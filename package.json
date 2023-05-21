@@ -23,6 +23,7 @@
         "fibers": "^5.0.3",
         "nuxt-microcms-module": "^3.0.1",
         "sass": "^1.62.1",
-        "sass-loader": "^13.2.2"
+        "sass-loader": "^13.2.2",
+        "vue3-smooth-scroll": "^0.8.1"
     }
 }
