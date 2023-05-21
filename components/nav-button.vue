@@ -4,12 +4,12 @@
 <template>
   <div class="nav-button">
       <div class="icon" id="homeButton">
-        <nuxt-link to="/" href="/"></nuxt-link>
+        <nuxt-link to="/"></nuxt-link>
         <img src="@/assets/imgs/home_black_24dp.svg" alt="">
         <p>home</p>
       </div>
       <div class="icon" id="topButton">
-        <nuxt-link to="#" href="#"></nuxt-link>
+        <nuxt-link to="#"></nuxt-link>
         <img src="@/assets/imgs/upgrade_black_24dp.svg" alt="">
         <p>top</p>
       </div>
@@ -62,11 +62,10 @@
     box-shadow: $bg-gray -2px 1px 3px;
     border-radius: 10px 0 0 10px;
   }
-
 }
 
 @media screen and (min-width:640px) {
-  .mobile_nav{
+  .nav-button{
     right: 5vw;
     bottom: 10vh;
     height: 65px;
