@@ -20,6 +20,7 @@
         "vue-tsc": "^1.6.5"
     },
     "dependencies": {
+        "@nuxtjs/google-adsense": "^2.1.0",
         "fibers": "^5.0.3",
         "nuxt-microcms-module": "^3.0.1",
         "sass": "^1.62.1",
