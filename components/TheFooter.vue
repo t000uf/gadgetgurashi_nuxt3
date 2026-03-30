@@ -1,10 +1,14 @@
 <template>
   <footer class="foot">
-    <nuxt-link to="#">page top</nuxt-link>
+    <NuxtLink to="#">page top</NuxtLink>
     <div class="footnav">
       <ul>
-        <li><nuxt-link to="/">home</nuxt-link></li>
-        <li><nuxt-link to="/article/about">about</nuxt-link></li>
+        <li>
+          <NuxtLink to="/">home</NuxtLink>
+        </li>
+        <li>
+          <NuxtLink to="/article/about">about</NuxtLink>
+        </li>
       </ul>
     </div>
     <small>© 2022 gadgetgurashi</small>

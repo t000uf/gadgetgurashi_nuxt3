@@ -3,13 +3,17 @@
     <header>
       <div class="headerContents">
         <div id="logo">
-          <nuxt-link to="/"></nuxt-link>
+          <NuxtLink to="/" />
           <img src="@/assets/imgs/gadget_life_gray.png" alt="gadget_life_logo" id="headerPic">
         </div>
         <div id="menu">
           <ul>
-            <li><nuxt-link to="/">home</nuxt-link></li>
-            <li><nuxt-link to="/article/about">about</nuxt-link></li>
+            <li>
+              <NuxtLink to="/">home</NuxtLink>
+            </li>
+            <li>
+              <NuxtLink to="/article/about">about</NuxtLink>
+            </li>
           </ul>
         </div>
       </div>
