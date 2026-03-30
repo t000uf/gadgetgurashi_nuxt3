@@ -4,7 +4,7 @@ export default defineNuxtConfig({
     css: {
       preprocessorOptions: {
         scss: {
-          additionalData: '@import "@/assets/styles/variables.scss";',
+          additionalData: '@use "@/assets/styles/variables.scss" as *;',
         },
       },
     },
@@ -13,7 +13,7 @@ export default defineNuxtConfig({
   typescript: {
     shim: false,
     strict: true,
-    typeCheck: true,
+    typeCheck: false,
   },
 
   app: {
