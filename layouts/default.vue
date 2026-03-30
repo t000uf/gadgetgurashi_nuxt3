@@ -4,9 +4,9 @@
   <div>
     <Header />
     <div class="container">
-       <div class="contents">
-      <slot/>
-      <Side />
+      <div class="contents">
+        <slot />
+        <Side />
       </div>
     </div>
     <NavButton />
@@ -15,8 +15,7 @@
 </template>
 
 <style lang="scss" scoped>
-
-.container{
+.container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -28,7 +27,7 @@
   box-sizing: border-box;
 }
 
-.contents{
+.contents {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -42,7 +41,7 @@
   animation-delay: 100ms;
 }
 
-.sentence{
+.sentence {
   max-width: 700px;
   width: 100%;
   padding: 10px;
@@ -50,14 +49,14 @@
 }
 
 @media screen and (max-width:639px) {
-  .contents{
+  .contents {
     padding: 0;
     align-items: center;
-  } 
+  }
 }
 
 @media screen and (min-width:640px) {
-  .contents{
+  .contents {
     padding: 0 1% 0 1%;
     align-items: center;
     font-size: medium;
@@ -65,18 +64,18 @@
 }
 
 @media screen and (min-width:1025px) {
-  .contents{
+  .contents {
     flex-direction: row;
     align-items: flex-start;
   }
 }
 
 @media screen and (max-width:300px) {
-  .container{
+  .container {
     padding: 0 1px 0 1px;
   }
 
-  .sentence{
+  .sentence {
     padding: 0 5px 0 5px;
   }
 }
