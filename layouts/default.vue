@@ -2,15 +2,15 @@
 
 <template>
   <div>
-    <Header />
+    <TheHeader />
     <div class="container">
       <div class="contents">
         <slot />
-        <Side />
+        <SideBar />
       </div>
     </div>
     <NavButton />
-    <Footer />
+    <TheFooter />
   </div>
 </template>
 
@@ -39,13 +39,6 @@
   opacity: 0;
   animation: fadein .5s ease-out forwards;
   animation-delay: 100ms;
-}
-
-.sentence {
-  max-width: 700px;
-  width: 100%;
-  padding: 10px;
-  box-sizing: border-box;
 }
 
 @media screen and (max-width:639px) {
