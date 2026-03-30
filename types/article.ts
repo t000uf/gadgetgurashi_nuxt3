@@ -7,4 +7,6 @@ export type Article = {
   preview?: string;
   text?: string;
   tag: (MicroCMSListContent & Tag)[];
+  related?: (MicroCMSListContent & Article)[];
+  affiliate?: string;
 };
