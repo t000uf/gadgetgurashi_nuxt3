@@ -15,9 +15,9 @@
         "@nuxtjs/eslint-config-typescript": "^12.0.0",
         "@types/node": "^20.19.37",
         "@volar/typescript": "^2.4.28",
-        "eslint": "^8.57.1",
+        "eslint": "^10.1.0",
         "eslint-config-prettier": "^10.1.8",
-        "nuxt": "^3.5.0",
+        "nuxt": "^3.21.2",
         "typescript": "^5.0.4",
         "vue-tsc": "^3.2.6"
     },
