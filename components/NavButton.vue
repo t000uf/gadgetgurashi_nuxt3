@@ -4,12 +4,12 @@
 <template>
   <div class="nav-button">
     <div class="icon" id="homeButton">
-      <nuxt-link to="/"></nuxt-link>
+      <NuxtLink to="/"></NuxtLink>
       <img src="@/assets/imgs/home_black_24dp.svg" alt="">
       <p>home</p>
     </div>
     <div class="icon" id="topButton">
-      <nuxt-link to="#"></nuxt-link>
+      <NuxtLink to="#"></NuxtLink>
       <img src="@/assets/imgs/upgrade_black_24dp.svg" alt="">
       <p>top</p>
     </div>
