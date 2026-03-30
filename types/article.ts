@@ -1,5 +1,5 @@
 import type { MicroCMSImage, MicroCMSListContent } from 'microcms-js-sdk';
-import { Tag } from '@/types/tag';
+import type { Tag } from '@/types/tag';
 
 export type Article = {
   title?: string;
