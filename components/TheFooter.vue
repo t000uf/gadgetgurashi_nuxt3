@@ -1,19 +1,18 @@
 <template>
   <footer class="foot">
     <nuxt-link to="#">page top</nuxt-link>
-      <div class="footnav">
-        <ul>
-          <li><nuxt-link to="/">home</nuxt-link></li>
-          <li><nuxt-link to="/article/about">about</nuxt-link></li>
-        </ul>
-      </div>
+    <div class="footnav">
+      <ul>
+        <li><nuxt-link to="/">home</nuxt-link></li>
+        <li><nuxt-link to="/article/about">about</nuxt-link></li>
+      </ul>
+    </div>
     <small>© 2022 gadgetgurashi</small>
   </footer>
 </template>
 
 <style lang="scss" scoped>
-
-.foot{
+.foot {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -22,7 +21,7 @@
   background-color: $bg-gray;
 }
 
-.foot a{
+.foot a {
   margin: 0 10px;
   color: $text-color;
 }
@@ -41,8 +40,7 @@
   display: inline-block;
 }
 
-.footnav ul li a{
+.footnav ul li a {
   color: $text-color;
 }
-
 </style>
