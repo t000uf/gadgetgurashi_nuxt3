@@ -1,6 +1,10 @@
+<script lang="ts" setup>
+const { returnTop } = useScrollTop()
+</script>
+
 <template>
   <footer class="foot">
-    <NuxtLink to="#">page top</NuxtLink>
+    <p class="pageTop" @click="returnTop">page top</p>
     <div class="footnav">
       <ul>
         <li>
@@ -28,6 +32,12 @@
 .foot a {
   margin: 0 10px;
   color: $text-color;
+}
+
+.pageTop {
+  margin: 0;
+  cursor: pointer;
+  text-decoration: underline;
 }
 
 .footnav {

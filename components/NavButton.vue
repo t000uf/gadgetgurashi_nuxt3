@@ -1,16 +1,31 @@
 <script lang="ts" setup>
+const { returnTop } = useScrollTop()
+
+const buttonActive = ref(true)
+
+const scrollWindow = () => {
+  const bottom = document.documentElement.scrollHeight - 1000
+  buttonActive.value = window.scrollY <= bottom
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', scrollWindow)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', scrollWindow)
+})
 </script>
 
 <template>
-  <div class="nav-button">
+  <div v-show="buttonActive" class="nav-button">
     <div class="icon" id="homeButton">
-      <NuxtLink to="/"></NuxtLink>
-      <img src="@/assets/imgs/home_black_24dp.svg" alt="">
+      <NuxtLink to="/" />
+      <img src="@/assets/imgs/home_black_24dp.svg" alt="home">
       <p>home</p>
     </div>
-    <div class="icon" id="topButton">
-      <NuxtLink to="#"></NuxtLink>
-      <img src="@/assets/imgs/upgrade_black_24dp.svg" alt="">
+    <div class="icon" id="topButton" @click="returnTop">
+      <img src="@/assets/imgs/upgrade_black_24dp.svg" alt="top">
       <p>top</p>
     </div>
   </div>
