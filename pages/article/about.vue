@@ -1,12 +1,10 @@
 <script lang="ts" setup>
+import type { MicroCMSListContent } from 'microcms-js-sdk'
 import type { About } from '@/types'
 
 const { format } = useDate()
 
-const { data: content } = await useMicroCMSGetListDetail<About>({
-  endpoint: 'about',
-  contentId: 'about' as string,
-})
+const { data: content } = await useFetch<MicroCMSListContent & About>('/api/about/about')
 
 useHead({
   title: computed(() => `${content.value?.title} - がじぇっとぐらし！`),

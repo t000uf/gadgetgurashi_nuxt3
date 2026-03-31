@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { Article } from '@/types'
+import type { Article, MicroCMSList } from '@/types'
 
 definePageMeta({
   layout: 'home'
@@ -9,9 +9,8 @@ const route = useRoute()
 const page = Number(route.params.p) || 1
 const limit = 10
 
-const { data } = await useMicroCMSGetList<Article>({
-  endpoint: 'article',
-  queries: {
+const { data } = await useFetch<MicroCMSList<Article>>('/api/article', {
+  query: {
     limit,
     offset: (page - 1) * limit,
   }

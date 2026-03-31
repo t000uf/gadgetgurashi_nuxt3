@@ -1,6 +1,5 @@
 <script lang="ts" setup>
-import type { Article, Tag } from '@/types'
-import type { MicroCMSListContent } from 'microcms-js-sdk'
+import type { Article, Tag, MicroCMSList } from '@/types'
 
 const route = useRoute()
 const tagId = route.params.tagId as string
@@ -8,18 +7,16 @@ const page = Number(route.params.p) || 1
 const limit = 10
 
 const [{ data: articleData }, { data: tagData }] = await Promise.all([
-  useMicroCMSGetList<Article>({
-    endpoint: 'article',
-    queries: {
+  useFetch<MicroCMSList<Article>>('/api/article', {
+    query: {
       fields: 'id,title,thumbnail,preview,tag',
       limit,
       filters: `tag[contains]${tagId}`,
       offset: (page - 1) * limit,
     }
   }),
-  useMicroCMSGetList<Tag>({
-    endpoint: 'tag',
-    queries: { limit: 100 }
+  useFetch<MicroCMSList<Tag>>('/api/tag', {
+    query: { limit: 100 }
   })
 ])
 
