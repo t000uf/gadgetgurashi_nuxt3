@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import type { MicroCMSListContent } from 'microcms-js-sdk'
-import type { Tag } from '@/types/tag'
+import type { Tag } from '@/types'
 
 const props = defineProps<{
   pager: number[]

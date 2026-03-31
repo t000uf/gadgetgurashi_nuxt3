@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import type { MicroCMSListContent } from 'microcms-js-sdk'
-import type { Article } from '@/types/article'
+import type { Article } from '@/types'
 
 defineProps<{
   content: MicroCMSListContent & Article
@@ -27,6 +27,7 @@ defineProps<{
         </p>
       </div>
     </div>
+    <!-- <TagLink v-if="content.tag" :tags="content.tag" /> -->
   </div>
 </template>
 

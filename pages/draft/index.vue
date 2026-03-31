@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { Article } from '@/types/article'
+import type { Article } from '@/types'
 import type { MicroCMSListContent } from 'microcms-js-sdk'
 
 const { format } = useDate()

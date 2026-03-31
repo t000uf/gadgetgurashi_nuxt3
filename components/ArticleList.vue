@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import type { MicroCMSListContent } from 'microcms-js-sdk'
-import type { Article } from '@/types/article'
+import type { Article } from '@/types'
 
 defineProps<{
   contents: (MicroCMSListContent & Article)[]

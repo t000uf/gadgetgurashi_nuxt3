@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { About } from '@/types/about'
+import type { About } from '@/types'
 
 const { format } = useDate()
 

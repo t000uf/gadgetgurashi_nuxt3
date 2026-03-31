@@ -1,6 +1,5 @@
 <script lang="ts" setup>
-import type { Article } from '@/types/article'
-import type { Tag } from '@/types/tag'
+import type { Article, Tag } from '@/types'
 import type { MicroCMSListContent } from 'microcms-js-sdk'
 
 const route = useRoute()
