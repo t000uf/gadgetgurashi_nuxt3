@@ -26,8 +26,7 @@
         "microcms-js-sdk": "^3.3.0",
         "nuxt-microcms-module": "^3.1.1",
         "sass": "^1.62.1",
-        "sass-loader": "^13.2.2",
-        "vue3-smooth-scroll": "^0.8.1"
+        "sass-loader": "^13.2.2"
     },
     "packageManager": "pnpm@10.33.0",
     "volta": {

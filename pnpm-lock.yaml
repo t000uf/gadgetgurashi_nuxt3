@@ -23,9 +23,6 @@ importers:
       sass-loader:
         specifier: ^13.2.2
         version: 13.3.3(sass@1.98.0)(webpack@5.105.4)
-      vue3-smooth-scroll:
-        specifier: ^0.8.1
-        version: 0.8.1
     devDependencies:
       '@nuxtjs/eslint-config':
         specifier: ^12.0.0
@@ -4588,9 +4585,6 @@ packages:
     hasBin: true
     peerDependencies:
       typescript: '>=5.0.0'
-
-  vue3-smooth-scroll@0.8.1:
-    resolution: {integrity: sha512-9EN1aiBT2RtkIe1MoGiyGjUoLmqmlJ96R9/QVCylaiurHQ7oGu1SPzEoGJyxdhCa1q3qyMcX/pne1oTAn1UaoQ==}
 
   vue@3.5.31:
     resolution: {integrity: sha512-iV/sU9SzOlmA/0tygSmjkEN6Jbs3nPoIPFhCMLD2STrjgOU8DX7ZtzMhg4ahVwf5Rp9KoFzcXeB1ZrVbLBp5/Q==}
@@ -9728,8 +9722,6 @@ snapshots:
       '@volar/typescript': 2.4.28
       '@vue/language-core': 3.2.6
       typescript: 5.9.3
-
-  vue3-smooth-scroll@0.8.1: {}
 
   vue@3.5.31(typescript@5.9.3):
     dependencies:
