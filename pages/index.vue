@@ -5,9 +5,21 @@ definePageMeta({
   layout: 'home'
 })
 
+const route = useRoute()
+const page = Number(route.params.p) || 1
+const limit = 10
+
 const { data } = await useMicroCMSGetList<Article>({
-  endpoint: 'article'
+  endpoint: 'article',
+  queries: {
+    limit,
+    offset: (page - 1) * limit,
+  }
 })
+
+const pager = computed(() =>
+  [...Array(Math.ceil((data.value?.totalCount ?? 0) / limit)).keys()]
+)
 </script>
 
 <template>
@@ -24,11 +36,11 @@ const { data } = await useMicroCMSGetList<Article>({
       記事一覧
     </h4>
     <ArticleList v-if="data?.contents" :contents="data.contents" />
-    <!-- <Pagination :pager="pager" :current="Number(page)" /> -->
+    <Pagination :pager="pager" :current="1" />
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .sentence_home {
   max-width: 700px;
   width: 100%;
