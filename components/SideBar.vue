@@ -4,7 +4,7 @@ twitter-follow-button.value = '';
   <div class="side">
     <!--<a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-size="large" data-lang="ja" data-show-count="true">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
     <a href="https://twitter.com/gadgetgurashi?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-size="large" data-lang="ja" data-show-count="false">Follow @gadgetgurashi</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>-->
-    <adsbygoogle :ad-slot="'7173714878'" :ad-format="'auto'" :ad-style="{ display: 'block' }" />
+    <AdsByGoogle ad-slot="7173714878" />
   </div>
 </template>
 

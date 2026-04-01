@@ -19,6 +19,7 @@ useHead({
     <p class="date">更新日時：{{ format(content.revisedAt) }}</p>
     <div class="articleText" v-html="content.text" />
   </div>
+  <AdsByGoogle ad-slot="7173714878" />
 </template>
 
 <style lang="scss" scoped>

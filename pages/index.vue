@@ -36,6 +36,7 @@ const pager = computed(() =>
     </h4>
     <ArticleList v-if="data?.contents" :contents="data.contents" />
     <Pagination :pager="pager" :current="1" />
+    <AdsByGoogle ad-slot="7173714878" />
   </div>
 </template>
 

@@ -16,6 +16,12 @@ export default defineNuxtConfig({
     typeCheck: false,
   },
 
+  runtimeConfig: {
+    public: {
+      adsenseId: 'ca-pub-7931455677905492',
+    },
+  },
+
   app: {
     head: {
       title: 'がじぇっとぐらし！',
@@ -45,23 +51,17 @@ export default defineNuxtConfig({
         { name: 'twitter:site', content: '@nzn_gadget' },
       ],
       link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+      script: [
+        {
+          src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js',
+          'data-ad-client': 'ca-pub-7931455677905492',
+          async: true,
+        },
+      ],
     },
   },
 
-  modules: [
-    'nuxt-simple-sitemap',
-    [
-      '@nuxtjs/google-adsense',
-      {
-        id: 'ca-pub-7931455677905492',
-        pageLevelAds: true,
-        analyticsUacct: process.env.GA_TRACKING_ID,
-        analyticsDomainName: 'gadgetgurashi.com',
-        onPageLoad: true,
-        test: true, // 開発終了時に無効化
-      },
-    ],
-  ],
+  modules: ['nuxt-simple-sitemap'],
 
   site: {
     url: 'https://gadgetgurashi.com',

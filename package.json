@@ -22,7 +22,6 @@
         "vue-tsc": "^3.2.6"
     },
     "dependencies": {
-        "@nuxtjs/google-adsense": "^3.0.3",
         "microcms-js-sdk": "^3.3.0",
         "nuxt-simple-sitemap": "^4.4.1",
         "sass": "^1.62.1",

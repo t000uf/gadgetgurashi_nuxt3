@@ -37,6 +37,7 @@ useHead({
       <p>関連商品リンク</p>
       <div v-html="content.affiliate" />
     </div>
+    <AdsByGoogle ad-slot="7173714878" />
     <h4 class="headline">
       「{{ content.title }}」に関連する記事
     </h4>
