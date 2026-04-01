@@ -49,6 +49,7 @@ export default defineNuxtConfig({
   },
 
   modules: [
+    'nuxt-simple-sitemap',
     [
       '@nuxtjs/google-adsense',
       {
@@ -61,4 +62,12 @@ export default defineNuxtConfig({
       },
     ],
   ],
+
+  site: {
+    url: 'https://gadgetgurashi.com',
+  },
+  sitemap: {
+    sources: ['/api/__sitemap__/urls'],
+    exclude: ['/draft/**'],
+  },
 });
