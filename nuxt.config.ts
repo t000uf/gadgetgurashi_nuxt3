@@ -64,18 +64,7 @@ export default defineNuxtConfig({
   },
 
   modules: [
-    [
-      '@nuxtjs/sitemap',
-      {
-        site: {
-          url: 'https://gadgetgurashi.com',
-        },
-        sitemap: {
-          sources: ['/api/__sitemap__/urls'],
-          exclude: ['/draft/**'],
-        },
-      },
-    ],
+    '@nuxtjs/sitemap',
     [
       'nuxt-gtag',
       {
@@ -83,4 +72,12 @@ export default defineNuxtConfig({
       },
     ],
   ],
+  site: {
+    url: 'https://gadgetgurashi.com',
+  },
+
+  sitemap: {
+    sources: ['/api/__sitemap__/urls'],
+    exclude: ['/draft/**'],
+  },
 });
