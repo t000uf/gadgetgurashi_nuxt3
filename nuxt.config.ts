@@ -64,20 +64,23 @@ export default defineNuxtConfig({
   },
 
   modules: [
-    'nuxt-simple-sitemap',
     [
-      '@nuxtjs/google-gtag',
+      '@nuxtjs/sitemap',
+      {
+        site: {
+          url: 'https://gadgetgurashi.com',
+        },
+        sitemap: {
+          sources: ['/api/__sitemap__/urls'],
+          exclude: ['/draft/**'],
+        },
+      },
+    ],
+    [
+      'nuxt-gtag',
       {
         id: process.env.GA_TRACKING_ID,
       },
     ],
   ],
-
-  site: {
-    url: 'https://gadgetgurashi.com',
-  },
-  sitemap: {
-    sources: ['/api/__sitemap__/urls'],
-    exclude: ['/draft/**'],
-  },
 });
