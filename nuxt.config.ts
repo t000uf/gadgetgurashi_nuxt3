@@ -1,5 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  compatibilityDate: '2026-04-02',
+
   vite: {
     css: {
       preprocessorOptions: {
@@ -61,7 +63,15 @@ export default defineNuxtConfig({
     },
   },
 
-  modules: ['nuxt-simple-sitemap'],
+  modules: [
+    'nuxt-simple-sitemap',
+    [
+      '@nuxtjs/google-gtag',
+      {
+        id: process.env.GA_TRACKING_ID,
+      },
+    ],
+  ],
 
   site: {
     url: 'https://gadgetgurashi.com',
