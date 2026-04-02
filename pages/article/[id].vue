@@ -33,6 +33,7 @@ useHead({
     <p class="date">更新日時：{{ format(content.revisedAt) }}</p>
     <img class="article_thumbnail" :src="content.thumbnail?.url" :alt="content.title">
     <div class="articleText" v-html="content.text" />
+    <TagLink :tags="content.tag" />
     <div class="affiliate">
       <p>関連商品リンク</p>
       <div v-html="content.affiliate" />
