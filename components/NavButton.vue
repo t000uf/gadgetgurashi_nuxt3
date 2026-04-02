@@ -1,23 +1,37 @@
 <script lang="ts" setup>
+const { returnTop } = useScrollTop()
+
+const buttonActive = ref(true)
+
+const scrollWindow = () => {
+  const bottom = document.documentElement.scrollHeight - 1000
+  buttonActive.value = window.scrollY <= bottom
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', scrollWindow)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', scrollWindow)
+})
 </script>
 
 <template>
-  <div class="nav-button">
-      <div class="icon" id="homeButton">
-        <nuxt-link to="/"></nuxt-link>
-        <img src="@/assets/imgs/home_black_24dp.svg" alt="">
-        <p>home</p>
-      </div>
-      <div class="icon" id="topButton">
-        <nuxt-link to="#"></nuxt-link>
-        <img src="@/assets/imgs/upgrade_black_24dp.svg" alt="">
-        <p>top</p>
-      </div>
+  <div v-show="buttonActive" class="nav-button">
+    <div class="icon" id="homeButton">
+      <NuxtLink to="/" />
+      <img src="@/assets/imgs/home_black_24dp.svg" alt="home">
+      <p>home</p>
+    </div>
+    <div class="icon" id="topButton" @click="returnTop">
+      <img src="@/assets/imgs/upgrade_black_24dp.svg" alt="top">
+      <p>top</p>
+    </div>
   </div>
 </template>
 
 <style lang="scss">
-
 .nav-button {
   position: fixed;
   display: flex;
@@ -37,7 +51,7 @@
   justify-content: center;
   align-items: center;
   width: 65px;
-  height: 65px;  
+  height: 65px;
   font-size: small;
 }
 
@@ -50,12 +64,12 @@
   text-decoration: none;
 }
 
-.icon p{
+.icon p {
   margin: 0;
 }
 
 @media screen and (max-width:639px) {
-  .nav-button{
+  .nav-button {
     right: 0px;
     bottom: 100px;
     height: 120px;
@@ -65,7 +79,7 @@
 }
 
 @media screen and (min-width:640px) {
-  .nav-button{
+  .nav-button {
     right: 5vw;
     bottom: 10vh;
     height: 65px;
@@ -73,9 +87,8 @@
     border-radius: 50px;
   }
 
-  #homeButton{
+  #homeButton {
     display: none;
   }
 }
-
 </style>

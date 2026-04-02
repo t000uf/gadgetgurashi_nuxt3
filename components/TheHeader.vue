@@ -1,15 +1,19 @@
 <template>
-	<div id="header">
+  <div id="header">
     <header>
       <div class="headerContents">
         <div id="logo">
-          <nuxt-link to="/"></nuxt-link>
+          <NuxtLink to="/" />
           <img src="@/assets/imgs/gadget_life_gray.png" alt="gadget_life_logo" id="headerPic">
         </div>
         <div id="menu">
           <ul>
-            <li><nuxt-link to="/">home</nuxt-link></li>
-            <li><nuxt-link to="/article/about">about</nuxt-link></li>
+            <li>
+              <NuxtLink to="/">home</NuxtLink>
+            </li>
+            <li>
+              <NuxtLink to="/article/about">about</NuxtLink>
+            </li>
           </ul>
         </div>
       </div>
@@ -18,8 +22,7 @@
 </template>
 
 <style lang="scss">
-
-header{
+header {
   position: fixed;
   top: 0;
   left: 0;
@@ -33,7 +36,7 @@ header{
   z-index: 999;
 }
 
-.headerContents{
+.headerContents {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -41,17 +44,17 @@ header{
   max-width: 1280px;
   width: 100%;
   height: 100%;
-  
+
 }
 
-#logo{
+#logo {
   position: relative;
   box-sizing: border-box;
   height: 100%;
   padding: 5px;
 }
 
-#logo a{
+#logo a {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -61,18 +64,18 @@ header{
   height: 100%;
 }
 
-#menu ul{
+#menu ul {
   display: flex;
   flex-direction: row;
 }
 
-#menu ul li{
+#menu ul li {
   margin-right: 20px;
   font-size: 18px;
   list-style-type: none;
 }
 
-#menu ul li a{
+#menu ul li a {
   position: relative;
   text-decoration: none;
   color: $text-color;
@@ -80,11 +83,11 @@ header{
   -webkit-transition-duration: 0.3s;
 }
 
-#menu ul li a:hover{
+#menu ul li a:hover {
   color: $text-color;
 }
 
-#menu ul li a::after{
+#menu ul li a::after {
   position: relative;
   left: 0;
   bottom: 0;
@@ -98,7 +101,7 @@ header{
   -webkit-transition-duration: 0.3s;
 }
 
-#menu ul li a:hover::after{
+#menu ul li a:hover::after {
   left: 0;
   bottom: 0;
   width: 100%;
@@ -106,9 +109,8 @@ header{
 }
 
 @media screen and (max-width:639px) {
-  #menu{
+  #menu {
     display: none;
   }
 }
-
 </style>

@@ -2,7 +2,7 @@
 
 <template>
   <div>
-    <Header />
+    <TheHeader />
     <div id="wrap">
       <div id="top">
         <img src="@/assets/imgs/DSCF1982.jpg" alt="" id="topImg">
@@ -10,18 +10,17 @@
       <div class="container_home">
         <div class="contents_home">
           <slot />
-          <Side />
+          <SideBar />
         </div>
       </div>
     </div>
     <NavButton />
-    <Footer />
+    <TheFooter />
   </div>
 </template>
 
 <style lang="scss" scoped>
-
-.container_home{
+.container_home {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -33,7 +32,7 @@
   box-sizing: border-box;
 }
 
-.contents_home{
+.contents_home {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -48,14 +47,14 @@
 }
 
 @media screen and (max-width:639px) {
-  .contents_home{
+  .contents_home {
     padding: 0;
     align-items: center;
-  } 
+  }
 }
 
 @media screen and (min-width:640px) {
-  .contents_home{
+  .contents_home {
     padding: 0 1% 0 1%;
     align-items: center;
     font-size: medium;
@@ -63,19 +62,19 @@
 }
 
 @media screen and (min-width:1025px) {
-  .contents_home{
+  .contents_home {
     flex-direction: row;
     align-items: flex-start;
   }
 }
 
 @media screen and (max-width:300px) {
-  .container_home{
+  .container_home {
     padding: 0 1px 0 1px;
   }
 }
 
-#wrap{
+#wrap {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -84,7 +83,7 @@
   height: 100%;
 }
 
-#top{
+#top {
   position: sticky;
   top: 52px;
   width: 100%;
@@ -93,7 +92,7 @@
   box-sizing: border-box;
 }
 
-#top img{
+#top img {
   width: 100%;
   height: 100%;
   box-sizing: border-box;
@@ -101,28 +100,25 @@
   object-position: 50% 50%;
 }
 
-.sentence h4{
+.sentence h4 {
   margin-top: 0;
 }
 
 @media screen and (min-width:640px) {
-  #top{
+  #top {
     height: 40vh;
   }
 }
 
 @media screen and (min-width:760px) {
-  #top{
+  #top {
     height: 50vh;
   }
 }
-
 </style>
 
 <style lang="scss" scoped>
-
-.contents{
+.contents {
   margin-top: 30px;
 }
-
 </style>

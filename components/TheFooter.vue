@@ -1,19 +1,26 @@
+<script lang="ts" setup>
+const { returnTop } = useScrollTop()
+</script>
+
 <template>
   <footer class="foot">
-    <nuxt-link to="#">page top</nuxt-link>
-      <div class="footnav">
-        <ul>
-          <li><nuxt-link to="/">home</nuxt-link></li>
-          <li><nuxt-link to="/article/about">about</nuxt-link></li>
-        </ul>
-      </div>
+    <p class="pageTop" @click="returnTop">page top</p>
+    <div class="footnav">
+      <ul>
+        <li>
+          <NuxtLink to="/">home</NuxtLink>
+        </li>
+        <li>
+          <NuxtLink to="/article/about">about</NuxtLink>
+        </li>
+      </ul>
+    </div>
     <small>© 2022 gadgetgurashi</small>
   </footer>
 </template>
 
 <style lang="scss" scoped>
-
-.foot{
+.foot {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -22,9 +29,15 @@
   background-color: $bg-gray;
 }
 
-.foot a{
+.foot a {
   margin: 0 10px;
   color: $text-color;
+}
+
+.pageTop {
+  margin: 0;
+  cursor: pointer;
+  text-decoration: underline;
 }
 
 .footnav {
@@ -41,8 +54,7 @@
   display: inline-block;
 }
 
-.footnav ul li a{
+.footnav ul li a {
   color: $text-color;
 }
-
 </style>
