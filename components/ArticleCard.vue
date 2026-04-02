@@ -101,16 +101,15 @@ defineProps<{
   justify-content: space-evenly;
   align-items: center;
   width: 100%;
-  overflow: hidden; // 追加
+  overflow: hidden;
 }
 
 .thumbnail {
   width: 350px;
-  max-width: 50%; // 追加
-  height: auto; // 追加
+  height: auto;
   border-radius: 10px;
   box-sizing: border-box;
-  flex-shrink: 0; // 追加（縮みすぎ防止）
+  flex-shrink: 0;
 }
 
 .preview {
