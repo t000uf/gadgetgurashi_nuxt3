@@ -78,5 +78,8 @@ docs/DESIGN.md   デザインシステム（v8リブランディング）
 
 - `pnpm lint` が動かない。ESLint 10 は flat config（`eslint.config.js`）必須だが、設定は `.eslintrc` のまま。
   `@nuxtjs/eslint-config-typescript` が flat config 未対応のため、移行するには構成の入れ替えが必要。
-- `assets/imgs/` のマテリアルアイコンSVG（`arrow_*`, `home_*`, `upgrade_*`, `report_*`, `description_*`）と
-  `gadget_life*.png` は v8 デザインで参照されなくなった。ロゴ確定後にまとめて整理する。
+- `assets/imgs/` のマテリアルアイコンSVG（`arrow_*`, `home_*`, `upgrade_*`）は
+  `components/AppIcon.vue` にパスデータとしてインライン化して使用中（`fill="currentColor"`で
+  呼び出し元の色を継承させるため、`url()`/`mask-image`ではなくSVGを直接埋め込んでいる）。
+  `report_*`, `description_*`, `gadget_life*.png` は v8 デザインで参照されなくなった。
+  ロゴ確定後にまとめて整理する。

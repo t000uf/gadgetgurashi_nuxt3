@@ -21,7 +21,7 @@ onUnmounted(() => {
   <Transition name="fade">
     <button v-show="buttonActive" type="button" class="nav-button" aria-label="ページ上部へ戻る"
       @click="returnTop">
-      ↑
+      <AppIcon name="arrow-up" :size="22" />
     </button>
   </Transition>
 </template>
@@ -41,8 +41,6 @@ onUnmounted(() => {
   border-radius: 50%;
   background-color: $color-primary;
   color: #fff;
-  font-size: 18px;
-  line-height: 1;
   cursor: pointer;
   transition: background-color 0.2s ease;
 
