@@ -21,7 +21,14 @@ const getPath = (p: number) => {
         :to="getPath(current - 1)"
         class="pagination__item pagination__item--arrow"
         aria-label="前のページへ"
-      >←</NuxtLink>
+      >
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+          <path
+            fill="currentColor"
+            d="M16.88,2.88L16.88,2.88c-0.49-0.49-1.28-0.49-1.77,0l-8.41,8.41c-0.39,0.39-0.39,1.02,0,1.41l8.41,8.41 c0.49,0.49,1.28,0.49,1.77,0l0,0c0.49-0.49,0.49-1.28,0-1.77L9.54,12l7.35-7.35C17.37,4.16,17.37,3.37,16.88,2.88z"
+          />
+        </svg>
+      </NuxtLink>
 
       <NuxtLink v-if="2 < current" :to="getPath(1)" class="pagination__item">1</NuxtLink>
       <span v-if="3 < current" class="pagination__omission">…</span>
@@ -47,7 +54,14 @@ const getPath = (p: number) => {
         :to="getPath(current + 1)"
         class="pagination__item pagination__item--arrow"
         aria-label="次のページへ"
-      >→</NuxtLink>
+      >
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+          <path
+            fill="currentColor"
+            d="M7.38 21.01c.49.49 1.28.49 1.77 0l8.31-8.31c.39-.39.39-1.02 0-1.41L9.15 2.98c-.49-.49-1.28-.49-1.77 0s-.49 1.28 0 1.77L14.62 12l-7.25 7.25c-.48.48-.48 1.28.01 1.76z"
+          />
+        </svg>
+      </NuxtLink>
     </div>
   </nav>
 </template>
