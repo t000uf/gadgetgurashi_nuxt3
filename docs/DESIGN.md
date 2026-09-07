@@ -58,7 +58,7 @@ CMS本文（v-html）の `h2` / `h3` / `h4` にも `@include article-typography`
 | H1 | 記事タイトル・ページタイトル | Zen Maru Gothic Bold `clamp(24px, 4vw, 32px)`、直下に**横幅いっぱい**のオレンジ下線バー（高さ4px・角丸2px）。**ページ内で1つだけ** |
 | H2 | セクションの区切り | Zen Maru Gothic Bold 20px、左に 5×22px のオレンジバー。CMS本文中では上に1pxの罫線＋64pxの余白でセクションの切れ目を明示 |
 | H3 | 小見出し | Zen Maru Gothic Bold 17px、左に 9px 円のオレンジドット |
-| H4 | 補足・キャプション見出し | Zen Maru Gothic Bold 15px、左に7px角スクエアのオレンジドット、薄いオレンジ背景のpillチップとして表示（下線は使わない＝リンクとの混同回避） |
+| H4 | 補足・キャプション見出し | Zen Maru Gothic Bold 15px、左に6px角スクエアのオレンジドット。H3同様のシンプルな行見出しで、背景chip化はしない（リストが連続する箇所で見出しが浮いて見えるため。下線も使わない＝リンクとの混同回避） |
 
 見出し前後の余白は「区切りの分かりやすさ」を優先し、H2は上下64px/16px、H3は上44px/下14pxを確保する
 （`assets/styles/_mixins.scss` の `article-typography` 参照）。
