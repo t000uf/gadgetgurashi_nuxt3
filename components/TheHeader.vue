@@ -70,10 +70,17 @@ const isAbout = computed(() => route.path.startsWith('/article/about'))
   border-radius: $radius-pill;
   color: $color-base;
   text-decoration: none;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease;
 
   &:hover {
     color: $color-base;
-    opacity: 0.8;
+    opacity: 0.85;
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0) scale(0.97);
+    transition-duration: 0.1s;
   }
 }
 
@@ -95,6 +102,9 @@ const isAbout = computed(() => route.path.startsWith('/article/about'))
   border-radius: $radius-pill;
 }
 
+// 下線バーは常に配置しておき、hover / is-active で幅（scaleX）と色だけを
+// 切り替える。中央から左右に伸びるアニメーションにするため transform-origin
+// はcenterのまま、位置合わせにtranslateX(-50%)を使う
 .header__link {
   position: relative;
   padding-bottom: 4px;
@@ -103,10 +113,33 @@ const isAbout = computed(() => route.path.startsWith('/article/about'))
   font-weight: 500;
   font-size: 16px;
   text-decoration: none;
-  transition: color 0.2s ease;
+  transition: color 0.2s ease, transform 0.15s ease;
+
+  &::after {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    display: block;
+    width: 100%;
+    height: 2px;
+    border-radius: $radius-bar;
+    background-color: $color-nav-inactive;
+    content: '';
+    transform: translateX(-50%) scaleX(0);
+    transform-origin: center;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.2s ease;
+  }
 
   &:hover {
     color: $color-base;
+
+    &::after {
+      transform: translateX(-50%) scaleX(0.55);
+    }
+  }
+
+  &:active {
+    transform: scale(0.96);
   }
 
   &.is-active {
@@ -114,15 +147,8 @@ const isAbout = computed(() => route.path.startsWith('/article/about'))
     font-weight: 700;
 
     &::after {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      display: block;
-      width: 100%;
-      height: 2px;
-      border-radius: $radius-bar;
       background-color: $color-primary;
-      content: '';
+      transform: translateX(-50%) scaleX(1);
     }
   }
 }
@@ -136,6 +162,11 @@ const isAbout = computed(() => route.path.startsWith('/article/about'))
 // SPはHOMEのみアイコン表示にするため、通常は非表示にしておく
 .header__link-icon {
   display: none;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.header__link--home:hover .header__link-icon {
+  transform: translateY(-1px) scale(1.08);
 }
 
 @media screen and (max-width: $bp-sm) {
