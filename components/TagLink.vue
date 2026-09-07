@@ -23,14 +23,19 @@ defineProps<{
 }
 
 .tags__item {
-  @include badge;
+  @include label($color-secondary);
 
+  padding: 3px 10px;
+  border: 1px solid rgba($color-secondary, 0.4);
+  border-radius: $radius-pill;
+  background-color: rgba($color-secondary, 0.1);
+  font-size: 12px;
   text-decoration: none;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
 
   &:hover {
-    background-color: $color-secondary-dark;
-    color: #fff;
+    border-color: $color-secondary;
+    background-color: rgba($color-secondary, 0.18);
   }
 }
 </style>

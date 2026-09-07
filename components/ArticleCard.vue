@@ -14,7 +14,6 @@ const props = withDefaults(
 const { formatDot } = useDate()
 
 const date = computed(() => formatDot(props.content.createdAt))
-const category = computed(() => props.content.tag?.[0]?.tagName)
 const tags = computed(() => props.content.tag ?? [])
 // 一覧カードのタグは、記事へのリンク（<a>）の中に別のリンクをネストできないため
 // card__link の外に置く。表示しすぎないよう先頭3件までに絞る
@@ -29,7 +28,6 @@ const listTags = computed(() => tags.value.slice(0, 3))
           loading="lazy">
         <div v-else class="card__image card__image--placeholder" />
         <span v-if="variant === 'featured'" class="card__badge card__badge--featured">注目</span>
-        <span v-else-if="variant === 'default' && category" class="card__badge">{{ category }}</span>
       </div>
       <div class="card__body">
         <h3 class="card__title">{{ content.title }}</h3>

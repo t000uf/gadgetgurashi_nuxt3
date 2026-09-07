@@ -12,7 +12,6 @@ const { data: content } = await useFetch<MicroCMSListContent & Article>(
 
 const { readingTime } = useArticleMeta()
 
-const category = computed(() => content.value?.tag?.[0]?.tagName)
 const minutes = computed(() => readingTime(content.value?.text))
 const shareUrl = computed(() => {
   const url = `https://gadgetgurashi.com/article/${content.value?.id}/`
@@ -43,7 +42,6 @@ useHead({
       <div class="article__visual">
         <img v-if="content.thumbnail?.url" class="article__thumbnail" :src="content.thumbnail.url" :alt="content.title">
         <div v-else class="article__thumbnail article__thumbnail--placeholder" />
-        <span v-if="category" class="article__category">{{ category }}</span>
       </div>
 
       <h1 id="articleTitle" class="article__title">{{ content.title }}</h1>
@@ -52,6 +50,7 @@ useHead({
         <span v-if="content.revisedAt"> ・ 更新 {{ formatDot(content.revisedAt) }}</span>
         <span v-if="minutes"> ・ 読了 {{ minutes }}分</span>
       </p>
+      <TagLink v-if="content.tag" :tags="content.tag" class="article__tags--top" />
 
       <div class="article__text" v-html="content.text" />
 
@@ -128,14 +127,6 @@ useHead({
   @include placeholder-stripe;
 }
 
-.article__category {
-  @include badge;
-
-  position: absolute;
-  top: 12px;
-  left: 12px;
-}
-
 .article__title {
   @include heading-1;
 
@@ -145,7 +136,11 @@ useHead({
 .article__meta {
   @include label($color-meta);
 
-  margin: 0 0 32px;
+  margin: 0 0 16px;
+}
+
+.article__tags--top {
+  margin-bottom: 32px;
 }
 
 .article__text {
