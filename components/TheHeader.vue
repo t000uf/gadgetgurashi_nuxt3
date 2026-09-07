@@ -13,10 +13,23 @@ const isAbout = computed(() => route.path.startsWith('/article/about'))
         <span class="header__logotype">がじぇっとぐらし！</span>
       </NuxtLink>
       <nav class="header__nav">
-        <NuxtLink to="/" class="header__link" :class="{ 'is-active': isHome }">HOME</NuxtLink>
+        <NuxtLink
+          to="/"
+          class="header__link header__link--home"
+          :class="{ 'is-active': isHome }"
+          aria-label="HOME"
+        >
+          <svg class="header__link-icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+            <path
+              fill="currentColor"
+              d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z"
+            />
+          </svg>
+          <span class="header__link-text">HOME</span>
+        </NuxtLink>
         <NuxtLink
           to="/article/about"
-          class="header__link"
+          class="header__link header__link--about"
           :class="{ 'is-active': isAbout }"
         >ABOUT</NuxtLink>
       </nav>
@@ -119,6 +132,17 @@ const isAbout = computed(() => route.path.startsWith('/article/about'))
   }
 }
 
+.header__link--home {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+// SPはHOMEのみアイコン表示にするため、通常は非表示にしておく
+.header__link-icon {
+  display: none;
+}
+
 @media screen and (max-width: $bp-sm) {
   .header__inner {
     padding: 0 14px;
@@ -133,7 +157,7 @@ const isAbout = computed(() => route.path.startsWith('/article/about'))
   .header__nav {
     height: 40px;
     gap: 14px;
-    padding: 0 14px;
+    padding: 0 12px;
   }
 
   .header__logotype {
@@ -142,6 +166,23 @@ const isAbout = computed(() => route.path.startsWith('/article/about'))
 
   .header__link {
     font-size: 15px;
+  }
+
+  // SPはナビをHOMEのアイコンのみに絞る
+  .header__link--about {
+    display: none;
+  }
+
+  .header__link--home {
+    padding-bottom: 2px;
+  }
+
+  .header__link-icon {
+    display: block;
+  }
+
+  .header__link-text {
+    display: none;
   }
 }
 </style>
