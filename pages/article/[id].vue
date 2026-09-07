@@ -97,7 +97,7 @@ useHead({
 
 @media screen and (max-width: $bp-sm) {
   .article__block {
-    padding: 20px 0;
+    padding: 0;
   }
 }
 
