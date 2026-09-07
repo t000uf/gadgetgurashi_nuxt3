@@ -53,16 +53,7 @@ const pager = computed(() =>
 // 背景パターン（layouts/home.vue）の上に乗るブロックは、パターンを完全に隠すよう
 // サイト背景色で不透明に塗る。ブロック同士の余白ではパターンが見える
 .intro {
-  @include content-block;
-
-  border-radius: $radius-card;
-  padding: 28px;
-}
-
-@media screen and (max-width: $bp-sm) {
-  .intro {
-    padding: 20px 0;
-  }
+  @include content-card(28px, 20px 0);
 }
 
 .intro__eyebrow {
@@ -94,18 +85,10 @@ const pager = computed(() =>
 }
 
 .section-heading {
-  @include content-block;
+  @include content-card(20px 28px, 16px 0);
 
   width: 100%;
   margin: 0 0 14px;
-  border-radius: $radius-card;
-  padding: 20px 28px;
-}
-
-@media screen and (max-width: $bp-sm) {
-  .section-heading {
-    padding: 16px 0;
-  }
 }
 
 // 記事本文の実質的な大見出し（h3）とスタイルを揃える

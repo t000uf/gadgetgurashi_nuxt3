@@ -151,6 +151,20 @@
   -webkit-backdrop-filter: blur(10px);
 }
 
+// content-blockを角丸カードとして使う共通パターン（見出し／記事本文／一覧の
+// ページ見出しなど、背景パターンを隠すブロックはすべてこの形になる）。
+// SPは余白を切り詰めるページが多いため $padding-sm を別指定できるようにする
+@mixin content-card($padding: 28px, $padding-sm: 0) {
+  @include content-block;
+
+  border-radius: $radius-card;
+  padding: $padding;
+
+  @media screen and (max-width: $bp-sm) {
+    padding: $padding-sm;
+  }
+}
+
 // =============================================================
 // CMS本文（v-html）の組版。記事・about・下書きで共通利用する
 // =============================================================

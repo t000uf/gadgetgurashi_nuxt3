@@ -2,17 +2,12 @@
 import type { MicroCMSListContent } from 'microcms-js-sdk'
 import type { Article } from '@/types'
 
-const { formatDot } = useDate()
-
 const route = useRoute()
 const { data: content } = await useFetch<MicroCMSListContent & Article>(
   `/api/article/${route.params.id}`,
   { query: { depth: 2 } }
 )
 
-const { readingTime } = useArticleMeta()
-
-const minutes = computed(() => readingTime(content.value?.text))
 const shareUrl = computed(() => {
   const url = `https://gadgetgurashi.com/article/${content.value?.id}/`
   const text = `${content.value?.title ?? ''} - がじぇっとぐらし！`
@@ -34,143 +29,24 @@ useHead({
 </script>
 
 <template>
-  <article v-if="content" class="article">
-    <div class="article__block">
-      <div class="article__breadcrumb">
-        <NuxtLink to="/" class="article__breadcrumb__link">← TOP</NuxtLink>
+  <ArticleDetail v-if="content" :content="content">
+    <template #after-affiliate>
+      <div class="article__tail">
+        <hr class="article__divider">
+
+        <p class="article__share">
+          <a :href="shareUrl" target="_blank" rel="noopener noreferrer">シェアする →</a>
+        </p>
+
+        <AdsByGoogle ad-slot="7173714878" />
       </div>
-      <div class="article__visual">
-        <img v-if="content.thumbnail?.url" class="article__thumbnail" :src="content.thumbnail.url" :alt="content.title">
-        <div v-else class="article__thumbnail article__thumbnail--placeholder" />
-      </div>
-
-      <h1 id="articleTitle" class="article__title">{{ content.title }}</h1>
-      <p class="article__meta">
-        {{ formatDot(content.createdAt) }}
-        <span v-if="content.revisedAt"> ・ 更新 {{ formatDot(content.revisedAt) }}</span>
-        <span v-if="minutes"> ・ 読了 {{ minutes }}分</span>
-      </p>
-      <TagLink v-if="content.tag" :tags="content.tag" class="article__tags--top" />
-
-      <div class="article__text" v-html="content.text" />
-
-      <TagLink v-if="content.tag" :tags="content.tag" class="article__tags" />
-    </div>
-
-    <div class="article__affiliate">
-      <p class="article__affiliate-label">関連商品リンク</p>
-      <div v-html="content.affiliate" />
-    </div>
-
-    <div class="article__block article__block--tail">
-      <hr class="article__divider">
-
-      <p class="article__share">
-        <a :href="shareUrl" target="_blank" rel="noopener noreferrer">シェアする →</a>
-      </p>
-
-      <AdsByGoogle ad-slot="7173714878" />
-    </div>
-
-    <section v-if="content.related?.length" class="article__related">
-      <p class="article__related-label">RELATED</p>
-      <ArticleList :contents="content.related" variant="compact" />
-    </section>
-  </article>
+    </template>
+  </ArticleDetail>
 </template>
 
 <style lang="scss" scoped>
-// 背景パターン（layouts/default.vue）の上に乗るブロック群。本文（見出し〜タグ）は
-// 一連の読み物なのでひとつの不透明ブロックにまとめるが、関連商品リンクとRELATEDは
-// 本文とは別のまとまりなので、このブロックからは分離し、余白でパターンを見せる
-.article {
-  width: 100%;
-}
-
-.article__block {
-  @include content-block;
-
-  border-radius: $radius-card;
-  padding: 28px;
-}
-
-@media screen and (max-width: $bp-sm) {
-  .article__block {
-    padding: 0;
-  }
-}
-
-.article__breadcrumb {
-  padding-bottom: 14px;
-}
-
-.article__breadcrumb__link {
-  @include label($color-secondary);
-  margin: 7px;
-}
-
-.article__visual {
-  position: relative;
-  overflow: hidden;
-  border-radius: $radius-image;
-  margin-bottom: 24px;
-}
-
-.article__thumbnail {
-  display: block;
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  object-fit: cover;
-}
-
-.article__thumbnail--placeholder {
-  @include placeholder-stripe;
-}
-
-.article__title {
-  @include heading-1;
-
-  margin-bottom: 12px;
-}
-
-.article__meta {
-  @include label($color-meta);
-
-  margin: 0 0 16px;
-}
-
-.article__tags--top {
-  margin-bottom: 32px;
-}
-
-.article__text {
-  @include article-typography;
-}
-
-.article__tags {
-  margin-top: 32px;
-}
-
-.article__affiliate {
-  @include card;
-
-  max-width: 460px;
-  margin: 32px auto;
-  padding: 4px 20px 12px;
-  border: 2px solid $color-primary;
-  word-break: break-all;
-
-  :deep(img) {
-    width: 100%;
-    height: auto;
-    border-radius: $radius-image-sm;
-  }
-}
-
-.article__affiliate-label {
-  @include label($color-primary);
-
-  font-weight: 700;
+.article__tail {
+  @include content-card;
 }
 
 .article__divider {
@@ -189,25 +65,5 @@ useHead({
   a {
     text-decoration: none;
   }
-}
-
-.article__related {
-  @include content-block;
-
-  margin-top: 40px;
-  border-radius: $radius-card;
-  padding: 24px 28px;
-}
-
-@media screen and (max-width: $bp-sm) {
-  .article__related {
-    padding: 20px 0;
-  }
-}
-
-.article__related-label {
-  @include label($color-meta);
-
-  margin: 0 0 14px;
 }
 </style>

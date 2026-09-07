@@ -2,7 +2,6 @@
 import type { Article } from '@/types'
 import type { MicroCMSListContent } from 'microcms-js-sdk'
 
-const { formatDot } = useDate()
 const route = useRoute()
 
 const content = ref<(MicroCMSListContent & Article) | null>(null)
@@ -31,128 +30,15 @@ useHead({
 </script>
 
 <template>
-  <article v-if="content" class="article">
-    <p class="article__breadcrumb">TOP / DRAFT PREVIEW</p>
-
-    <div class="article__visual">
-      <img
-        v-if="content.thumbnail?.url"
-        class="article__thumbnail"
-        :src="content.thumbnail.url"
-        :alt="content.title"
-      >
-      <div v-else class="article__thumbnail article__thumbnail--placeholder" />
-      <span class="article__category">下書き</span>
-    </div>
-
-    <h1 id="articleTitle" class="article__title">{{ content.title }}</h1>
-    <p class="article__meta">
-      {{ formatDot(content.createdAt) }}
-      <span v-if="content.revisedAt"> ・ 更新 {{ formatDot(content.revisedAt) }}</span>
-    </p>
-
-    <div class="article__text" v-html="content.text" />
-
-    <TagLink v-if="content.tag" :tags="content.tag" class="article__tags" />
-
-    <div class="article__affiliate">
-      <p class="article__affiliate-label">関連商品リンク</p>
-      <div v-html="content.affiliate" />
-    </div>
-
-    <section v-if="content.related?.length" class="article__related">
-      <p class="article__related-label">RELATED</p>
-      <ArticleList :contents="content.related" variant="compact" />
-    </section>
-  </article>
+  <ArticleDetail v-if="content" :content="content">
+    <template #breadcrumb>
+      <span class="draft__label">TOP / DRAFT PREVIEW</span>
+    </template>
+  </ArticleDetail>
 </template>
 
 <style lang="scss" scoped>
-.article {
-  width: 100%;
-}
-
-.article__breadcrumb {
+.draft__label {
   @include label($color-meta);
-
-  margin: 0 0 14px;
-}
-
-.article__visual {
-  position: relative;
-  overflow: hidden;
-  border-radius: $radius-image;
-  margin-bottom: 24px;
-}
-
-.article__thumbnail {
-  display: block;
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  object-fit: cover;
-}
-
-.article__thumbnail--placeholder {
-  @include placeholder-stripe;
-}
-
-.article__category {
-  @include badge($color-primary);
-
-  position: absolute;
-  top: 12px;
-  left: 12px;
-}
-
-.article__title {
-  @include heading-1;
-
-  margin-bottom: 12px;
-}
-
-.article__meta {
-  @include label($color-meta);
-
-  margin: 0 0 32px;
-}
-
-.article__text {
-  @include article-typography;
-}
-
-.article__tags {
-  margin-top: 32px;
-}
-
-.article__affiliate {
-  @include card;
-
-  max-width: 460px;
-  margin: 32px auto;
-  padding: 4px 20px 12px;
-  border: 2px solid $color-primary;
-  word-break: break-all;
-
-  :deep(img) {
-    width: 100%;
-    height: auto;
-    border-radius: $radius-image-sm;
-  }
-}
-
-.article__affiliate-label {
-  @include label($color-primary);
-
-  font-weight: 700;
-}
-
-.article__related {
-  margin-top: 40px;
-}
-
-.article__related-label {
-  @include label($color-meta);
-
-  margin: 0 0 14px;
 }
 </style>
