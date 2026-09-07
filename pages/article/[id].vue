@@ -37,15 +37,11 @@ useHead({
 <template>
   <article v-if="content" class="article">
     <div class="article__block">
-      <p class="article__breadcrumb">TOP / {{ category ?? 'ARTICLE' }}</p>
-
+      <div class="article__breadcrumb">
+        <NuxtLink to="/" class="article__breadcrumb__link">← TOP</NuxtLink>
+      </div>
       <div class="article__visual">
-        <img
-          v-if="content.thumbnail?.url"
-          class="article__thumbnail"
-          :src="content.thumbnail.url"
-          :alt="content.title"
-        >
+        <img v-if="content.thumbnail?.url" class="article__thumbnail" :src="content.thumbnail.url" :alt="content.title">
         <div v-else class="article__thumbnail article__thumbnail--placeholder" />
         <span v-if="category" class="article__category">{{ category }}</span>
       </div>
@@ -106,9 +102,12 @@ useHead({
 }
 
 .article__breadcrumb {
-  @include label($color-meta);
+  padding-bottom: 14px;
+}
 
-  margin: 0 0 14px;
+.article__breadcrumb__link {
+  @include label($color-secondary);
+  margin: 7px;
 }
 
 .article__visual {
