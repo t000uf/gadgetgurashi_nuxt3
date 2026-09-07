@@ -29,10 +29,32 @@
   }
 }
 
-// H2はH1と同じ下線モチーフをスケールダウンして使う（H1=全幅／H2=短め）。
-// H3のドット・H4の角スクエアという「文字の左に付くマーカー」とは仕組みごと異なるため、
-// 文字サイズが近くてもH2だけ一目で判別できる
+// H2は実コンテンツではほぼ使われない（記事本文の大見出しは実際にはH3が使われる。
+// H1は記事タイトル側で別に使用されるため）。そのため見た目の優先度は
+// 「H1(全幅下線) > H3(短い下線・実質の大見出し) > H2(ドット) > H4(角スクエア)」とし、
+// H3にH1と同じ下線モチーフのスケールダウン版を割り当てる
 @mixin heading-2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 36px 0 14px;
+  color: $color-base;
+  font-family: $font-heading;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1.5;
+
+  &::before {
+    flex: none;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: $color-primary;
+    content: '';
+  }
+}
+
+@mixin heading-3 {
   position: relative;
   margin: 40px 0 20px;
   padding-bottom: 10px;
@@ -50,27 +72,6 @@
     width: 40px;
     height: 3px;
     border-radius: $radius-bar;
-    background-color: $color-primary;
-    content: '';
-  }
-}
-
-@mixin heading-3 {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 36px 0 14px;
-  color: $color-base;
-  font-family: $font-heading;
-  font-weight: 700;
-  font-size: 16px;
-  line-height: 1.5;
-
-  &::before {
-    flex: none;
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
     background-color: $color-primary;
     content: '';
   }
@@ -171,19 +172,20 @@
     margin: 10px 0 30px;
   }
 
-  // 長文中の見出しは前後の余白と罫線ではっきり区切る（段落見出しとの混同防止）
+  // 長文中の見出しは前後の余白と罫線ではっきり区切る（段落見出しとの混同防止）。
+  // 実コンテンツでは記事本文の大見出しにH3が使われるため、罫線を伴う強い区切りはH3側に付ける
   :deep(h2) {
     @include heading-2;
 
-    margin-top: 64px;
-    padding-top: 32px;
-    border-top: 1px solid $color-border;
+    margin-top: 44px;
   }
 
   :deep(h3) {
     @include heading-3;
 
-    margin-top: 44px;
+    margin-top: 64px;
+    padding-top: 32px;
+    border-top: 1px solid $color-border;
   }
 
   :deep(h4) {
