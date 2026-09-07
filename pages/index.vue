@@ -35,7 +35,7 @@ const pager = computed(() =>
       </p>
     </section>
 
-    <section class="article-list__container">
+    <section>
       <div class="section-heading">
         <h3 id="allkiji" class="section-title">記事一覧</h3>
       </div>
@@ -58,7 +58,13 @@ const pager = computed(() =>
   @include content-block;
 
   border-radius: $radius-card;
-  padding: 28px 14px;
+  padding: 28px;
+}
+
+@media screen and (max-width: $bp-sm) {
+  .intro {
+    padding: 20px 16px;
+  }
 }
 
 .intro__eyebrow {
@@ -95,10 +101,13 @@ const pager = computed(() =>
   width: 100%;
   margin: 0 0 14px;
   border-radius: $radius-card;
+  padding: 20px 28px;
 }
 
-.article-list__container {
-  padding: 28px 14px;
+@media screen and (max-width: $bp-sm) {
+  .section-heading {
+    padding: 16px;
+  }
 }
 
 // 記事本文の実質的な大見出し（h3）とスタイルを揃える

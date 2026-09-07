@@ -36,7 +36,13 @@ const restContents = computed(() =>
 <style lang="scss" scoped>
 .article-list {
   width: 100%;
-  padding: 28px 14px;
+  padding: 28px;
+}
+
+@media screen and (max-width: $bp-sm) {
+  .article-list {
+    padding: 20px 16px;
+  }
 }
 
 .article-list__featured {
