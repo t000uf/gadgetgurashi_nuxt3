@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 const route = useRoute()
 
-const isHome = computed(() => route.path === '/' || route.path.startsWith('/page/'))
+const isHome = computed(() => route.path === '/')
 const isAbout = computed(() => route.path.startsWith('/article/about'))
 </script>
 

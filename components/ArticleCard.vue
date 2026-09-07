@@ -16,32 +16,42 @@ const { formatDot } = useDate()
 const date = computed(() => formatDot(props.content.createdAt))
 const category = computed(() => props.content.tag?.[0]?.tagName)
 const tags = computed(() => props.content.tag ?? [])
+// 一覧カードのタグは、記事へのリンク（<a>）の中に別のリンクをネストできないため
+// card__link の外に置く。表示しすぎないよう先頭3件までに絞る
+const listTags = computed(() => tags.value.slice(0, 3))
 </script>
 
 <template>
-  <NuxtLink :to="`/article/${content.id}/`" class="card" :class="`card--${variant}`">
-    <div class="card__visual">
-      <img v-if="content.thumbnail?.url" class="card__image" :src="content.thumbnail.url" :alt="content.title"
-        loading="lazy">
-      <div v-else class="card__image card__image--placeholder" />
-      <span v-if="variant === 'featured'" class="card__badge card__badge--featured">注目</span>
-      <span v-else-if="variant === 'default' && category" class="card__badge">{{ category }}</span>
-    </div>
-    <div class="card__body">
-      <h3 class="card__title">{{ content.title }}</h3>
-      <p v-if="variant === 'featured' && content.preview" class="card__preview">
-        {{ content.preview }}...
-      </p>
-      <div v-if="variant === 'compact' && tags.length" class="card__tags">
-        <span v-for="tag in tags" :key="tag.id" class="card__tag">{{ tag.tagName }}</span>
+  <div class="card" :class="`card--${variant}`">
+    <NuxtLink :to="`/article/${content.id}/`" class="card__link">
+      <div class="card__visual">
+        <img v-if="content.thumbnail?.url" class="card__image" :src="content.thumbnail.url" :alt="content.title"
+          loading="lazy">
+        <div v-else class="card__image card__image--placeholder" />
+        <span v-if="variant === 'featured'" class="card__badge card__badge--featured">注目</span>
+        <span v-else-if="variant === 'default' && category" class="card__badge">{{ category }}</span>
       </div>
-      <time v-if="date && variant !== 'compact'" class="card__date">{{ date }}</time>
-    </div>
-  </NuxtLink>
+      <div class="card__body">
+        <h3 class="card__title">{{ content.title }}</h3>
+        <p v-if="variant === 'featured' && content.preview" class="card__preview">
+          {{ content.preview }}...
+        </p>
+        <div v-if="variant === 'compact' && tags.length" class="card__tags">
+          <span v-for="tag in tags" :key="tag.id" class="card__tag">{{ tag.tagName }}</span>
+        </div>
+        <time v-if="date && variant !== 'compact'" class="card__date">{{ date }}</time>
+      </div>
+    </NuxtLink>
+    <TagLink v-if="variant !== 'compact' && listTags.length" :tags="listTags" class="card__taglinks" />
+  </div>
 </template>
 
 <style lang="scss" scoped>
 .card {
+  display: block;
+}
+
+.card__link {
   display: block;
   color: inherit;
   text-decoration: none;
@@ -167,9 +177,11 @@ const tags = computed(() => props.content.tag ?? [])
 
 // --- compact：関連記事の横並びサムネイル ---------------------
 .card--compact {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
+  .card__link {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
 
   .card__visual {
     flex: none;
@@ -185,6 +197,10 @@ const tags = computed(() => props.content.tag ?? [])
   .card__title {
     font-size: 13px;
   }
+}
+
+.card__taglinks {
+  margin-top: 10px;
 }
 
 .card__tags {

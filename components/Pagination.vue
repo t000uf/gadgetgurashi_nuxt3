@@ -22,7 +22,7 @@ const getPath = (p: number) => {
         class="pagination__item pagination__item--arrow"
         aria-label="前のページへ"
       >
-        <AppIcon name="arrow-back" :size="16" />
+        <AppIcon name="arrow-back" :size="18" />
       </NuxtLink>
 
       <NuxtLink v-if="2 < current" :to="getPath(1)" class="pagination__item">1</NuxtLink>
@@ -50,7 +50,7 @@ const getPath = (p: number) => {
         class="pagination__item pagination__item--arrow"
         aria-label="次のページへ"
       >
-        <AppIcon name="arrow-forward" :size="16" />
+        <AppIcon name="arrow-forward" :size="18" />
       </NuxtLink>
     </div>
   </nav>
@@ -70,23 +70,23 @@ const getPath = (p: number) => {
 
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   border-radius: $radius-pill;
-  padding: 8px 16px;
+  padding: 10px 20px;
 }
 
 .pagination__item {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 34px;
-  height: 34px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   background-color: $color-placeholder-1;
   color: $color-nav-inactive;
   font-family: $font-heading;
   font-weight: 500;
-  font-size: 14px;
+  font-size: 15px;
   text-decoration: none;
   transition: background-color 0.2s ease, color 0.2s ease;
 
