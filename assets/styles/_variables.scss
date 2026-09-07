@@ -1,0 +1,52 @@
+$text-color: #433f36;
+$main-color: #ffab0f;
+$sub-color: #ffcb70;
+$light-color: #ffebc9;
+$light-accent: #c4f8d8;
+$bg-white: #faf9f8;
+$bg-lightgray:#e3e0db;
+$bg-gray: #c8c3b9;
+$link-text: #08778a;
+html {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    display: block;
+    scroll-behavior: smooth;
+    color: $text-color;
+    font-family: 'Noto+Sans+JP', sans-serif;
+}
+
+body {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    display: block;
+}
+
+@keyframes fadein {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 100;
+    }
+}
+
+a {
+    color: $link-text;
+}
+
+a:visited {
+    color: #664bff;
+}
+
+::selection {
+    background-color: $sub-color;
+    color: $text-color;
+}
+
+::-moz-selection {
+    background-color: $sub-color;
+    color: $text-color;
+}
