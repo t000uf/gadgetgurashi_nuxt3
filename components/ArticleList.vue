@@ -23,7 +23,7 @@ const restContents = computed(() =>
 </script>
 
 <template>
-  <div class="article-list">
+  <div class="article-list" :class="`article-list--${variant}`">
     <ArticleCard v-if="featuredContent" :key="featuredContent.id" :content="featuredContent" variant="featured"
       class="article-list__featured" />
     <div class="article-list__grid">
@@ -36,12 +36,17 @@ const restContents = computed(() =>
 <style lang="scss" scoped>
 .article-list {
   width: 100%;
-  padding: 28px;
+}
+
+// grid（トップ・一覧・タグページ）は他コンテンツと同じ横paddingで揃える。
+// compact（RELATED）は既にpaddingを持つ箱にネストされるため付けない
+.article-list--grid {
+  padding: 0 28px;
 }
 
 @media screen and (max-width: $bp-sm) {
-  .article-list {
-    padding: 20px 16px;
+  .article-list--grid {
+    padding: 0;
   }
 }
 

@@ -24,7 +24,7 @@ const pager = computed(() =>
 <template>
   <div>
     <p class="breadcrumb">TOP / ARCHIVE</p>
-    <h1 id="allkiji" class="page-title">記事一覧</h1>
+    <h1 class="page-title allkiji">記事一覧</h1>
     <p class="page-meta">PAGE {{ page }}</p>
     <ArticleList v-if="data?.contents" :contents="data.contents" />
     <Pagination :pager="pager" :current="page" />

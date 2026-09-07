@@ -32,7 +32,7 @@ const pager = computed(() =>
 <template>
   <div>
     <p class="breadcrumb">TOP / TAG</p>
-    <h1 id="allkiji" class="page-title">「{{ selectedTag?.tagName }}」の記事</h1>
+    <h1 class="page-title allkiji">「{{ selectedTag?.tagName }}」の記事</h1>
     <p class="page-meta">{{ articleData?.totalCount ?? 0 }} ARTICLES ・ PAGE {{ page }}</p>
     <ArticleList v-if="articleData?.contents" :contents="articleData.contents" />
     <Pagination v-if="pager" :pager="pager" :current="page" :tag="selectedTag" />

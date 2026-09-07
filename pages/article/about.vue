@@ -36,7 +36,7 @@ useHead({
 
 @media screen and (max-width: $bp-sm) {
   .about {
-    padding: 20px 16px;
+    padding: 20px 0;
   }
 }
 

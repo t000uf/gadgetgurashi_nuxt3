@@ -97,7 +97,7 @@ useHead({
 
 @media screen and (max-width: $bp-sm) {
   .article__block {
-    padding: 20px 16px;
+    padding: 20px 0;
   }
 }
 
@@ -206,7 +206,7 @@ useHead({
 
 @media screen and (max-width: $bp-sm) {
   .article__related {
-    padding: 20px 16px;
+    padding: 20px 0;
   }
 }
 

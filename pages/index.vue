@@ -35,13 +35,11 @@ const pager = computed(() =>
       </p>
     </section>
 
-    <section>
-      <div class="section-heading">
-        <h3 id="allkiji" class="section-title">記事一覧</h3>
-      </div>
-      <ArticleList v-if="data?.contents" :contents="data.contents" featured />
-      <Pagination :pager="pager" :current="1" />
+    <section class="section-heading">
+      <h3 class="section-title allkiji">記事一覧</h3>
     </section>
+    <ArticleList v-if="data?.contents" :contents="data.contents" featured />
+    <Pagination :pager="pager" :current="1" />
 
     <AdsByGoogle ad-slot="7173714878" />
   </div>
@@ -63,7 +61,7 @@ const pager = computed(() =>
 
 @media screen and (max-width: $bp-sm) {
   .intro {
-    padding: 20px 16px;
+    padding: 20px 0;
   }
 }
 
@@ -106,7 +104,7 @@ const pager = computed(() =>
 
 @media screen and (max-width: $bp-sm) {
   .section-heading {
-    padding: 16px;
+    padding: 16px 0;
   }
 }
 

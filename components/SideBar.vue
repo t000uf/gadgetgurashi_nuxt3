@@ -24,6 +24,12 @@
   margin: 0 0 10px;
 }
 
+@media screen and (max-width: $bp-sm) {
+  .side {
+    padding: 16px 0;
+  }
+}
+
 @media screen and (min-width: $bp-lg) {
   .side {
     position: sticky;
