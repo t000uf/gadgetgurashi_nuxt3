@@ -31,15 +31,34 @@ const pager = computed(() =>
 
 <template>
   <div>
-    <p class="breadcrumb">TOP / TAG</p>
-    <h1 class="page-title allkiji">「{{ selectedTag?.tagName }}」の記事</h1>
-    <p class="page-meta">{{ articleData?.totalCount ?? 0 }} ARTICLES ・ PAGE {{ page }}</p>
+    <section class="page-heading">
+      <p class="breadcrumb">TOP / TAG</p>
+      <h1 class="page-title allkiji">「{{ selectedTag?.tagName }}」の記事</h1>
+      <p class="page-meta">{{ articleData?.totalCount ?? 0 }} ARTICLES ・ PAGE {{ page }}</p>
+    </section>
     <ArticleList v-if="articleData?.contents" :contents="articleData.contents" />
     <Pagination v-if="pager" :pager="pager" :current="page" :tag="selectedTag" />
   </div>
 </template>
 
 <style lang="scss" scoped>
+// 背景パターン（layouts/default.vue）の上に乗るブロック。トップページの
+// section-heading（pages/index.vue）と同じ考え方で不透明に塗る
+.page-heading {
+  @include content-block;
+
+  width: 100%;
+  margin: 0 0 14px;
+  border-radius: $radius-card;
+  padding: 20px 28px;
+}
+
+@media screen and (max-width: $bp-sm) {
+  .page-heading {
+    padding: 16px 0;
+  }
+}
+
 .breadcrumb {
   @include label($color-meta);
 
@@ -55,6 +74,6 @@ const pager = computed(() =>
 .page-meta {
   @include label($color-meta);
 
-  margin: 0 0 24px;
+  margin: 0;
 }
 </style>
