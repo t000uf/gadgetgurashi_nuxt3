@@ -1,0 +1,219 @@
+@use 'tokens' as *;
+
+// =============================================================
+// 見出しシステム（デザイントークンとして重要）
+// H1: ページ内で1つだけ / H2: セクション区切り / H3: 小見出し
+// H4: 補足・キャプション見出し（下線は使わない＝リンクとの混同回避）
+// =============================================================
+@mixin heading-1 {
+  position: relative;
+  margin: 0 0 24px;
+  padding-bottom: 12px;
+  color: $color-base;
+  font-family: $font-heading;
+  font-weight: 700;
+  font-size: 26px;
+  line-height: 1.4;
+
+  &::after {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    display: block;
+    width: 52px;
+    height: 4px;
+    border-radius: $radius-bar;
+    background-color: $color-primary;
+    content: '';
+  }
+}
+
+@mixin heading-2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 40px 0 16px;
+  color: $color-base;
+  font-family: $font-heading;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 1.5;
+
+  &::before {
+    flex: none;
+    width: 5px;
+    height: 22px;
+    border-radius: $radius-bar;
+    background-color: $color-primary;
+    content: '';
+  }
+}
+
+@mixin heading-3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 32px 0 12px;
+  color: $color-base;
+  font-family: $font-heading;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1.5;
+
+  &::before {
+    flex: none;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: $color-primary;
+    content: '';
+  }
+}
+
+@mixin heading-4 {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 24px 0 10px;
+  color: $color-base;
+  font-family: $font-mono;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  line-height: 1.5;
+
+  &::before {
+    flex: none;
+    width: 6px;
+    height: 6px;
+    background-color: $color-primary;
+    content: '';
+  }
+}
+
+// ラベル・メタ情報（JetBrains Mono）
+@mixin label-mono($size: 10px, $color: $color-meta) {
+  color: $color;
+  font-family: $font-mono;
+  font-weight: 500;
+  font-size: $size;
+  letter-spacing: 1px;
+}
+
+// 画像プレースホルダー（実画像未設定時のフォールバック）
+@mixin placeholder-stripe($step: 10px) {
+  background-image: repeating-linear-gradient(
+    45deg,
+    $color-placeholder-1,
+    $color-placeholder-1 $step,
+    $color-placeholder-2 $step,
+    $color-placeholder-2 $step * 2
+  );
+}
+
+// 画像に重ねるバッジ（pill）。背景の色塗りは使わない
+@mixin badge($bg: $color-secondary) {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: $radius-pill;
+  background-color: $bg;
+  color: #fff;
+  font-family: $font-mono;
+  font-weight: 500;
+  font-size: 11px;
+  line-height: 1.4;
+  white-space: nowrap;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@mixin card {
+  border-radius: $radius-card;
+  background-color: $color-card;
+}
+
+// =============================================================
+// CMS本文（v-html）の組版。記事・about・下書きで共通利用する
+// =============================================================
+@mixin article-typography {
+  color: $color-body;
+  font-family: $font-body;
+  font-size: 16px;
+  line-height: 1.9;
+  word-break: break-word;
+
+  :deep(p) {
+    margin: 0 0 1.6em;
+  }
+
+  :deep(a) {
+    color: $color-secondary;
+    text-decoration: none;
+
+    &:hover {
+      color: $color-secondary-dark;
+      text-decoration: underline;
+    }
+  }
+
+  :deep(img) {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    box-sizing: border-box;
+    border-radius: $radius-image;
+    margin: 10px 0 30px;
+  }
+
+  :deep(h2) {
+    @include heading-2;
+  }
+
+  :deep(h3) {
+    @include heading-3;
+  }
+
+  :deep(h4) {
+    @include heading-4;
+  }
+
+  :deep(ul),
+  :deep(ol) {
+    margin: 0 0 1.6em;
+    padding-left: 1.4em;
+  }
+
+  :deep(li) {
+    margin-bottom: 0.6em;
+  }
+
+  :deep(blockquote) {
+    margin: 0 0 1.6em;
+    padding: 4px 0 4px 16px;
+    border-left: 4px solid $color-border;
+    color: $color-meta;
+  }
+
+  :deep(code) {
+    padding: 2px 6px;
+    border-radius: 4px;
+    background-color: $color-bg;
+    font-family: $font-mono;
+    font-size: 14px;
+  }
+
+  :deep(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 0 1.6em;
+    font-size: 14px;
+  }
+
+  :deep(th),
+  :deep(td) {
+    padding: 8px 10px;
+    border: 1px solid $color-border;
+    text-align: left;
+  }
+}

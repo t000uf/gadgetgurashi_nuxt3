@@ -1,0 +1,52 @@
+// =============================================================
+// Design tokens - がじぇっとぐらし！ v8 リブランディング
+// 定義の追加・変更はここだけで行う（値の直書き禁止）
+// =============================================================
+
+// --- Colors -------------------------------------------------
+// ブランドカラー（オレンジ）とアクセント（ブルー）の2色構成。
+// この2色以外の新しい色は追加しない。
+$color-primary: #e8791e; // ブランド／注目表示／見出しアクセント
+$color-primary-dark: #c8620f; // hover用に暗く落としたトーン
+$color-secondary: #4f74d6; // カテゴリタグ／リンク／二次的な導線
+$color-secondary-dark: #3d5cb0; // リンクhover
+
+$color-base: #1f2530; // 濃色：ロゴ／見出し／ヘッダーテキスト
+$color-body: #5c6472; // 本文グレー
+$color-meta: #9aa3b0; // メタ情報グレー（日付・ラベル）
+$color-nav-inactive: #7c8798; // ナビ非アクティブ
+
+$color-bg: #f4f6f8; // サイト背景
+$color-header-bg: #e6eaef; // ヘッダー背景
+$color-header-border: #c7cfd9; // ヘッダー境界線
+$color-border: #d2d9e2; // セクション境界線
+$color-card: #ffffff; // カード背景
+
+$color-placeholder-1: #dfe4ea; // プレースホルダー画像 縞1
+$color-placeholder-2: #d2d9e2; // プレースホルダー画像 縞2
+
+// --- Typography ---------------------------------------------
+$font-heading: 'Zen Maru Gothic', 'Hiragino Maru Gothic ProN', sans-serif;
+$font-body: 'Zen Kaku Gothic New', 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+$font-mono: 'JetBrains Mono', 'SFMono-Regular', Consolas, monospace;
+
+// --- Radius --------------------------------------------------
+$radius-card: 14px; // カード全体
+$radius-image: 12px; // 画像（大）
+$radius-image-sm: 10px; // 画像（小・グリッド内）
+$radius-pill: 20px; // バッジ / pill
+$radius-bar: 2px; // アクセントバー
+
+// --- Layout --------------------------------------------------
+$header-height: 56px;
+$content-width: 760px; // 本文カラム
+$container-width: 1080px; // 本文＋サイドバー
+$sidebar-width: 260px;
+
+$space-card: 24px; // カード内パディングの基本単位
+$space-grid: 16px; // 記事グリッドのgap
+
+// --- Breakpoints ---------------------------------------------
+$bp-sm: 639px;
+$bp-md: 640px;
+$bp-lg: 1025px;

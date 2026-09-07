@@ -2,7 +2,7 @@
 import type { Article } from '@/types'
 import type { MicroCMSListContent } from 'microcms-js-sdk'
 
-const { format } = useDate()
+const { formatDot } = useDate()
 const route = useRoute()
 
 const content = ref<(MicroCMSListContent & Article) | null>(null)
@@ -31,151 +31,128 @@ useHead({
 </script>
 
 <template>
-  <div v-if="content" class="sentence">
-    <h2 id="articleTitle">
-      {{ content.title }}
-    </h2>
-    <p class="date">投稿日時：{{ format(content.createdAt) }}</p>
-    <p class="date">更新日時：{{ format(content.revisedAt) }}</p>
-    <img class="article_thumbnail" :src="content.thumbnail?.url" :alt="content.title">
-    <div class="articleText" v-html="content.text" />
-    <TagLink v-if="content.tag" :tags="content.tag" />
-    <div class="affiliate">
-      <p>関連商品リンク</p>
+  <article v-if="content" class="article">
+    <p class="article__breadcrumb">TOP / DRAFT PREVIEW</p>
+
+    <div class="article__visual">
+      <img
+        v-if="content.thumbnail?.url"
+        class="article__thumbnail"
+        :src="content.thumbnail.url"
+        :alt="content.title"
+      >
+      <div v-else class="article__thumbnail article__thumbnail--placeholder" />
+      <span class="article__category">下書き</span>
+    </div>
+
+    <h1 id="articleTitle" class="article__title">{{ content.title }}</h1>
+    <p class="article__meta">
+      {{ formatDot(content.createdAt) }}
+      <span v-if="content.revisedAt"> ・ 更新 {{ formatDot(content.revisedAt) }}</span>
+    </p>
+
+    <div class="article__text" v-html="content.text" />
+
+    <TagLink v-if="content.tag" :tags="content.tag" class="article__tags" />
+
+    <div class="article__affiliate">
+      <p class="article__affiliate-label">関連商品リンク</p>
       <div v-html="content.affiliate" />
     </div>
-    <h4 class="headline">
-      「{{ content.title }}」に関連する記事
-    </h4>
-    <ArticleList v-if="content.related" :contents="content.related" />
-  </div>
+
+    <section v-if="content.related?.length" class="article__related">
+      <p class="article__related-label">RELATED</p>
+      <ArticleList :contents="content.related" variant="compact" />
+    </section>
+  </article>
 </template>
 
 <style lang="scss" scoped>
-.sentence {
-  max-width: 700px;
+.article {
   width: 100%;
-  padding: 10px;
-  box-sizing: border-box;
 }
 
-#articleTitle {
-  border-left: $main-color 5px solid;
-  padding-left: 10px;
+.article__breadcrumb {
+  @include label-mono(10px, $color-meta);
+
+  margin: 0 0 14px;
 }
 
-.article_thumbnail {
+.article__visual {
+  position: relative;
+  overflow: hidden;
+  border-radius: $radius-image;
+  margin-bottom: 24px;
+}
+
+.article__thumbnail {
+  display: block;
   width: 100%;
-  max-width: 700px;
-  box-sizing: border-box;
-  border-radius: 10px;
-  margin: 10px 0 30px 0;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
 }
 
-.articleText {
-  max-width: 700px;
-
-  :deep(p) {
-    line-height: 2;
-    padding: 3px;
-  }
-
-  :deep(img) {
-    width: 100%;
-    max-width: 700px;
-    box-sizing: border-box;
-    border-radius: 10px;
-    margin: 10px 0 30px 0;
-  }
-
-  :deep(h3) {
-    display: flex;
-    align-items: center;
-    position: sticky;
-    top: 70px;
-    height: 55px;
-    border-radius: 10px;
-    margin-bottom: 60px;
-    padding: 10px;
-    background-image: linear-gradient(to right, $sub-color 0%, $main-color 100%);
-    box-shadow: $bg-gray 0.5px 1px 1px;
-    font-size: 20px;
-    z-index: 10;
-
-    &::before {
-      position: absolute;
-      content: '';
-      bottom: -11px;
-      left: 1em;
-      width: 25px;
-      height: 25px;
-      background-color: $sub-color;
-      border-radius: 2px;
-      box-shadow: $bg-gray 1px 0.5px 0.5px;
-      transform: rotate(45deg);
-      z-index: 15;
-    }
-  }
-
-  :deep(h4) {
-    position: relative;
-    margin: 20px 0 0 0;
-    padding: 10px;
-    font-size: 18px;
-
-    &::after {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 5px;
-      content: '';
-      border-radius: 3px;
-      background-image: linear-gradient(to right, $sub-color 0%, $light-color 100%);
-    }
-  }
+.article__thumbnail--placeholder {
+  @include placeholder-stripe;
 }
 
-.date {
-  text-align: right;
-  font-size: 12px;
+.article__category {
+  @include badge($color-primary);
+
+  position: absolute;
+  top: 12px;
+  left: 12px;
 }
 
-.affiliate {
-  border: 2px solid $main-color;
-  border-radius: 10px;
-  margin: 20px auto 50px auto;
-  padding: 0 20px;
-  max-width: 400px;
-  width: 100%;
-  box-sizing: border-box;
-  background-color: #ffffff;
+.article__title {
+  @include heading-1;
+
+  margin-bottom: 12px;
+}
+
+.article__meta {
+  @include label-mono(11px, $color-meta);
+
+  margin: 0 0 32px;
+}
+
+.article__text {
+  @include article-typography;
+}
+
+.article__tags {
+  margin-top: 32px;
+}
+
+.article__affiliate {
+  @include card;
+
+  max-width: 460px;
+  margin: 32px auto;
+  padding: 4px 20px 12px;
+  border: 2px solid $color-primary;
   word-break: break-all;
 
   :deep(img) {
     width: 100%;
-    max-width: 700px;
-    box-sizing: border-box;
-    border-radius: 10px;
-    margin: 10px 0 30px 0;
+    height: auto;
+    border-radius: $radius-image-sm;
   }
 }
 
-.headline {
-  position: relative;
-  margin: 20px 0;
-  padding: 10px;
-  font-size: 18px;
+.article__affiliate-label {
+  @include label-mono(10px, $color-primary);
 
-  &::after {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 5px;
-    content: '';
-    border-radius: 3px;
-    background-image: linear-gradient(to right, $sub-color 0%, $light-color 100%);
-  }
+  font-weight: 700;
+}
+
+.article__related {
+  margin-top: 40px;
+}
+
+.article__related-label {
+  @include label-mono(10px, $color-meta);
+
+  margin: 0 0 14px;
 }
 </style>

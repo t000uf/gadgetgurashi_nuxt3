@@ -12,41 +12,75 @@ useHead({
 </script>
 
 <template>
-  <div>
+  <div class="layout">
     <TheHeader />
-    <div class="container">
-      <div class="notfoundWrap">
-        <img src="@/assets/imgs/report_problem_black_24dp.svg" alt="" class="icon404">
-        <h3>{{ error.statusCode }} Not Found</h3>
-        <h2>ページが見つかりませんでした...</h2>
-        <NuxtLink to="/">
-          ホームに戻る
-        </NuxtLink>
+    <main class="container">
+      <div class="notfound">
+        <p class="notfound__code">ERROR {{ error.statusCode }}</p>
+        <h1 class="notfound__title">ページが見つかりませんでした...</h1>
+        <p class="notfound__text">
+          URLが変更されたか、記事が削除された可能性があります。
+        </p>
+        <p class="notfound__link">
+          <NuxtLink to="/">ホームに戻る →</NuxtLink>
+        </p>
       </div>
-    </div>
+    </main>
     <TheFooter />
   </div>
 </template>
 
 <style lang="scss" scoped>
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: $color-bg;
+}
+
 .container {
   display: flex;
   justify-content: center;
-  background-color: $bg-white;
+  align-items: center;
+  flex: 1;
+  padding: ($header-height + 40px) 24px 64px;
 }
 
-.notfoundWrap {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+.notfound {
   width: 100%;
-  max-width: 700px;
-  height: 85vh;
+  max-width: $content-width;
   text-align: center;
 }
 
-.icon404 {
-  width: 30%;
+.notfound__code {
+  @include label-mono(11px, $color-primary);
+
+  margin: 0 0 16px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+
+.notfound__title {
+  margin: 0 0 16px;
+  color: $color-base;
+  font-family: $font-heading;
+  font-weight: 700;
+  font-size: 22px;
+}
+
+.notfound__text {
+  margin: 0;
+  color: $color-body;
+  font-size: 14px;
+}
+
+.notfound__link {
+  @include label-mono(12px, $color-secondary);
+
+  margin-top: 24px;
+
+  a {
+    text-decoration: none;
+  }
 }
 </style>

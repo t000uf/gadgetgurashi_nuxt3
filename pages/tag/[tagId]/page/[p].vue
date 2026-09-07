@@ -9,7 +9,7 @@ const limit = 10
 const [{ data: articleData }, { data: tagData }] = await Promise.all([
   useFetch<MicroCMSList<Article>>('/api/article', {
     query: {
-      fields: 'id,title,thumbnail,preview,tag',
+      fields: 'id,title,thumbnail,preview,tag,createdAt',
       limit,
       filters: `tag[contains]${tagId}`,
       offset: (page - 1) * limit,
@@ -30,20 +30,31 @@ const pager = computed(() =>
 </script>
 
 <template>
-  <div class="sentence">
-    <h3 id="allkiji">
-      "{{ selectedTag?.tagName }}"の記事一覧
-    </h3>
+  <div>
+    <p class="breadcrumb">TOP / TAG</p>
+    <h1 id="allkiji" class="page-title">「{{ selectedTag?.tagName }}」の記事</h1>
+    <p class="page-meta">{{ articleData?.totalCount ?? 0 }} ARTICLES ・ PAGE {{ page }}</p>
     <ArticleList v-if="articleData?.contents" :contents="articleData.contents" />
     <Pagination v-if="pager" :pager="pager" :current="page" :tag="selectedTag" />
   </div>
 </template>
 
 <style lang="scss" scoped>
-.sentence {
-  max-width: 700px;
-  width: 100%;
-  padding: 10px;
-  box-sizing: border-box;
+.breadcrumb {
+  @include label-mono(10px, $color-meta);
+
+  margin: 0 0 14px;
+}
+
+.page-title {
+  @include heading-1;
+
+  margin-bottom: 12px;
+}
+
+.page-meta {
+  @include label-mono(11px, $color-meta);
+
+  margin: 0 0 24px;
 }
 </style>

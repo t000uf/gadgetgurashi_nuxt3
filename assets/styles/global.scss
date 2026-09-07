@@ -1,0 +1,80 @@
+// グローバルスタイル（nuxt.config.ts の css で1度だけ読み込む）
+// トークン／mixin は additionalData 経由で自動的に利用できる
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  scroll-behavior: smooth;
+  background-color: $color-bg;
+  color: $color-body;
+  font-family: $font-body;
+  font-size: 16px;
+  line-height: 1.8;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: $color-base;
+  font-family: $font-heading;
+  font-weight: 700;
+}
+
+a {
+  color: $color-secondary;
+  transition: color 0.2s ease;
+
+  &:visited {
+    color: $color-secondary;
+  }
+
+  &:hover {
+    color: $color-secondary-dark;
+  }
+}
+
+:focus-visible {
+  outline: 2px solid $color-primary;
+  outline-offset: 2px;
+}
+
+img {
+  max-width: 100%;
+}
+
+::selection {
+  background-color: rgba($color-primary, 0.25);
+  color: $color-base;
+}
+
+::-moz-selection {
+  background-color: rgba($color-primary, 0.25);
+  color: $color-base;
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}

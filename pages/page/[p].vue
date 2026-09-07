@@ -22,11 +22,31 @@ const pager = computed(() =>
 </script>
 
 <template>
-  <div class="sentence_home">
-    <h3 id="allkiji">
-      記事一覧 {{ page }}ページ目
-    </h3>
+  <div>
+    <p class="breadcrumb">TOP / ARCHIVE</p>
+    <h1 id="allkiji" class="page-title">記事一覧</h1>
+    <p class="page-meta">PAGE {{ page }}</p>
     <ArticleList v-if="data?.contents" :contents="data.contents" />
     <Pagination :pager="pager" :current="page" />
   </div>
 </template>
+
+<style lang="scss" scoped>
+.breadcrumb {
+  @include label-mono(10px, $color-meta);
+
+  margin: 0 0 14px;
+}
+
+.page-title {
+  @include heading-1;
+
+  margin-bottom: 12px;
+}
+
+.page-meta {
+  @include label-mono(11px, $color-meta);
+
+  margin: 0 0 24px;
+}
+</style>

@@ -14,126 +14,93 @@ const getPath = (p: number) => {
 </script>
 
 <template>
-  <div class="pagingWrap">
-    <ul class="pager">
-      <li v-if="2 < current" class="page">
-        <NuxtLink :to="getPath(1)" />
-        <p>1</p>
-      </li>
-      <li v-if="3 <= current" class="omission">
-        ...
-      </li>
-      <li v-for="p in pager" v-show="current - 2 <= p && p <= current + 0" :key="p" class="page"
-        :class="{ active: current === p + 1 }">
-        <NuxtLink :to="getPath(p + 1)" />
-        <p>{{ p + 1 }}</p>
-      </li>
-      <li v-if="current + 2 <= pager.length" class="omission">
-        ...
-      </li>
-      <li v-if="current + 1 < pager.length" class="page">
-        <NuxtLink :to="getPath(pager.length)" />
-        <p>{{ pager.length }}</p>
-      </li>
-    </ul>
-    <ul class="pageArrows">
-      <li v-if="1 < current" class="page arrow">
-        <img src="@/assets/imgs/arrow_back_ios_new_black_24dp.svg" alt="前のページへ">
-        <NuxtLink :to="getPath(current - 1)" />
-      </li>
-      <li v-if="current < pager.length" class="page arrow">
-        <img src="@/assets/imgs/arrow_forward_ios_black_24dp.svg" alt="次のページへ">
-        <NuxtLink :to="getPath(current + 1)" />
-      </li>
-    </ul>
-  </div>
+  <nav class="pagination" aria-label="ページ送り">
+    <NuxtLink
+      v-if="1 < current"
+      :to="getPath(current - 1)"
+      class="pagination__item pagination__item--arrow"
+      aria-label="前のページへ"
+    >←</NuxtLink>
+
+    <NuxtLink v-if="2 < current" :to="getPath(1)" class="pagination__item">1</NuxtLink>
+    <span v-if="3 < current" class="pagination__omission">…</span>
+
+    <template v-for="p in pager" :key="p">
+      <NuxtLink
+        v-if="current - 2 <= p && p <= current + 0"
+        :to="getPath(p + 1)"
+        class="pagination__item"
+        :class="{ 'is-active': current === p + 1 }"
+      >{{ p + 1 }}</NuxtLink>
+    </template>
+
+    <span v-if="current + 2 <= pager.length" class="pagination__omission">…</span>
+    <NuxtLink
+      v-if="current + 1 < pager.length"
+      :to="getPath(pager.length)"
+      class="pagination__item"
+    >{{ pager.length }}</NuxtLink>
+
+    <NuxtLink
+      v-if="current < pager.length"
+      :to="getPath(current + 1)"
+      class="pagination__item pagination__item--arrow"
+      aria-label="次のページへ"
+    >→</NuxtLink>
+  </nav>
 </template>
 
 <style lang="scss" scoped>
-.pagingWrap {
-  width: 100%;
-}
-
-.pager {
+.pagination {
   display: flex;
-  flex-direction: row;
-  align-items: center;
   justify-content: center;
-  margin: 0;
-  padding: 0;
-  height: 70px;
+  align-items: center;
+  gap: 8px;
+  padding: 36px 0 8px;
 }
 
-.page {
-  position: relative;
-  box-sizing: border-box;
-  border-radius: 50px;
-  margin: 0 10px;
-  padding: 10px;
-  width: 45px;
-  height: 45px;
-  background-color: $sub-color;
-  text-align: center;
-  list-style-type: none;
-
-  a {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-
-  p {
-    margin: 0;
-    font-size: 110%;
-  }
-}
-
-.omission {
-  text-align: center;
-  list-style-type: none;
-}
-
-.active {
-  background-color: $main-color;
-}
-
-.pageArrows {
+.pagination__item {
   display: flex;
-  flex-direction: row;
-  align-items: center;
   justify-content: center;
-  margin: 0;
-  padding: 0;
-  height: 70px;
-}
+  align-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background-color: $color-placeholder-1;
+  color: $color-nav-inactive;
+  font-family: $font-mono;
+  font-weight: 500;
+  font-size: 13px;
+  text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease;
 
-.arrow {
-  background-color: $main-color;
-
-  img {
-    position: absolute;
-    top: 11px;
-    left: 11px;
+  &:hover {
+    background-color: $color-border;
+    color: $color-base;
   }
-}
 
-@media screen and (max-width: 400px) {
-  .page {
-    margin: 0 4px;
-    padding: 7px;
-    width: 40px;
-    height: 40px;
+  &.is-active {
+    background-color: $color-primary;
+    color: #fff;
 
-    p {
-      font-size: 100%;
+    &:hover {
+      background-color: $color-primary-dark;
+      color: #fff;
     }
   }
+}
 
-  .arrow img {
-    top: 9px;
-    left: 8px;
+.pagination__item--arrow {
+  background-color: transparent;
+  color: $color-secondary;
+
+  &:hover {
+    background-color: $color-placeholder-1;
+    color: $color-secondary-dark;
   }
+}
+
+.pagination__omission {
+  @include label-mono(12px, $color-meta);
 }
 </style>
