@@ -35,8 +35,7 @@ const isAbout = computed(() => route.path.startsWith('/article/about'))
   width: 100%;
   height: $header-height;
   border-bottom: 1px solid $color-header-border;
-  background-color: rgba($color-header-bg, 0.92);
-  backdrop-filter: blur(10px);
+  background-color: $color-header-bg;
 }
 
 .header__inner {

@@ -2,6 +2,7 @@
 
 <template>
   <div class="layout">
+    <BackgroundPattern />
     <TheHeader />
     <main class="container">
       <div class="hero">
@@ -21,6 +22,8 @@
 
 <style lang="scss" scoped>
 .layout {
+  position: relative;
+  z-index: 0; // スタッキングコンテキストを作り、子のz-index:-1(背景パターン)をこの中に閉じ込める
   display: flex;
   flex-direction: column;
   min-height: 100vh;

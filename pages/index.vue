@@ -35,10 +35,14 @@ const pager = computed(() =>
       </p>
     </section>
 
-    <hr class="divider">
+    <div class="divider-block">
+      <hr class="divider">
+    </div>
 
     <section>
-      <h2 id="allkiji" class="section-title">記事一覧</h2>
+      <div class="section-heading">
+        <h2 id="allkiji" class="section-title">記事一覧</h2>
+      </div>
       <ArticleList v-if="data?.contents" :contents="data.contents" featured />
       <Pagination :pager="pager" :current="1" />
     </section>
@@ -50,6 +54,14 @@ const pager = computed(() =>
 <style lang="scss" scoped>
 .home {
   width: 100%;
+}
+
+// 背景パターン（layouts/home.vue）の上に乗るブロックは、パターンを完全に隠すよう
+// サイト背景色で不透明に塗る。ブロック同士の余白ではパターンが見える
+.intro {
+  background-color: $color-bg;
+  border-radius: $radius-card;
+  padding: 28px;
 }
 
 .intro__eyebrow {
@@ -80,14 +92,32 @@ const pager = computed(() =>
   }
 }
 
+.divider-block {
+  width: 100%;
+  margin-top: 32px;
+  background-color: $color-bg;
+  border-radius: $radius-card;
+  padding: 20px 28px;
+}
+
 .divider {
   height: 1px;
   border: none;
-  margin: 32px 0 0;
+  margin: 0;
   background-color: $color-border;
+}
+
+.section-heading {
+  display: inline-block;
+  margin: 36px 0 14px;
+  background-color: $color-bg;
+  border-radius: $radius-card;
+  padding: 16px 20px;
 }
 
 .section-title {
   @include heading-2;
+
+  margin: 0;
 }
 </style>

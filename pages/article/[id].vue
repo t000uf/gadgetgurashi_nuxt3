@@ -81,8 +81,19 @@ useHead({
 </template>
 
 <style lang="scss" scoped>
+// 背景パターン（layouts/default.vue）の上に乗るブロック。記事本文は一連の読み物
+// なので、個別要素ごとではなく記事全体をひとつの不透明な塗りブロックとして扱う
 .article {
   width: 100%;
+  background-color: $color-bg;
+  border-radius: $radius-card;
+  padding: 28px;
+}
+
+@media screen and (max-width: $bp-sm) {
+  .article {
+    padding: 20px 16px;
+  }
 }
 
 .article__breadcrumb {

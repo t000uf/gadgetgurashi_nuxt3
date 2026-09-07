@@ -113,6 +113,16 @@ const tags = computed(() => props.content.tag ?? [])
   font-size: 13px;
 }
 
+// featured / default は背景パターン（layouts/home.vue）の上に乗るブロック。
+// 画像とテキストをまとめてサイト背景色で不透明に塗り、パターンを隠す
+// （compactは記事詳細ページのRELATED欄で使う横並び行のため対象外）
+.card--featured,
+.card--default {
+  background-color: $color-bg;
+  border-radius: $radius-card;
+  padding: 10px 10px 14px;
+}
+
 // --- featured：1カラムの大きなカード -------------------------
 .card--featured {
   .card__visual {

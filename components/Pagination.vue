@@ -15,48 +15,59 @@ const getPath = (p: number) => {
 
 <template>
   <nav class="pagination" aria-label="ページ送り">
-    <NuxtLink
-      v-if="1 < current"
-      :to="getPath(current - 1)"
-      class="pagination__item pagination__item--arrow"
-      aria-label="前のページへ"
-    >←</NuxtLink>
-
-    <NuxtLink v-if="2 < current" :to="getPath(1)" class="pagination__item">1</NuxtLink>
-    <span v-if="3 < current" class="pagination__omission">…</span>
-
-    <template v-for="p in pager" :key="p">
+    <div class="pagination__inner">
       <NuxtLink
-        v-if="current - 2 <= p && p <= current + 0"
-        :to="getPath(p + 1)"
+        v-if="1 < current"
+        :to="getPath(current - 1)"
+        class="pagination__item pagination__item--arrow"
+        aria-label="前のページへ"
+      >←</NuxtLink>
+
+      <NuxtLink v-if="2 < current" :to="getPath(1)" class="pagination__item">1</NuxtLink>
+      <span v-if="3 < current" class="pagination__omission">…</span>
+
+      <template v-for="p in pager" :key="p">
+        <NuxtLink
+          v-if="current - 2 <= p && p <= current + 0"
+          :to="getPath(p + 1)"
+          class="pagination__item"
+          :class="{ 'is-active': current === p + 1 }"
+        >{{ p + 1 }}</NuxtLink>
+      </template>
+
+      <span v-if="current + 2 <= pager.length" class="pagination__omission">…</span>
+      <NuxtLink
+        v-if="current + 1 < pager.length"
+        :to="getPath(pager.length)"
         class="pagination__item"
-        :class="{ 'is-active': current === p + 1 }"
-      >{{ p + 1 }}</NuxtLink>
-    </template>
+      >{{ pager.length }}</NuxtLink>
 
-    <span v-if="current + 2 <= pager.length" class="pagination__omission">…</span>
-    <NuxtLink
-      v-if="current + 1 < pager.length"
-      :to="getPath(pager.length)"
-      class="pagination__item"
-    >{{ pager.length }}</NuxtLink>
-
-    <NuxtLink
-      v-if="current < pager.length"
-      :to="getPath(current + 1)"
-      class="pagination__item pagination__item--arrow"
-      aria-label="次のページへ"
-    >→</NuxtLink>
+      <NuxtLink
+        v-if="current < pager.length"
+        :to="getPath(current + 1)"
+        class="pagination__item pagination__item--arrow"
+        aria-label="次のページへ"
+      >→</NuxtLink>
+    </div>
   </nav>
 </template>
 
 <style lang="scss" scoped>
+// 背景パターン（layouts/home.vue, layouts/default.vue）の上に乗るブロック。
+// 外側の.paginationは余白（パターンが見える）、.pagination__innerだけ不透明に塗る
 .pagination {
   display: flex;
   justify-content: center;
+  margin: 36px 0 8px;
+}
+
+.pagination__inner {
+  display: flex;
   align-items: center;
   gap: 8px;
-  padding: 36px 0 8px;
+  background-color: $color-bg;
+  border-radius: $radius-pill;
+  padding: 8px 16px;
 }
 
 .pagination__item {
