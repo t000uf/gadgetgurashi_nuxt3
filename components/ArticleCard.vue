@@ -15,6 +15,7 @@ const { formatDot } = useDate()
 
 const date = computed(() => formatDot(props.content.createdAt))
 const category = computed(() => props.content.tag?.[0]?.tagName)
+const tags = computed(() => props.content.tag ?? [])
 </script>
 
 <template>
@@ -36,6 +37,9 @@ const category = computed(() => props.content.tag?.[0]?.tagName)
       <p v-if="variant === 'featured' && content.preview" class="card__preview">
         {{ content.preview }}...
       </p>
+      <div v-if="variant === 'compact' && tags.length" class="card__tags">
+        <span v-for="tag in tags" :key="tag.id" class="card__tag">{{ tag.tagName }}</span>
+      </div>
       <time v-if="date && variant !== 'compact'" class="card__date">{{ date }}</time>
     </div>
   </NuxtLink>
@@ -102,7 +106,7 @@ const category = computed(() => props.content.tag?.[0]?.tagName)
 }
 
 .card__date {
-  @include label-mono(11px, $color-meta);
+  @include label-mono(13px, $color-meta);
 
   display: inline-block;
   margin-top: 6px;
@@ -158,19 +162,38 @@ const category = computed(() => props.content.tag?.[0]?.tagName)
 // --- compact：関連記事の横並びサムネイル ---------------------
 .card--compact {
   display: flex;
-  align-items: center;
-  gap: 10px;
+  align-items: flex-start;
+  gap: 12px;
 
   .card__visual {
     flex: none;
-    width: 56px;
-    height: 56px;
+    width: 64px;
+    height: 64px;
     border-radius: $radius-image-sm;
+  }
+
+  .card__body {
+    min-width: 0;
   }
 
   .card__title {
     font-size: 13px;
   }
+}
+
+.card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.card__tag {
+  @include label-mono(11px, $color-secondary);
+
+  padding: 2px 8px;
+  border-radius: $radius-pill;
+  background-color: rgba($color-secondary, 0.1);
 }
 
 @media screen and (max-width: $bp-sm) {

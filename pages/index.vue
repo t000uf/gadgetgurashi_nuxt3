@@ -53,7 +53,7 @@ const pager = computed(() =>
 }
 
 .intro__eyebrow {
-  @include label-mono(11px, $color-primary);
+  @include label-mono(13px, $color-primary);
 
   margin: 0 0 10px;
   font-weight: 700;

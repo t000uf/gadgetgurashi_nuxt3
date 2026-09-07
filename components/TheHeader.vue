@@ -74,8 +74,12 @@ const isAbout = computed(() => route.path.startsWith('/article/about'))
 }
 
 .header__link {
-  @include label-mono(12px, $color-nav-inactive);
-
+  position: relative;
+  padding-bottom: 4px;
+  color: $color-nav-inactive;
+  font-family: $font-heading;
+  font-weight: 500;
+  font-size: 15px;
   text-decoration: none;
   transition: color 0.2s ease;
 
@@ -86,6 +90,18 @@ const isAbout = computed(() => route.path.startsWith('/article/about'))
   &.is-active {
     color: $color-primary;
     font-weight: 700;
+
+    &::after {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      display: block;
+      width: 100%;
+      height: 2px;
+      border-radius: $radius-bar;
+      background-color: $color-primary;
+      content: '';
+    }
   }
 }
 

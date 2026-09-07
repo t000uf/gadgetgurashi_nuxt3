@@ -86,7 +86,7 @@ useHead({
 }
 
 .article__breadcrumb {
-  @include label-mono(10px, $color-meta);
+  @include label-mono(12px, $color-meta);
 
   margin: 0 0 14px;
 }
@@ -124,7 +124,7 @@ useHead({
 }
 
 .article__meta {
-  @include label-mono(11px, $color-meta);
+  @include label-mono(13px, $color-meta);
 
   margin: 0 0 32px;
 }
@@ -154,7 +154,7 @@ useHead({
 }
 
 .article__affiliate-label {
-  @include label-mono(10px, $color-primary);
+  @include label-mono(12px, $color-primary);
 
   font-weight: 700;
 }
@@ -182,7 +182,7 @@ useHead({
 }
 
 .article__related-label {
-  @include label-mono(10px, $color-meta);
+  @include label-mono(12px, $color-meta);
 
   margin: 0 0 14px;
 }

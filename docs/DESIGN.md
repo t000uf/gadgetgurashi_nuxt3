@@ -12,9 +12,9 @@ Claude Design で決定した方向性を実装に落とし込んだもの。
 | 用途 | 値 | 変数 |
 |---|---|---|
 | ベース（濃色・ロゴ・見出し） | `#1f2530` | `$color-base` |
-| 本文グレー | `#5c6472` | `$color-body` |
-| メタ情報グレー | `#9aa3b0` | `$color-meta` |
-| ナビ非アクティブ | `#7c8798` | `$color-nav-inactive` |
+| 本文グレー | `#40485a` | `$color-body` |
+| メタ情報グレー（日付・パンくず等） | `#6b7488` | `$color-meta` |
+| ナビ非アクティブ | `#6b7488` | `$color-nav-inactive` |
 | サイト背景 | `#f4f6f8` | `$color-bg` |
 | ヘッダー／フッター背景 | `#e6eaef` | `$color-header-bg` |
 | ヘッダー境界線 | `#c7cfd9` | `$color-header-border` |
@@ -26,6 +26,9 @@ Claude Design で決定した方向性を実装に落とし込んだもの。
 
 オレンジ＝ブランド／注目表示／見出しアクセント、ブルー＝カテゴリタグ・リンク・二次的な導線。
 **この2色以外の新しい色は追加しない。** hover用の `$color-primary-dark` / `$color-secondary-dark` は同系トーンの派生。
+
+`$color-body` / `$color-meta` / `$color-nav-inactive` は初期実装時より濃く調整済み（本文・日付等の
+可読性フィードバックへの対応）。淡いグレーはメタ情報であっても最低限のコントラストを確保すること。
 
 ## タイポグラフィ
 
@@ -42,10 +45,13 @@ CMS本文（v-html）の `h2` / `h3` / `h4` にも `@include article-typography`
 
 | レベル | 用途 | 指定 |
 |---|---|---|
-| H1 | 記事タイトル・ページタイトル | Zen Maru Gothic Bold 26px、直下に 52×4px のオレンジ下線バー（角丸2px）。**ページ内で1つだけ** |
-| H2 | セクションの区切り | Zen Maru Gothic Bold 20px、左に 5×22px のオレンジバー |
-| H3 | 小見出し | Zen Maru Gothic Bold 16px、左に 8px 円のオレンジドット |
-| H4 | 補足・キャプション見出し | JetBrains Mono Bold 11px / letter-spacing 1.5px、左に 6×6px のオレンジ角スクエア。**下線は使わない**（リンクとの混同を避けるため） |
+| H1 | 記事タイトル・ページタイトル | Zen Maru Gothic Bold `clamp(24px, 4vw, 32px)`、直下に**横幅いっぱい**のオレンジ下線バー（高さ4px・角丸2px）。**ページ内で1つだけ** |
+| H2 | セクションの区切り | Zen Maru Gothic Bold 20px、左に 5×22px のオレンジバー。CMS本文中では上に1pxの罫線＋64pxの余白でセクションの切れ目を明示 |
+| H3 | 小見出し | Zen Maru Gothic Bold 17px、左に 9px 円のオレンジドット |
+| H4 | 補足・キャプション見出し | JetBrains Mono Bold 13px、左に7px角スクエアのオレンジドット、薄いオレンジ背景のpillチップとして表示（下線は使わない＝リンクとの混同回避） |
+
+見出し前後の余白は「区切りの分かりやすさ」を優先し、H2は上下64px/16px、H3は上44px/下14pxを確保する
+（`assets/styles/_mixins.scss` の `article-typography` 参照）。
 
 ## 角丸
 
@@ -65,7 +71,9 @@ CMS本文（v-html）の `h2` / `h3` / `h4` にも `@include article-typography`
 
 ### ヘッダー（全ページ共通・fixed / 高さ56px）
 背景 `$color-header-bg`、下端に1pxの境界線。左＝ロゴマーク（角丸スクエア＋circle）＋ロゴタイプ「がじぇっとぐらし！」、
-右＝`HOME` / `ABOUT`（JetBrains Mono）。現在のページのリンクはオレンジ＋bold、非アクティブは `$color-nav-inactive`。
+右＝`HOME` / `ABOUT`（**Zen Maru Gothic** 500, 15px。JetBrains Monoの小文字表記は可読性が低いため見出しフォントに変更）。
+現在のページのリンクはオレンジ＋bold＋下に2pxのアクティブバー、非アクティブは `$color-nav-inactive`。
+フッターのHOME/ABOUTも同様、ページ上部へ戻るボタンのみJetBrains Monoのまま。
 
 ### トップページ（`pages/index.vue` / `layouts/home.vue`）
 1. ヒーロー画像（角丸12px、`clamp(180px, 32vw, 360px)`）
@@ -80,7 +88,7 @@ CMS本文（v-html）の `h2` / `h3` / `h4` にも `@include article-typography`
 ### 記事詳細（`pages/article/[id].vue`）
 パンくず「TOP / カテゴリ」→ アイキャッチ（角丸12px・左上にカテゴリバッジ＝ブルーpill）→ H1＋オレンジ下線バー →
 メタ情報（日付・更新日・読了◯分）→ 本文 → タグ → 関連商品リンク → 2pxの区切り線 → 「シェアする →」（右寄せ・ブルー）→
-RELATED（ラベル＋2カラムのサムネイル付き関連記事）。
+RELATED（ラベル＋2カラムのサムネイル付き関連記事。各カードにタグも表示する）。
 
 ## カードとバッジのルール
 

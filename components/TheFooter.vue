@@ -62,11 +62,13 @@ const year = new Date().getFullYear()
 }
 
 .footer__link {
-  @include label-mono(10px, $color-nav-inactive);
-
   padding: 0;
   border: none;
   background: none;
+  color: $color-nav-inactive;
+  font-family: $font-heading;
+  font-weight: 500;
+  font-size: 14px;
   text-decoration: none;
   cursor: pointer;
   transition: color 0.2s ease;
@@ -76,8 +78,16 @@ const year = new Date().getFullYear()
   }
 }
 
+.footer__pagetop {
+  @include label-mono(12px, $color-nav-inactive);
+
+  &:hover {
+    color: $color-primary;
+  }
+}
+
 .footer__copyright {
-  @include label-mono(9px, $color-meta);
+  @include label-mono(13px, $color-meta);
 }
 
 @media screen and (max-width: $bp-sm) {
