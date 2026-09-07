@@ -106,10 +106,11 @@ const tags = computed(() => props.content.tag ?? [])
 }
 
 .card__date {
-  @include label-mono(13px, $color-meta);
+  @include label($color-meta);
 
   display: inline-block;
   margin-top: 6px;
+  font-size: 13px;
 }
 
 // --- featured：1カラムの大きなカード -------------------------
@@ -189,11 +190,12 @@ const tags = computed(() => props.content.tag ?? [])
 }
 
 .card__tag {
-  @include label-mono(11px, $color-secondary);
+  @include label($color-secondary);
 
   padding: 2px 8px;
   border-radius: $radius-pill;
   background-color: rgba($color-secondary, 0.1);
+  font-size: 12px;
 }
 
 @media screen and (max-width: $bp-sm) {

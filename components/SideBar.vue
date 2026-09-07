@@ -13,7 +13,7 @@
 }
 
 .side__label {
-  @include label-mono(12px, $color-meta);
+  @include label($color-meta);
 
   margin: 0 0 10px;
 }

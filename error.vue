@@ -53,11 +53,10 @@ useHead({
 }
 
 .notfound__code {
-  @include label-mono(11px, $color-primary);
+  @include label($color-primary);
 
   margin: 0 0 16px;
   font-weight: 700;
-  letter-spacing: 1.5px;
 }
 
 .notfound__title {
@@ -75,7 +74,7 @@ useHead({
 }
 
 .notfound__link {
-  @include label-mono(12px, $color-secondary);
+  @include label($color-secondary);
 
   margin-top: 24px;
 

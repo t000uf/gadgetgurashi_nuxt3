@@ -32,11 +32,21 @@ Claude Design で決定した方向性を実装に落とし込んだもの。
 
 ## タイポグラフィ
 
-- 見出し・ロゴ：**Zen Maru Gothic**（500 / 700）
+- 見出し・ロゴ・ナビゲーション・ラベル/メタ情報：**Zen Maru Gothic**（500 / 700）
 - 本文：**Zen Kaku Gothic New**（400 / 500 / 700 / 900）
-- ラベル・メタ・タグ・モノスペース要素：**JetBrains Mono**（500 / 700）
+- CMS本文中の `<code>` のみ：**JetBrains Mono**（500 / 700）
 
 いずれも Google Fonts（無料）。読み込みは `nuxt.config.ts` の `app.head.link` で行う。
+
+**JetBrains Monoはナビゲーション・ラベル・バッジ等のUIチロームには使わない。** 初期実装ではモノスペースで
+統一していたが、和文との相性・可読性の観点からUI文字は全てZen Maru Gothicに統一した。残るのは記事本文
+（CMS）中の `<code>` インライン要素のみで、これは意図的な例外（コード表記の慣習に合わせるため）。
+
+日付・パンくず・タグ・eyebrowラベルなど「読ませる短いテキスト」は `@include label($color)` で
+Zen Maru Gothic 500 / 15px に統一する（ヘッダーナビと同じ扱い）。ただしカード内の日付・関連記事の
+タグチップ・ページネーションの数字・フッターの著作権表記など、絶対的なスペースが小さいUI部品は
+`label` mixinを使いつつ `font-size` を12〜14px程度に個別調整してよい（`components/ArticleCard.vue`
+の `.card__date` / `.card__tag` 参照）。
 
 ## 見出しシステム
 
@@ -48,7 +58,7 @@ CMS本文（v-html）の `h2` / `h3` / `h4` にも `@include article-typography`
 | H1 | 記事タイトル・ページタイトル | Zen Maru Gothic Bold `clamp(24px, 4vw, 32px)`、直下に**横幅いっぱい**のオレンジ下線バー（高さ4px・角丸2px）。**ページ内で1つだけ** |
 | H2 | セクションの区切り | Zen Maru Gothic Bold 20px、左に 5×22px のオレンジバー。CMS本文中では上に1pxの罫線＋64pxの余白でセクションの切れ目を明示 |
 | H3 | 小見出し | Zen Maru Gothic Bold 17px、左に 9px 円のオレンジドット |
-| H4 | 補足・キャプション見出し | JetBrains Mono Bold 13px、左に7px角スクエアのオレンジドット、薄いオレンジ背景のpillチップとして表示（下線は使わない＝リンクとの混同回避） |
+| H4 | 補足・キャプション見出し | Zen Maru Gothic Bold 15px、左に7px角スクエアのオレンジドット、薄いオレンジ背景のpillチップとして表示（下線は使わない＝リンクとの混同回避） |
 
 見出し前後の余白は「区切りの分かりやすさ」を優先し、H2は上下64px/16px、H3は上44px/下14pxを確保する
 （`assets/styles/_mixins.scss` の `article-typography` 参照）。
@@ -71,19 +81,19 @@ CMS本文（v-html）の `h2` / `h3` / `h4` にも `@include article-typography`
 
 ### ヘッダー（全ページ共通・fixed / 高さ56px）
 背景 `$color-header-bg`、下端に1pxの境界線。左＝ロゴマーク（角丸スクエア＋circle）＋ロゴタイプ「がじぇっとぐらし！」、
-右＝`HOME` / `ABOUT`（**Zen Maru Gothic** 500, 15px。JetBrains Monoの小文字表記は可読性が低いため見出しフォントに変更）。
+右＝`HOME` / `ABOUT`（Zen Maru Gothic 500, 15px）。
 現在のページのリンクはオレンジ＋bold＋下に2pxのアクティブバー、非アクティブは `$color-nav-inactive`。
-フッターのHOME/ABOUTも同様、ページ上部へ戻るボタンのみJetBrains Monoのまま。
+フッターのHOME/ABOUT/PAGE TOPも同じ書体・サイズで統一。
 
 ### トップページ（`pages/index.vue` / `layouts/home.vue`）
 1. ヒーロー画像（角丸12px、`clamp(180px, 32vw, 360px)`）
-2. イントロブロック：eyebrowラベル「WELCOME」（モノスペース／オレンジ）＋ H1 ＋ 本文 ＋「このブログについて →」
+2. イントロブロック：eyebrowラベル「WELCOME」（Zen Maru Gothic Bold／オレンジ）＋ H1 ＋ 本文 ＋「このブログについて →」
 3. 1pxの区切り線
 4. 記事一覧セクション（H2）：先頭記事を「注目」バッジ付きの1カラム大カード、以降は2カラムグリッド
 5. ページネーション：丸ボタン。現在ページはオレンジ塗り、他はグレー
 
 ### 記事一覧（`pages/page/[p].vue` / `pages/tag/[tagId]/page/[p].vue`）
-パンくず（モノスペース）＋ H1 ＋ 件数などのメタ ＋ 2カラムグリッド ＋ ページネーション。
+パンくず（Zen Maru Gothic 15px）＋ H1 ＋ 件数などのメタ ＋ 2カラムグリッド ＋ ページネーション。
 
 ### 記事詳細（`pages/article/[id].vue`）
 パンくず「TOP / カテゴリ」→ アイキャッチ（角丸12px・左上にカテゴリバッジ＝ブルーpill）→ H1＋オレンジ下線バー →

@@ -68,9 +68,9 @@ const getPath = (p: number) => {
   border-radius: 50%;
   background-color: $color-placeholder-1;
   color: $color-nav-inactive;
-  font-family: $font-mono;
+  font-family: $font-heading;
   font-weight: 500;
-  font-size: 13px;
+  font-size: 14px;
   text-decoration: none;
   transition: background-color 0.2s ease, color 0.2s ease;
 
@@ -101,6 +101,6 @@ const getPath = (p: number) => {
 }
 
 .pagination__omission {
-  @include label-mono(12px, $color-meta);
+  @include label($color-meta);
 }
 </style>

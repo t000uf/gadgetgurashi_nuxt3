@@ -33,7 +33,7 @@ const pager = computed(() =>
 
 <style lang="scss" scoped>
 .breadcrumb {
-  @include label-mono(12px, $color-meta);
+  @include label($color-meta);
 
   margin: 0 0 14px;
 }
@@ -45,7 +45,7 @@ const pager = computed(() =>
 }
 
 .page-meta {
-  @include label-mono(13px, $color-meta);
+  @include label($color-meta);
 
   margin: 0 0 24px;
 }

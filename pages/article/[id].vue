@@ -86,7 +86,7 @@ useHead({
 }
 
 .article__breadcrumb {
-  @include label-mono(12px, $color-meta);
+  @include label($color-meta);
 
   margin: 0 0 14px;
 }
@@ -124,7 +124,7 @@ useHead({
 }
 
 .article__meta {
-  @include label-mono(13px, $color-meta);
+  @include label($color-meta);
 
   margin: 0 0 32px;
 }
@@ -154,7 +154,7 @@ useHead({
 }
 
 .article__affiliate-label {
-  @include label-mono(12px, $color-primary);
+  @include label($color-primary);
 
   font-weight: 700;
 }
@@ -167,7 +167,7 @@ useHead({
 }
 
 .article__share {
-  @include label-mono(12px, $color-secondary);
+  @include label($color-secondary);
 
   margin: 0 0 32px;
   text-align: right;
@@ -182,7 +182,7 @@ useHead({
 }
 
 .article__related-label {
-  @include label-mono(12px, $color-meta);
+  @include label($color-meta);
 
   margin: 0 0 14px;
 }

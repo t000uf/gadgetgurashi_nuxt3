@@ -68,7 +68,7 @@ const year = new Date().getFullYear()
   color: $color-nav-inactive;
   font-family: $font-heading;
   font-weight: 500;
-  font-size: 14px;
+  font-size: 15px;
   text-decoration: none;
   cursor: pointer;
   transition: color 0.2s ease;
@@ -79,7 +79,7 @@ const year = new Date().getFullYear()
 }
 
 .footer__pagetop {
-  @include label-mono(12px, $color-nav-inactive);
+  @include label($color-nav-inactive);
 
   &:hover {
     color: $color-primary;
@@ -87,7 +87,9 @@ const year = new Date().getFullYear()
 }
 
 .footer__copyright {
-  @include label-mono(13px, $color-meta);
+  @include label($color-meta);
+
+  font-size: 13px;
 }
 
 @media screen and (max-width: $bp-sm) {

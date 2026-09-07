@@ -53,11 +53,10 @@ const pager = computed(() =>
 }
 
 .intro__eyebrow {
-  @include label-mono(13px, $color-primary);
+  @include label($color-primary);
 
   margin: 0 0 10px;
   font-weight: 700;
-  letter-spacing: 1.5px;
 }
 
 .intro__title {
@@ -72,7 +71,7 @@ const pager = computed(() =>
 }
 
 .intro__link {
-  @include label-mono(12px, $color-secondary);
+  @include label($color-secondary);
 
   margin: 16px 0 0;
 
