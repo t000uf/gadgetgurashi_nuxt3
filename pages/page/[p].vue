@@ -23,7 +23,7 @@ const pager = computed(() =>
 
 <template>
   <ArticleListPage
-    breadcrumb="TOP / ARCHIVE"
+    breadcrumb="ARCHIVE"
     title="記事一覧"
     :meta="`PAGE ${page}`"
     :contents="data?.contents"

@@ -30,15 +30,5 @@ useHead({
 </script>
 
 <template>
-  <ArticleDetail v-if="content" :content="content">
-    <template #breadcrumb>
-      <span class="draft__label">TOP / DRAFT PREVIEW</span>
-    </template>
-  </ArticleDetail>
+  <ArticleDetail v-if="content" :content="content" breadcrumb="DRAFT PREVIEW" />
 </template>
-
-<style lang="scss" scoped>
-.draft__label {
-  @include label($color-meta);
-}
-</style>

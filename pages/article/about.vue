@@ -13,7 +13,7 @@ useHead({
 
 <template>
   <div class="about">
-    <p class="about__breadcrumb">TOP / ABOUT</p>
+    <Breadcrumb current="ABOUT" />
     <template v-if="content">
       <h1 class="about__title">{{ content.title }}</h1>
       <p class="about__meta">更新 {{ formatDot(content.revisedAt) }}</p>
@@ -30,12 +30,6 @@ useHead({
   @include content-card(28px, 20px 0);
 
   width: 100%;
-}
-
-.about__breadcrumb {
-  @include label($color-meta);
-
-  margin: 0 0 14px;
 }
 
 .about__title {

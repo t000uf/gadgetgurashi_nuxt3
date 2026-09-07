@@ -31,7 +31,7 @@ const pager = computed(() =>
 
 <template>
   <ArticleListPage
-    breadcrumb="TOP / TAG"
+    breadcrumb="TAG"
     :title="`「${selectedTag?.tagName}」の記事`"
     :meta="`${articleData?.totalCount ?? 0} ARTICLES ・ PAGE ${page}`"
     :contents="articleData?.contents"

@@ -4,6 +4,7 @@ import type { Article } from '@/types'
 
 const props = defineProps<{
   content: MicroCMSListContent & Article
+  breadcrumb?: string
 }>()
 
 const { formatDot } = useDate()
@@ -15,11 +16,7 @@ const minutes = computed(() => readingTime(props.content.text))
 <template>
   <div class="detail">
     <div class="detail__block">
-      <div class="detail__breadcrumb">
-        <slot name="breadcrumb">
-          <NuxtLink to="/" class="detail__breadcrumb__link">← TOP</NuxtLink>
-        </slot>
-      </div>
+      <Breadcrumb :current="breadcrumb" />
 
       <div class="detail__visual">
         <img v-if="content.thumbnail?.url" class="detail__thumbnail" :src="content.thumbnail.url" :alt="content.title">
@@ -63,15 +60,6 @@ const minutes = computed(() => readingTime(props.content.text))
 
 .detail__block {
   @include content-card;
-}
-
-.detail__breadcrumb {
-  padding-bottom: 14px;
-}
-
-.detail__breadcrumb__link {
-  @include label($color-secondary);
-  margin: 7px;
 }
 
 .detail__visual {

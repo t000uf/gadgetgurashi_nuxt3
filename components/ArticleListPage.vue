@@ -16,7 +16,7 @@ defineProps<{
 <template>
   <div>
     <section class="page-heading">
-      <p class="breadcrumb">{{ breadcrumb }}</p>
+      <Breadcrumb :current="breadcrumb" />
       <h1 class="page-title allkiji">{{ title }}</h1>
       <p class="page-meta">{{ meta }}</p>
     </section>
@@ -32,12 +32,6 @@ defineProps<{
   @include content-card(20px 28px, 16px 0);
 
   width: 100%;
-  margin: 0 0 14px;
-}
-
-.breadcrumb {
-  @include label($color-meta);
-
   margin: 0 0 14px;
 }
 
