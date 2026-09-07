@@ -35,13 +35,9 @@ const pager = computed(() =>
       </p>
     </section>
 
-    <div class="divider-block">
-      <hr class="divider">
-    </div>
-
-    <section>
+    <section class="article-list__container">
       <div class="section-heading">
-        <h2 id="allkiji" class="section-title">記事一覧</h2>
+        <h3 id="allkiji" class="section-title">記事一覧</h3>
       </div>
       <ArticleList v-if="data?.contents" :contents="data.contents" featured />
       <Pagination :pager="pager" :current="1" />
@@ -59,9 +55,10 @@ const pager = computed(() =>
 // 背景パターン（layouts/home.vue）の上に乗るブロックは、パターンを完全に隠すよう
 // サイト背景色で不透明に塗る。ブロック同士の余白ではパターンが見える
 .intro {
-  background-color: $color-bg;
+  @include content-block;
+
   border-radius: $radius-card;
-  padding: 28px;
+  padding: 28px 14px;
 }
 
 .intro__eyebrow {
@@ -92,31 +89,21 @@ const pager = computed(() =>
   }
 }
 
-.divider-block {
-  width: 100%;
-  margin-top: 32px;
-  background-color: $color-bg;
-  border-radius: $radius-card;
-  padding: 20px 28px;
-}
-
-.divider {
-  height: 1px;
-  border: none;
-  margin: 0;
-  background-color: $color-border;
-}
-
 .section-heading {
-  display: inline-block;
-  margin: 36px 0 14px;
-  background-color: $color-bg;
+  @include content-block;
+
+  width: 100%;
+  margin: 0 0 14px;
   border-radius: $radius-card;
-  padding: 16px 20px;
 }
 
+.article-list__container {
+  padding: 28px 14px;
+}
+
+// 記事本文の実質的な大見出し（h3）とスタイルを揃える
 .section-title {
-  @include heading-2;
+  @include heading-3;
 
   margin: 0;
 }

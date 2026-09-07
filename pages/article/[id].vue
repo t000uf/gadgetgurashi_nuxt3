@@ -36,42 +36,46 @@ useHead({
 
 <template>
   <article v-if="content" class="article">
-    <p class="article__breadcrumb">TOP / {{ category ?? 'ARTICLE' }}</p>
+    <div class="article__block">
+      <p class="article__breadcrumb">TOP / {{ category ?? 'ARTICLE' }}</p>
 
-    <div class="article__visual">
-      <img
-        v-if="content.thumbnail?.url"
-        class="article__thumbnail"
-        :src="content.thumbnail.url"
-        :alt="content.title"
-      >
-      <div v-else class="article__thumbnail article__thumbnail--placeholder" />
-      <span v-if="category" class="article__category">{{ category }}</span>
+      <div class="article__visual">
+        <img
+          v-if="content.thumbnail?.url"
+          class="article__thumbnail"
+          :src="content.thumbnail.url"
+          :alt="content.title"
+        >
+        <div v-else class="article__thumbnail article__thumbnail--placeholder" />
+        <span v-if="category" class="article__category">{{ category }}</span>
+      </div>
+
+      <h1 id="articleTitle" class="article__title">{{ content.title }}</h1>
+      <p class="article__meta">
+        {{ formatDot(content.createdAt) }}
+        <span v-if="content.revisedAt"> ・ 更新 {{ formatDot(content.revisedAt) }}</span>
+        <span v-if="minutes"> ・ 読了 {{ minutes }}分</span>
+      </p>
+
+      <div class="article__text" v-html="content.text" />
+
+      <TagLink v-if="content.tag" :tags="content.tag" class="article__tags" />
     </div>
-
-    <h1 id="articleTitle" class="article__title">{{ content.title }}</h1>
-    <p class="article__meta">
-      {{ formatDot(content.createdAt) }}
-      <span v-if="content.revisedAt"> ・ 更新 {{ formatDot(content.revisedAt) }}</span>
-      <span v-if="minutes"> ・ 読了 {{ minutes }}分</span>
-    </p>
-
-    <div class="article__text" v-html="content.text" />
-
-    <TagLink v-if="content.tag" :tags="content.tag" class="article__tags" />
 
     <div class="article__affiliate">
       <p class="article__affiliate-label">関連商品リンク</p>
       <div v-html="content.affiliate" />
     </div>
 
-    <hr class="article__divider">
+    <div class="article__block article__block--tail">
+      <hr class="article__divider">
 
-    <p class="article__share">
-      <a :href="shareUrl" target="_blank" rel="noopener noreferrer">シェアする →</a>
-    </p>
+      <p class="article__share">
+        <a :href="shareUrl" target="_blank" rel="noopener noreferrer">シェアする →</a>
+      </p>
 
-    <AdsByGoogle ad-slot="7173714878" />
+      <AdsByGoogle ad-slot="7173714878" />
+    </div>
 
     <section v-if="content.related?.length" class="article__related">
       <p class="article__related-label">RELATED</p>
@@ -81,17 +85,22 @@ useHead({
 </template>
 
 <style lang="scss" scoped>
-// 背景パターン（layouts/default.vue）の上に乗るブロック。記事本文は一連の読み物
-// なので、個別要素ごとではなく記事全体をひとつの不透明な塗りブロックとして扱う
+// 背景パターン（layouts/default.vue）の上に乗るブロック群。本文（見出し〜タグ）は
+// 一連の読み物なのでひとつの不透明ブロックにまとめるが、関連商品リンクとRELATEDは
+// 本文とは別のまとまりなので、このブロックからは分離し、余白でパターンを見せる
 .article {
   width: 100%;
-  background-color: $color-bg;
+}
+
+.article__block {
+  @include content-block;
+
   border-radius: $radius-card;
   padding: 28px;
 }
 
 @media screen and (max-width: $bp-sm) {
-  .article {
+  .article__block {
     padding: 20px 16px;
   }
 }
@@ -173,7 +182,7 @@ useHead({
 .article__divider {
   height: 2px;
   border: none;
-  margin: 32px 0 18px;
+  margin: 0 0 18px;
   background-color: $color-placeholder-1;
 }
 
@@ -189,7 +198,17 @@ useHead({
 }
 
 .article__related {
+  @include content-block;
+
   margin-top: 40px;
+  border-radius: $radius-card;
+  padding: 24px 28px;
+}
+
+@media screen and (max-width: $bp-sm) {
+  .article__related {
+    padding: 20px 16px;
+  }
 }
 
 .article__related-label {

@@ -15,7 +15,6 @@
         <SideBar />
       </div>
     </main>
-    <NavButton />
     <TheFooter />
   </div>
 </template>
@@ -41,7 +40,7 @@
 
 .hero {
   width: 100%;
-  max-width: $container-width;
+  max-width: $content-width;
   overflow: hidden;
   border-radius: $radius-image;
 }
@@ -83,6 +82,12 @@
     flex-direction: row;
     align-items: flex-start;
     justify-content: center;
+  }
+
+  // PCはsidenavとの2カラムになるため、ヒーローは記事一覧＋サイドバーを合わせた
+  // container-width まで伸ばす（SP/タブレットは記事一覧と同じcontent-widthのまま）
+  .hero {
+    max-width: $container-width;
   }
 }
 </style>

@@ -24,8 +24,20 @@ useHead({
 </template>
 
 <style lang="scss" scoped>
+// 背景パターン（layouts/default.vue）の上に乗るブロック。記事詳細ページと同様、
+// ページ全体をひとつの不透明な塗りブロックとして扱う
 .about {
+  @include content-block;
+
   width: 100%;
+  border-radius: $radius-card;
+  padding: 28px;
+}
+
+@media screen and (max-width: $bp-sm) {
+  .about {
+    padding: 20px 16px;
+  }
 }
 
 .about__breadcrumb {
