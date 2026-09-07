@@ -12,7 +12,6 @@
         <SideBar />
       </div>
     </main>
-    <NavButton />
     <TheFooter />
   </div>
 </template>

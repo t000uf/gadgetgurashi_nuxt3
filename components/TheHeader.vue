@@ -34,8 +34,10 @@ const isAbout = computed(() => route.path.startsWith('/article/about'))
   justify-content: center;
   width: 100%;
   height: $header-height;
-  border-bottom: 1px solid $color-header-border;
-  background-color: $color-header-bg;
+  // ヘッダー本体は透明のまま。重ね順は「ヘッダーのピル > コンテンツ > 背景色 > 背景パターン」。
+  // ヘッダー自身に不透明な塗りを持たせるとコンテンツより手前に来てしまうため、
+  // 塗りはピル（.header__brand / .header__nav）だけに持たせる
+  background: transparent;
 }
 
 .header__inner {
@@ -47,10 +49,17 @@ const isAbout = computed(() => route.path.startsWith('/article/about'))
   padding: 0 24px;
 }
 
+// 背景パターンの上に乗るため、ロゴタイプとナビゲーションはそれぞれ独立した
+// 半透明+backdrop-filterのピルとして塗る（ヘッダー全体は透明のまま）
 .header__brand {
+  @include content-block($color-header-bg);
+
   display: flex;
   align-items: center;
+  height: 36px;
   gap: 9px;
+  padding: 0 16px;
+  border-radius: $radius-pill;
   color: $color-base;
   text-decoration: none;
 
@@ -68,8 +77,14 @@ const isAbout = computed(() => route.path.startsWith('/article/about'))
 }
 
 .header__nav {
+  @include content-block($color-header-bg);
+
   display: flex;
+  align-items: center;
+  height: 36px;
   gap: 20px;
+  padding: 0 20px;
+  border-radius: $radius-pill;
 }
 
 .header__link {
@@ -106,11 +121,27 @@ const isAbout = computed(() => route.path.startsWith('/article/about'))
 
 @media screen and (max-width: $bp-sm) {
   .header__inner {
-    padding: 0 16px;
+    padding: 0 12px;
+  }
+
+  .header__brand {
+    height: 32px;
+    gap: 6px;
+    padding: 0 10px;
+  }
+
+  .header__nav {
+    height: 32px;
+    gap: 10px;
+    padding: 0 10px;
   }
 
   .header__logotype {
-    font-size: 14px;
+    font-size: 13px;
+  }
+
+  .header__link {
+    font-size: 13px;
   }
 }
 </style>

@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-const { returnTop } = useScrollTop()
 const year = new Date().getFullYear()
 </script>
 
@@ -13,9 +12,6 @@ const year = new Date().getFullYear()
       <nav class="footer__nav">
         <NuxtLink to="/" class="footer__link">HOME</NuxtLink>
         <NuxtLink to="/article/about" class="footer__link">ABOUT</NuxtLink>
-        <button type="button" class="footer__link footer__pagetop" @click="returnTop">
-          PAGE TOP ↑
-        </button>
       </nav>
     </div>
     <small class="footer__copyright">© {{ year }} gadgetgurashi</small>
@@ -23,14 +19,15 @@ const year = new Date().getFullYear()
 </template>
 
 <style lang="scss" scoped>
+// フッター本体は透明のまま。ロゴ・ナビ・著作権表記はそれぞれ独立したピルとして塗る
+// （ヘッダーと同じ考え方・同じ$color-header-bg。パターンを隠すのが目的）
 .footer {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 18px;
   padding: 32px 24px 28px;
-  border-top: 1px solid $color-border;
-  background-color: $color-header-bg;
+  background: transparent;
 }
 
 .footer__inner {
@@ -43,9 +40,14 @@ const year = new Date().getFullYear()
 }
 
 .footer__brand {
+  @include content-block($color-header-bg);
+
   display: flex;
   align-items: center;
+  height: 36px;
   gap: 9px;
+  padding: 0 16px;
+  border-radius: $radius-pill;
   color: $color-base;
 }
 
@@ -56,9 +58,14 @@ const year = new Date().getFullYear()
 }
 
 .footer__nav {
+  @include content-block($color-header-bg);
+
   display: flex;
   align-items: center;
+  height: 36px;
   gap: 20px;
+  padding: 0 20px;
+  border-radius: $radius-pill;
 }
 
 .footer__link {
@@ -78,17 +85,12 @@ const year = new Date().getFullYear()
   }
 }
 
-.footer__pagetop {
-  @include label($color-nav-inactive);
-
-  &:hover {
-    color: $color-primary;
-  }
-}
-
 .footer__copyright {
   @include label($color-meta);
+  @include content-block($color-header-bg);
 
+  border-radius: $radius-pill;
+  padding: 6px 16px;
   font-size: 13px;
 }
 
