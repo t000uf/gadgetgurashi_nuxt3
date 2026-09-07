@@ -78,21 +78,23 @@
   }
 }
 
+// H4は元デザイン（当初のH3＝丸ドット＋太字）を踏襲する。今はH2に同じ見た目があるので合わせる
 @mixin heading-4 {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin: 24px 0 8px;
+  margin: 36px 0 14px;
   color: $color-base;
   font-family: $font-heading;
   font-weight: 700;
-  font-size: 15px;
-  line-height: 1.6;
+  font-size: 16px;
+  line-height: 1.5;
 
   &::before {
     flex: none;
-    width: 6px;
-    height: 6px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
     background-color: $color-primary;
     content: '';
   }
