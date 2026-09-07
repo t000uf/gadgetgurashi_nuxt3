@@ -9,7 +9,7 @@ const isAbout = computed(() => route.path.startsWith('/article/about'))
   <header class="header">
     <div class="header__inner">
       <NuxtLink to="/" class="header__brand">
-        <BrandLogo :size="24" />
+        <BrandLogo :size="26" />
         <span class="header__logotype">がじぇっとぐらし！</span>
       </NuxtLink>
       <nav class="header__nav">
@@ -56,9 +56,9 @@ const isAbout = computed(() => route.path.startsWith('/article/about'))
 
   display: flex;
   align-items: center;
-  height: 36px;
-  gap: 9px;
-  padding: 0 16px;
+  height: 44px;
+  gap: 10px;
+  padding: 0 20px;
   border-radius: $radius-pill;
   color: $color-base;
   text-decoration: none;
@@ -72,7 +72,7 @@ const isAbout = computed(() => route.path.startsWith('/article/about'))
 .header__logotype {
   font-family: $font-heading;
   font-weight: 700;
-  font-size: 16px;
+  font-size: 17px;
   line-height: 1;
 }
 
@@ -81,9 +81,9 @@ const isAbout = computed(() => route.path.startsWith('/article/about'))
 
   display: flex;
   align-items: center;
-  height: 36px;
-  gap: 20px;
-  padding: 0 20px;
+  height: 44px;
+  gap: 24px;
+  padding: 0 24px;
   border-radius: $radius-pill;
 }
 
@@ -93,7 +93,7 @@ const isAbout = computed(() => route.path.startsWith('/article/about'))
   color: $color-nav-inactive;
   font-family: $font-heading;
   font-weight: 500;
-  font-size: 15px;
+  font-size: 16px;
   text-decoration: none;
   transition: color 0.2s ease;
 
@@ -121,27 +121,27 @@ const isAbout = computed(() => route.path.startsWith('/article/about'))
 
 @media screen and (max-width: $bp-sm) {
   .header__inner {
-    padding: 0 12px;
+    padding: 0 14px;
   }
 
   .header__brand {
-    height: 32px;
-    gap: 6px;
-    padding: 0 10px;
+    height: 40px;
+    gap: 8px;
+    padding: 0 14px;
   }
 
   .header__nav {
-    height: 32px;
-    gap: 10px;
-    padding: 0 10px;
+    height: 40px;
+    gap: 14px;
+    padding: 0 14px;
   }
 
   .header__logotype {
-    font-size: 13px;
+    font-size: 15px;
   }
 
   .header__link {
-    font-size: 13px;
+    font-size: 15px;
   }
 }
 </style>
