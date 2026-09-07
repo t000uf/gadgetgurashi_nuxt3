@@ -8,8 +8,14 @@
 </template>
 
 <style lang="scss" scoped>
+// SP/PCで見た目を統一：どちらも他コンテンツと同じ規約（content-block）で塗る
+// （独自の色は足さずデフォルトの$color-bgを使う）。PCのみ幅とstickyを追加する
 .side {
+  @include content-block;
+
   width: 100%;
+  padding: 16px;
+  border-radius: $radius-card;
 }
 
 .side__label {
@@ -24,9 +30,6 @@
     top: $header-height + 24px;
     width: $sidebar-width;
     flex: none;
-    padding: 16px;
-    border-radius: $radius-card;
-    background-color: $color-card;
   }
 }
 </style>

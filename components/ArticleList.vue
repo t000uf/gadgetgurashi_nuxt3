@@ -24,20 +24,11 @@ const restContents = computed(() =>
 
 <template>
   <div class="article-list">
-    <ArticleCard
-      v-if="featuredContent"
-      :key="featuredContent.id"
-      :content="featuredContent"
-      variant="featured"
-      class="article-list__featured"
-    />
+    <ArticleCard v-if="featuredContent" :key="featuredContent.id" :content="featuredContent" variant="featured"
+      class="article-list__featured" />
     <div class="article-list__grid">
-      <ArticleCard
-        v-for="content in restContents"
-        :key="content.id"
-        :content="content"
-        :variant="variant === 'compact' ? 'compact' : 'default'"
-      />
+      <ArticleCard v-for="content in restContents" :key="content.id" :content="content"
+        :variant="variant === 'compact' ? 'compact' : 'default'" />
     </div>
   </div>
 </template>
@@ -45,6 +36,7 @@ const restContents = computed(() =>
 <style lang="scss" scoped>
 .article-list {
   width: 100%;
+  padding: 28px 14px;
 }
 
 .article-list__featured {
@@ -59,7 +51,8 @@ const restContents = computed(() =>
 
 @media screen and (max-width: $bp-sm) {
   .article-list__grid {
-    gap: 22px $space-grid;
+    grid-template-columns: 1fr;
+    gap: 22px;
   }
 }
 </style>

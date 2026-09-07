@@ -62,10 +62,11 @@ const getPath = (p: number) => {
 }
 
 .pagination__inner {
+  @include content-block;
+
   display: flex;
   align-items: center;
   gap: 8px;
-  background-color: $color-bg;
   border-radius: $radius-pill;
   padding: 8px 16px;
 }

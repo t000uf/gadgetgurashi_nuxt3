@@ -142,6 +142,15 @@
   background-color: $color-card;
 }
 
+// 背景パターンの上に乗る「まとまりブロック」共通の塗り。完全な不透明ではなく
+// 95%程度の半透明+backdrop-filterでうっすら透けさせる（ヘッダー／フッターのピルは
+// このブロックより手前に来るので対象外。個別の色を変えたい場合は $color を渡す）
+@mixin content-block($color: $color-bg, $opacity: 0.95) {
+  background-color: rgba($color, $opacity);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
 // =============================================================
 // CMS本文（v-html）の組版。記事・about・下書きで共通利用する
 // =============================================================

@@ -21,13 +21,8 @@ const tags = computed(() => props.content.tag ?? [])
 <template>
   <NuxtLink :to="`/article/${content.id}/`" class="card" :class="`card--${variant}`">
     <div class="card__visual">
-      <img
-        v-if="content.thumbnail?.url"
-        class="card__image"
-        :src="content.thumbnail.url"
-        :alt="content.title"
-        loading="lazy"
-      >
+      <img v-if="content.thumbnail?.url" class="card__image" :src="content.thumbnail.url" :alt="content.title"
+        loading="lazy">
       <div v-else class="card__image card__image--placeholder" />
       <span v-if="variant === 'featured'" class="card__badge card__badge--featured">注目</span>
       <span v-else-if="variant === 'default' && category" class="card__badge">{{ category }}</span>
@@ -118,9 +113,9 @@ const tags = computed(() => props.content.tag ?? [])
 // （compactは記事詳細ページのRELATED欄で使う横並び行のため対象外）
 .card--featured,
 .card--default {
-  background-color: $color-bg;
+  @include content-block;
+
   border-radius: $radius-card;
-  padding: 10px 10px 14px;
 }
 
 // --- featured：1カラムの大きなカード -------------------------
