@@ -56,6 +56,7 @@
 
 @mixin heading-3 {
   position: relative;
+  width: 100%;
   margin: 40px 0 20px;
   padding-bottom: 10px;
   color: $color-base;
@@ -69,7 +70,7 @@
     bottom: 0;
     left: 0;
     display: block;
-    width: 40px;
+    width: 100%;
     height: 3px;
     border-radius: $radius-bar;
     background-color: $color-primary;
