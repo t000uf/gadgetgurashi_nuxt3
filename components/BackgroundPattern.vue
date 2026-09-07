@@ -62,11 +62,11 @@
 
 <style lang="scss" scoped>
 .bg-pattern {
-  position: absolute;
+  position: fixed;
   inset: 0;
   z-index: -1;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   pointer-events: none;
 }
 </style>
