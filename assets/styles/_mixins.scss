@@ -29,21 +29,26 @@
   }
 }
 
+// H2はH1と同じ下線モチーフをスケールダウンして使う（H1=全幅／H2=短め）。
+// H3のドット・H4の角スクエアという「文字の左に付くマーカー」とは仕組みごと異なるため、
+// 文字サイズが近くてもH2だけ一目で判別できる
 @mixin heading-2 {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin: 40px 0 16px;
+  position: relative;
+  margin: 40px 0 20px;
+  padding-bottom: 10px;
   color: $color-base;
   font-family: $font-heading;
   font-weight: 700;
-  font-size: 20px;
+  font-size: 23px;
   line-height: 1.5;
 
-  &::before {
-    flex: none;
-    width: 5px;
-    height: 22px;
+  &::after {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    display: block;
+    width: 40px;
+    height: 3px;
     border-radius: $radius-bar;
     background-color: $color-primary;
     content: '';
@@ -53,18 +58,18 @@
 @mixin heading-3 {
   display: flex;
   align-items: center;
-  gap: 9px;
+  gap: 8px;
   margin: 36px 0 14px;
   color: $color-base;
   font-family: $font-heading;
   font-weight: 700;
-  font-size: 17px;
+  font-size: 16px;
   line-height: 1.5;
 
   &::before {
     flex: none;
-    width: 9px;
-    height: 9px;
+    width: 7px;
+    height: 7px;
     border-radius: 50%;
     background-color: $color-primary;
     content: '';

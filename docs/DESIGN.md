@@ -33,7 +33,7 @@ Claude Design で決定した方向性を実装に落とし込んだもの。
 ## タイポグラフィ
 
 - 見出し・ロゴ・ナビゲーション・ラベル/メタ情報：**Zen Maru Gothic**（500 / 700）
-- 本文：**Zen Kaku Gothic New**（400 / 500 / 700 / 900）
+- 本文：**Zen Kaku Gothic New**（400 / 500 / 700 / 900）。地の文（`html`基準）はweight 500を標準とし、Regular(400)よりわずかに強めの太さで可読性を確保する
 - CMS本文中の `<code>` のみ：**JetBrains Mono**（500 / 700）
 
 いずれも Google Fonts（無料）。読み込みは `nuxt.config.ts` の `app.head.link` で行う。
@@ -56,9 +56,9 @@ CMS本文（v-html）の `h2` / `h3` / `h4` にも `@include article-typography`
 | レベル | 用途 | 指定 |
 |---|---|---|
 | H1 | 記事タイトル・ページタイトル | Zen Maru Gothic Bold `clamp(24px, 4vw, 32px)`、直下に**横幅いっぱい**のオレンジ下線バー（高さ4px・角丸2px）。**ページ内で1つだけ** |
-| H2 | セクションの区切り | Zen Maru Gothic Bold 20px、左に 5×22px のオレンジバー。CMS本文中では上に1pxの罫線＋64pxの余白でセクションの切れ目を明示 |
-| H3 | 小見出し | Zen Maru Gothic Bold 17px、左に 9px 円のオレンジドット |
-| H4 | 補足・キャプション見出し | Zen Maru Gothic Bold 15px、左に6px角スクエアのオレンジドット。H3同様のシンプルな行見出しで、背景chip化はしない（リストが連続する箇所で見出しが浮いて見えるため。下線も使わない＝リンクとの混同回避） |
+| H2 | セクションの区切り | Zen Maru Gothic Bold 23px、直下に**短いオレンジ下線**（40×3px）。H1の下線モチーフをスケールダウンしたもので、H3/H4の「左マーカー」方式とは仕組みごと異なるため一目で区別できる。CMS本文中では上に1pxの罫線＋64pxの余白も加えセクションの切れ目を明示 |
+| H3 | 小見出し | Zen Maru Gothic Bold 16px、左に 7px 円のオレンジドット |
+| H4 | 補足・キャプション見出し | Zen Maru Gothic Bold 15px、左に6px角スクエアのオレンジドット。H3同様のシンプルな行見出しで、背景chip化はしない（リストが連続する箇所で見出しが浮いて見えるため。下線も使わない＝H2との混同・リンクとの混同回避） |
 
 見出し前後の余白は「区切りの分かりやすさ」を優先し、H2は上下64px/16px、H3は上44px/下14pxを確保する
 （`assets/styles/_mixins.scss` の `article-typography` 参照）。
