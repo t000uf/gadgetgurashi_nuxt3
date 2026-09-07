@@ -1,75 +1,68 @@
 <script lang="ts" setup></script>
 
 <template>
-  <div>
+  <div class="layout">
+    <BackgroundPattern />
     <TheHeader />
-    <div class="container">
+    <main class="container">
       <div class="contents">
-        <slot />
+        <div class="contents__main">
+          <slot />
+        </div>
         <SideBar />
       </div>
-    </div>
+    </main>
     <NavButton />
     <TheFooter />
   </div>
 </template>
 
 <style lang="scss" scoped>
-.container {
+.layout {
+  position: relative;
+  z-index: 0; // スタッキングコンテキストを作り、子のz-index:-1(背景パターン)をこの中に閉じ込める
   display: flex;
   flex-direction: column;
-  align-items: center;
+  min-height: 100vh;
+  background-color: $color-bg;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  flex: 1;
   width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  background-color: $bg-white;
-  box-sizing: border-box;
+  padding: ($header-height + 32px) 24px 64px;
 }
 
 .contents {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  box-sizing: border-box;
-  max-width: 1024px;
+  align-items: center;
+  gap: 40px;
   width: 100%;
-  margin: 70px 0;
-  padding: 0;
+  max-width: $container-width;
   opacity: 0;
-  animation: fadein .5s ease-out forwards;
-  animation-delay: 100ms;
+  animation: fadein 0.5s ease-out 0.1s forwards;
 }
 
-@media screen and (max-width:639px) {
-  .contents {
-    padding: 0;
-    align-items: center;
+.contents__main {
+  width: 100%;
+  max-width: $content-width;
+  min-width: 0;
+}
+
+@media screen and (max-width: $bp-sm) {
+  .container {
+    padding: ($header-height + 20px) 16px 48px;
   }
 }
 
-@media screen and (min-width:640px) {
-  .contents {
-    padding: 0 1% 0 1%;
-    align-items: center;
-    font-size: medium;
-  }
-}
-
-@media screen and (min-width:1025px) {
+@media screen and (min-width: $bp-lg) {
   .contents {
     flex-direction: row;
     align-items: flex-start;
-  }
-}
-
-@media screen and (max-width:300px) {
-  .container {
-    padding: 0 1px 0 1px;
-  }
-
-  .sentence {
-    padding: 0 5px 0 5px;
+    justify-content: center;
   }
 }
 </style>

@@ -9,46 +9,33 @@ defineProps<{
 
 <template>
   <div class="tags">
-    <div v-for="(tag, key) in tags" :key="key" class="tag">
-      <NuxtLink :to="`/tag/${tag.id}/page/1/`" class="tagLink" />
-      <p class="tagName">
-        {{ tag.tagName }}
-      </p>
-    </div>
+    <NuxtLink v-for="tag in tags" :key="tag.id" :to="`/tag/${tag.id}/page/1/`" class="tags__item">
+      {{ tag.tagName }}
+    </NuxtLink>
   </div>
 </template>
 
 <style lang="scss" scoped>
 .tags {
   display: flex;
-  flex-direction: row;
   flex-wrap: wrap;
-  width: 100%;
-  word-break: keep-all;
+  gap: 8px;
 }
 
-.tag {
-  position: relative;
-  margin: 0 10px 10px 0;
-  padding: 10px;
-  background-color: $bg-lightgray;
-  box-shadow: $bg-gray 5px 5px 3px;
-  color: $text-color;
-  border-radius: 10px;
-  height: 50px;
-  box-sizing: border-box;
-}
+.tags__item {
+  @include label($color-secondary);
 
-.tagLink {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  padding: 3px 10px;
+  border: 1px solid rgba($color-secondary, 0.4);
+  border-radius: $radius-pill;
+  background-color: rgba($color-secondary, 0.1);
+  font-size: 12px;
   text-decoration: none;
-}
+  transition: background-color 0.2s ease, border-color 0.2s ease;
 
-.tagName {
-  margin: 0;
+  &:hover {
+    border-color: $color-secondary;
+    background-color: rgba($color-secondary, 0.18);
+  }
 }
 </style>

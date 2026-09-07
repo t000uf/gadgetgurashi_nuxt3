@@ -1,26 +1,41 @@
 <script lang="ts" setup></script>
-twitter-follow-button.value = '';
+
 <template>
-  <div class="side">
-    <!--<a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-size="large" data-lang="ja" data-show-count="true">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-    <a href="https://twitter.com/gadgetgurashi?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-size="large" data-lang="ja" data-show-count="false">Follow @gadgetgurashi</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>-->
+  <aside class="side">
+    <p class="side__label">SPONSORED</p>
     <AdsByGoogle ad-slot="7173714878" />
-  </div>
+  </aside>
 </template>
 
 <style lang="scss" scoped>
-@media screen and (min-width:1025px) {
+// SP/PCで見た目を統一：どちらも他コンテンツと同じ規約（content-block）で塗る
+// （独自の色は足さずデフォルトの$color-bgを使う）。PCのみ幅とstickyを追加する
+.side {
+  @include content-block;
 
+  width: 100%;
+  padding: 16px;
+  border-radius: $radius-card;
+}
+
+.side__label {
+  @include label($color-meta);
+
+  margin: 0 0 10px;
+}
+
+@media screen and (max-width: $bp-sm) {
+  .side {
+    padding: 16px 0;
+  }
+}
+
+@media screen and (min-width: $bp-lg) {
   .side {
     position: sticky;
-    top: 90px;
-    width: 250px;
-    height: 85vh;
-    box-sizing: border-box;
-    border-radius: 10px;
-    margin: 30px 0;
-    padding: 10px;
-    background-color: $bg-lightgray;
+    top: $header-height + 24px;
+    width: $sidebar-width;
+    flex: none;
   }
 }
 </style>

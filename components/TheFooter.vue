@@ -1,60 +1,103 @@
 <script lang="ts" setup>
-const { returnTop } = useScrollTop()
+const year = new Date().getFullYear()
 </script>
 
 <template>
-  <footer class="foot">
-    <p class="pageTop" @click="returnTop">page top</p>
-    <div class="footnav">
-      <ul>
-        <li>
-          <NuxtLink to="/">home</NuxtLink>
-        </li>
-        <li>
-          <NuxtLink to="/article/about">about</NuxtLink>
-        </li>
-      </ul>
+  <footer class="footer">
+    <div class="footer__inner">
+      <div class="footer__brand">
+        <BrandLogo :size="22" />
+        <span class="footer__logotype">がじぇっとぐらし！</span>
+      </div>
+      <nav class="footer__nav">
+        <NuxtLink to="/" class="footer__link">HOME</NuxtLink>
+        <NuxtLink to="/article/about" class="footer__link">ABOUT</NuxtLink>
+      </nav>
     </div>
-    <small>© 2022 gadgetgurashi</small>
+    <small class="footer__copyright">© {{ year }} gadgetgurashi</small>
   </footer>
 </template>
 
 <style lang="scss" scoped>
-.foot {
+// フッター本体は透明のまま。ロゴ・ナビ・著作権表記はそれぞれ独立したピルとして塗る
+// （ヘッダーと同じ考え方・同じ$color-header-bg。パターンを隠すのが目的）
+.footer {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 20px;
-  padding-bottom: 20px;
-  background-color: $bg-gray;
+  gap: 18px;
+  padding: 32px 24px 28px;
+  background: transparent;
 }
 
-.foot a {
-  margin: 0 10px;
-  color: $text-color;
-}
-
-.pageTop {
-  margin: 0;
-  cursor: pointer;
-  text-decoration: underline;
-}
-
-.footnav {
+.footer__inner {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
+  gap: 20px;
+  width: 100%;
+  max-width: $container-width;
 }
 
-.footnav ul {
-  padding-left: 0;
+.footer__brand {
+  @include content-block($color-header-bg);
+
+  display: flex;
+  align-items: center;
+  height: 36px;
+  gap: 9px;
+  padding: 0 16px;
+  border-radius: $radius-pill;
+  color: $color-base;
 }
 
-.footnav ul li {
-  display: inline-block;
+.footer__logotype {
+  font-family: $font-heading;
+  font-weight: 700;
+  font-size: 14px;
 }
 
-.footnav ul li a {
-  color: $text-color;
+.footer__nav {
+  @include content-block($color-header-bg);
+
+  display: flex;
+  align-items: center;
+  height: 36px;
+  gap: 20px;
+  padding: 0 20px;
+  border-radius: $radius-pill;
+}
+
+.footer__link {
+  padding: 0;
+  border: none;
+  background: none;
+  color: $color-nav-inactive;
+  font-family: $font-heading;
+  font-weight: 500;
+  font-size: 15px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: $color-primary;
+  }
+}
+
+.footer__copyright {
+  @include label($color-meta);
+  @include content-block($color-header-bg);
+
+  border-radius: $radius-pill;
+  padding: 6px 16px;
+  font-size: 13px;
+}
+
+@media screen and (max-width: $bp-sm) {
+  .footer__inner {
+    flex-direction: column;
+    gap: 16px;
+  }
 }
 </style>

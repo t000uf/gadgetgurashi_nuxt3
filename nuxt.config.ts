@@ -2,6 +2,8 @@
 export default defineNuxtConfig({
   compatibilityDate: '2026-04-02',
 
+  css: ['@/assets/styles/global.scss'],
+
   vite: {
     css: {
       preprocessorOptions: {
@@ -52,7 +54,15 @@ export default defineNuxtConfig({
         { name: 'twitter:site', content: '@gadgetgurashi' },
         { name: 'twitter:site', content: '@nzn_gadget' },
       ],
-      link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+      link: [
+        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+        { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+        { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
+        {
+          rel: 'stylesheet',
+          href: 'https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=JetBrains+Mono:wght@500;700&display=swap',
+        },
+      ],
       script: [
         {
           src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js',

@@ -2,7 +2,7 @@
 import type { MicroCMSListContent } from 'microcms-js-sdk'
 import type { About } from '@/types'
 
-const { format } = useDate()
+const { formatDot } = useDate()
 
 const { data: content } = await useFetch<MicroCMSListContent & About>('/api/about/about')
 
@@ -12,95 +12,39 @@ useHead({
 </script>
 
 <template>
-  <div v-if="content" class="sentence">
-    <h2 id="articleTitle">
-      {{ content.title }}
-    </h2>
-    <p class="date">更新日時：{{ format(content.revisedAt) }}</p>
-    <div class="articleText" v-html="content.text" />
+  <div class="about">
+    <Breadcrumb current="ABOUT" />
+    <template v-if="content">
+      <h1 class="about__title">{{ content.title }}</h1>
+      <p class="about__meta">更新 {{ formatDot(content.revisedAt) }}</p>
+      <div class="about__text" v-html="content.text" />
+    </template>
+    <AdsByGoogle ad-slot="7173714878" />
   </div>
-  <AdsByGoogle ad-slot="7173714878" />
 </template>
 
 <style lang="scss" scoped>
-.sentence {
-  max-width: 700px;
+// 背景パターン（layouts/default.vue）の上に乗るブロック。記事詳細ページと同様、
+// ページ全体をひとつの不透明な塗りブロックとして扱う
+.about {
+  @include content-card(28px, 20px 0);
+
   width: 100%;
-  padding: 10px;
-  box-sizing: border-box;
 }
 
-#articleTitle {
-  border-left: $main-color 5px solid;
-  padding-left: 10px;
+.about__title {
+  @include heading-1;
+
+  margin-bottom: 12px;
 }
 
-.articleText {
-  max-width: 700px;
+.about__meta {
+  @include label($color-meta);
 
-  :deep(p) {
-    line-height: 2;
-    padding: 3px;
-  }
-
-  :deep(img) {
-    width: 100%;
-    max-width: 700px;
-    box-sizing: border-box;
-    border-radius: 10px;
-    margin: 10px 0 30px 0;
-  }
-
-  :deep(h3) {
-    display: flex;
-    align-items: center;
-    position: sticky;
-    top: 70px;
-    height: 55px;
-    border-radius: 10px;
-    margin-bottom: 60px;
-    padding: 10px;
-    background-image: linear-gradient(to right, $sub-color 0%, $main-color 100%);
-    box-shadow: $bg-gray 0.5px 1px 1px;
-    font-size: 20px;
-    z-index: 10;
-
-    &::before {
-      position: absolute;
-      content: '';
-      bottom: -11px;
-      left: 1em;
-      width: 25px;
-      height: 25px;
-      background-color: $sub-color;
-      border-radius: 2px;
-      box-shadow: $bg-gray 1px 0.5px 0.5px;
-      transform: rotate(45deg);
-      z-index: 15;
-    }
-  }
-
-  :deep(h4) {
-    position: relative;
-    margin: 20px 0 0 0;
-    padding: 10px;
-    font-size: 18px;
-
-    &::after {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 5px;
-      content: '';
-      border-radius: 3px;
-      background-image: linear-gradient(to right, $sub-color 0%, $light-color 100%);
-    }
-  }
+  margin: 0 0 32px;
 }
 
-.date {
-  text-align: right;
-  font-size: 12px;
+.about__text {
+  @include article-typography;
 }
 </style>

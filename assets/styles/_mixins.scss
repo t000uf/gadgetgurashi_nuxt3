@@ -1,0 +1,271 @@
+@use 'tokens' as *;
+
+// =============================================================
+// 見出しシステム（デザイントークンとして重要）
+// H1: ページ内で1つだけ / H2: セクション区切り / H3: 小見出し
+// H4: 補足・キャプション見出し（下線は使わない＝リンクとの混同回避）
+// =============================================================
+@mixin heading-1 {
+  position: relative;
+  width: 100%;
+  margin: 0 0 28px;
+  padding-bottom: 16px;
+  color: $color-base;
+  font-family: $font-heading;
+  font-weight: 700;
+  font-size: clamp(24px, 4vw, 32px);
+  line-height: 1.4;
+
+  &::after {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    display: block;
+    width: 100%;
+    height: 4px;
+    border-radius: $radius-bar;
+    background-color: $color-primary;
+    content: '';
+  }
+}
+
+// H2は実コンテンツではほぼ使われない（記事本文の大見出しは実際にはH3が使われる。
+// H1は記事タイトル側で別に使用されるため）。そのため見た目の優先度は
+// 「H1(全幅下線) > H3(短い下線・実質の大見出し) > H2(ドット) > H4(角スクエア)」とし、
+// H3にH1と同じ下線モチーフのスケールダウン版を割り当てる
+@mixin heading-2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 36px 0 14px;
+  color: $color-base;
+  font-family: $font-heading;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1.5;
+
+  &::before {
+    flex: none;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: $color-primary;
+    content: '';
+  }
+}
+
+@mixin heading-3 {
+  position: relative;
+  width: 100%;
+  margin: 40px 0 20px;
+  padding-bottom: 10px;
+  color: $color-base;
+  font-family: $font-heading;
+  font-weight: 700;
+  font-size: 23px;
+  line-height: 1.5;
+
+  &::after {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    display: block;
+    width: 100%;
+    height: 3px;
+    border-radius: $radius-bar;
+    background-color: $color-primary;
+    content: '';
+  }
+}
+
+// H4は元デザイン（当初のH3＝丸ドット＋太字）を踏襲する。今はH2に同じ見た目があるので合わせる
+@mixin heading-4 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 36px 0 14px;
+  color: $color-base;
+  font-family: $font-heading;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1.5;
+
+  &::before {
+    flex: none;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: $color-primary;
+    content: '';
+  }
+}
+
+// ラベル・メタ情報（日付・パンくず・タグなど）。ナビゲーションと同じ
+// Zen Maru Gothic 500 / 15px に統一する（JetBrains Monoは本文中のコードにのみ使用）
+@mixin label($color: $color-meta) {
+  color: $color;
+  font-family: $font-heading;
+  font-weight: 500;
+  font-size: 15px;
+}
+
+// 画像プレースホルダー（実画像未設定時のフォールバック）
+@mixin placeholder-stripe($step: 10px) {
+  background-image: repeating-linear-gradient(
+    45deg,
+    $color-placeholder-1,
+    $color-placeholder-1 $step,
+    $color-placeholder-2 $step,
+    $color-placeholder-2 $step * 2
+  );
+}
+
+// 画像に重ねるバッジ（pill）。背景の色塗りは使わない
+@mixin badge($bg: $color-secondary) {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: $radius-pill;
+  background-color: $bg;
+  color: #fff;
+  font-family: $font-heading;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 1.4;
+  white-space: nowrap;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@mixin card {
+  border-radius: $radius-card;
+  background-color: $color-card;
+}
+
+// 背景パターンの上に乗る「まとまりブロック」共通の塗り。完全な不透明ではなく
+// 95%程度の半透明+backdrop-filterでうっすら透けさせる（ヘッダー／フッターのピルは
+// このブロックより手前に来るので対象外。個別の色を変えたい場合は $color を渡す）
+@mixin content-block($color: $color-bg, $opacity: 0.95) {
+  background-color: rgba($color, $opacity);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+// content-blockを角丸カードとして使う共通パターン（見出し／記事本文／一覧の
+// ページ見出しなど、背景パターンを隠すブロックはすべてこの形になる）。
+// SPは余白を切り詰めるページが多いため $padding-sm を別指定できるようにする
+@mixin content-card($padding: 28px, $padding-sm: 0) {
+  @include content-block;
+
+  border-radius: $radius-card;
+  padding: $padding;
+
+  @media screen and (max-width: $bp-sm) {
+    padding: $padding-sm;
+  }
+}
+
+// =============================================================
+// CMS本文（v-html）の組版。記事・about・下書きで共通利用する
+// =============================================================
+@mixin article-typography {
+  color: $color-body;
+  font-family: $font-body;
+  font-size: 16px;
+  line-height: 2;
+  word-break: break-word;
+
+  :deep(p) {
+    margin: 0 0 1.6em;
+  }
+
+  :deep(a) {
+    color: $color-secondary;
+    text-decoration: none;
+
+    &:hover {
+      color: $color-secondary-dark;
+      text-decoration: underline;
+    }
+  }
+
+  :deep(img) {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    box-sizing: border-box;
+    border-radius: $radius-image;
+    margin: 10px 0 30px;
+  }
+
+  // 長文中の見出しは前後の余白と罫線ではっきり区切る（段落見出しとの混同防止）。
+  // 実コンテンツでは記事本文の大見出しにH3が使われるため、罫線を伴う強い区切りはH3側に付ける
+  :deep(h2) {
+    @include heading-2;
+
+    margin-top: 44px;
+  }
+
+  :deep(h3) {
+    @include heading-3;
+
+    margin-top: 64px;
+    padding-top: 32px;
+    border-top: 1px solid $color-border;
+  }
+
+  :deep(h4) {
+    @include heading-4;
+  }
+
+  :deep(h2:first-child),
+  :deep(h3:first-child) {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+  }
+
+  :deep(ul),
+  :deep(ol) {
+    margin: 0 0 1.6em;
+    padding-left: 1.4em;
+  }
+
+  :deep(li) {
+    margin-bottom: 0.3em;
+  }
+
+  :deep(blockquote) {
+    margin: 0 0 1.6em;
+    padding: 4px 0 4px 16px;
+    border-left: 4px solid $color-border;
+    color: $color-meta;
+  }
+
+  :deep(code) {
+    padding: 2px 6px;
+    border-radius: 4px;
+    background-color: $color-card;
+    font-family: $font-mono;
+    font-size: 14px;
+  }
+
+  // CMS本文のYouTube等の埋め込みがカード幅を超えないようにする
+  :deep(iframe) {
+    max-width: 100%;
+  }
+
+  :deep(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 0 1.6em;
+    font-size: 14px;
+  }
+
+  :deep(th),
+  :deep(td) {
+    padding: 8px 10px;
+    border: 1px solid $color-border;
+    text-align: left;
+  }
+}

@@ -1,42 +1,34 @@
-# Nuxt 3 Minimal Starter
+# がじぇっとぐらし！
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+ガジェットレビューブログ [gadgetgurashi.com](https://www.gadgetgurashi.com) のフロントエンド。
+Nuxt 3 + microCMS + Netlify。
 
-## Setup
+## セットアップ
 
-Make sure to install the dependencies:
+パッケージマネージャは **pnpm** を使用します。
 
 ```bash
-# yarn
-yarn install
-
-# npm
-npm install
-
-# pnpm
 pnpm install
 ```
 
-## Development Server
+`.env` に以下を設定します。
 
-Start the development server on `http://localhost:3000`
-
-```bash
-npm run dev
+```
+MICROCMS_SERVICE_DOMAIN=
+MICROCMS_API_KEY=
+GA_TRACKING_ID=
 ```
 
-## Production
-
-Build the application for production:
+## 開発
 
 ```bash
-npm run build
+pnpm dev        # http://localhost:3000
+pnpm build      # 本番ビルド
+pnpm preview    # ビルド結果の確認
+pnpm typecheck  # 型チェック
 ```
 
-Locally preview production build:
+## ドキュメント
 
-```bash
-npm run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+- [AGENTS.md](./AGENTS.md) — 構成・規約・環境変数（AIエージェント／新規参加者向け）
+- [docs/DESIGN.md](./docs/DESIGN.md) — デザインシステム（v8リブランディング）

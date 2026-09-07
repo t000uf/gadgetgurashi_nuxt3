@@ -2,137 +2,224 @@
 import type { MicroCMSListContent } from 'microcms-js-sdk'
 import type { Article } from '@/types'
 
-defineProps<{
-  content: MicroCMSListContent & Article
-}>()
+const props = withDefaults(
+  defineProps<{
+    content: MicroCMSListContent & Article
+    /** featured: 注目記事（1カラム大） / default: グリッド / compact: 関連記事の横並び */
+    variant?: 'featured' | 'default' | 'compact'
+  }>(),
+  { variant: 'default' },
+)
+
+const { formatDot } = useDate()
+
+const date = computed(() => formatDot(props.content.createdAt))
+const tags = computed(() => props.content.tag ?? [])
+// 一覧カードのタグは、記事へのリンク（<a>）の中に別のリンクをネストできないため
+// card__link の外に置く。表示しすぎないよう先頭3件までに絞る
+const listTags = computed(() => tags.value.slice(0, 3))
 </script>
 
 <template>
-  <div class="kiji">
-    <NuxtLink :to="`/article/${content.id}/`" class="kijiLink" />
-    <h3 class="title">
-      {{ content.title }}
-    </h3>
-    <div class="thumbPre">
-      <img class="thumbnail" :src="content.thumbnail?.url" :alt="content.title">
-      <p class="preview">
-        {{ content.preview }}...
-      </p>
-    </div>
-    <div class="kijiTags">
-      <div v-for="(tag, tagkey) in content.tag" :key="tagkey" class="kijiTag">
-        <NuxtLink :to="`/tag/${tag.id}/page/1/`" class="kijiTagLink" />
-        <p class="kijiTagName">
-          {{ tag.tagName }}
-        </p>
+  <div class="card" :class="`card--${variant}`">
+    <NuxtLink :to="`/article/${content.id}/`" class="card__link">
+      <div class="card__visual">
+        <img v-if="content.thumbnail?.url" class="card__image" :src="content.thumbnail.url" :alt="content.title"
+          loading="lazy">
+        <div v-else class="card__image card__image--placeholder" />
+        <span v-if="variant === 'featured'" class="card__badge card__badge--featured">注目</span>
       </div>
-    </div>
-    <!-- <TagLink v-if="content.tag" :tags="content.tag" /> -->
+      <div class="card__body">
+        <h3 class="card__title">{{ content.title }}</h3>
+        <p v-if="variant === 'featured' && content.preview" class="card__preview">
+          {{ content.preview }}...
+        </p>
+        <div v-if="variant === 'compact' && tags.length" class="card__tags">
+          <span v-for="tag in tags" :key="tag.id" class="card__tag">{{ tag.tagName }}</span>
+        </div>
+        <time v-if="date && variant !== 'compact'" class="card__date">{{ date }}</time>
+      </div>
+    </NuxtLink>
+    <TagLink v-if="variant !== 'compact' && listTags.length" :tags="listTags" class="card__taglinks" />
   </div>
 </template>
 
 <style lang="scss" scoped>
-.kiji {
-  position: relative;
-  box-sizing: border-box;
-  width: 100%;
-  min-height: max-content;
-  border-left: $sub-color 10px solid;
-  border-radius: 0 10px 10px 0;
-  margin-bottom: 30px;
-  padding: 10px 10px 10px 20px;
-  background-color: $light-color;
-  box-shadow: $bg-gray 10px 7px 5px;
-  object-fit: cover;
+.card {
+  display: block;
+}
+
+.card__link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
 
   &:hover {
-    transform: scale(1.02);
-    transition-duration: 0.5s;
+    color: inherit;
+
+    .card__image {
+      transform: scale(1.03);
+    }
+
+    .card__title {
+      color: $color-primary;
+    }
   }
-
-  h3 {
-    margin: 0 0 10px 0;
-  }
 }
 
-.kijiLink {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.kijiTags {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  width: 100%;
-  word-break: keep-all;
-}
-
-.kijiTag {
+.card__visual {
   position: relative;
-  display: flex;
-  height: 100%;
-  margin: 10px 10px 0 0;
-  padding: 5px;
-  border-radius: 5px;
-  background-color: $sub-color;
-  color: $text-color;
-}
-
-.kijiTagLink {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  text-decoration: none;
-}
-
-.kijiTagName {
-  margin: 0;
-}
-
-.thumbPre {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-  align-items: center;
-  width: 100%;
   overflow: hidden;
+  border-radius: $radius-image-sm;
 }
 
-.thumbnail {
-  width: 350px;
-  height: auto;
-  border-radius: 10px;
-  box-sizing: border-box;
-  flex-shrink: 0;
+.card__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
 }
 
-.preview {
-  margin: auto 20px;
-  line-height: 1.7;
+.card__image--placeholder {
+  @include placeholder-stripe(8px);
 }
 
-@media screen and (max-width: 639px) {
-  .kiji {
-    padding: 10px;
+.card__badge {
+  @include badge;
+
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  max-width: calc(100% - 16px);
+  font-size: 10px;
+}
+
+.card__badge--featured {
+  background-color: $color-primary;
+}
+
+.card__title {
+  margin: 0;
+  color: $color-base;
+  font-family: $font-heading;
+  font-weight: 700;
+  line-height: 1.5;
+  transition: color 0.2s ease;
+}
+
+.card__date {
+  @include label($color-meta);
+
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 13px;
+}
+
+// featured / default は背景パターン（layouts/home.vue）の上に乗るブロック。
+// 画像とテキストをまとめてサイト背景色で不透明に塗り、パターンを隠す
+// （compactは記事詳細ページのRELATED欄で使う横並び行のため対象外）
+.card--featured,
+.card--default {
+  @include content-block;
+
+  border-radius: $radius-card;
+}
+
+// --- featured：1カラムの大きなカード -------------------------
+.card--featured {
+  .card__visual {
+    border-radius: $radius-image;
   }
 
-  .thumbPre {
-    flex-direction: column;
+  .card__image {
+    aspect-ratio: 16 / 9;
   }
 
-  .thumbnail {
-    width: 100%;
-    margin: 0;
+  .card__badge {
+    top: 12px;
+    left: 12px;
+    font-size: 11px;
   }
 
-  .preview {
-    margin: 10px 0;
+  .card__body {
+    padding-top: 12px;
+  }
+
+  .card__title {
+    font-size: 20px;
+  }
+}
+
+.card__preview {
+  margin: 8px 0 0;
+  color: $color-body;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+// --- default：2カラムグリッド --------------------------------
+.card--default {
+  .card__image {
+    aspect-ratio: 16 / 10;
+  }
+
+  .card__body {
+    padding-top: 10px;
+  }
+
+  .card__title {
+    font-size: 15px;
+  }
+}
+
+// --- compact：関連記事の横並びサムネイル ---------------------
+.card--compact {
+  .card__link {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .card__visual {
+    flex: none;
+    width: 64px;
+    height: 64px;
+    border-radius: $radius-image-sm;
+  }
+
+  .card__body {
+    min-width: 0;
+  }
+
+  .card__title {
+    font-size: 13px;
+  }
+}
+
+.card__taglinks {
+  margin-top: 10px;
+}
+
+.card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.card__tag {
+  @include label($color-secondary);
+
+  padding: 2px 8px;
+  border-radius: $radius-pill;
+  background-color: rgba($color-secondary, 0.1);
+  font-size: 12px;
+}
+
+@media screen and (max-width: $bp-sm) {
+  .card--featured .card__title {
+    font-size: 17px;
   }
 }
 </style>
