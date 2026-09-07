@@ -14,7 +14,7 @@ const getPath = (p: number) => {
 </script>
 
 <template>
-  <nav class="pagination" aria-label="ページ送り">
+  <nav v-if="1 < pager.length" class="pagination" aria-label="ページ送り">
     <div class="pagination__inner">
       <NuxtLink
         v-if="1 < current"
@@ -37,7 +37,7 @@ const getPath = (p: number) => {
         >{{ p + 1 }}</NuxtLink>
       </template>
 
-      <span v-if="current + 2 <= pager.length" class="pagination__omission">…</span>
+      <span v-if="current + 2 < pager.length" class="pagination__omission">…</span>
       <NuxtLink
         v-if="current + 1 < pager.length"
         :to="getPath(pager.length)"

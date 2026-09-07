@@ -36,7 +36,7 @@ const pager = computed(() =>
     </section>
 
     <section class="section-heading">
-      <h3 class="section-title allkiji">記事一覧</h3>
+      <h2 class="section-title allkiji">記事一覧</h2>
     </section>
     <ArticleList v-if="data?.contents" :contents="data.contents" featured />
     <Pagination :pager="pager" :current="1" />
@@ -91,7 +91,7 @@ const pager = computed(() =>
   margin: 0 0 14px;
 }
 
-// 記事本文の実質的な大見出し（h3）とスタイルを揃える
+// 文書構造上はh2だが、見た目はCMS本文の実質的な大見出し（h3）と揃える
 .section-title {
   @include heading-3;
 

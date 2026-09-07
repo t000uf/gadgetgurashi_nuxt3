@@ -42,7 +42,7 @@ APIキーはクライアントに出さないため、microCMS へのアクセ�
 ```
 assets/styles/   デザイントークン（_tokens.scss）、mixin（_mixins.scss）、グローバル（global.scss）
 components/      自動インポートされる単一ファイルコンポーネント
-composables/     useDate / useArticleMeta
+composables/     useDate / useArticleMeta / useScrollTop
 layouts/         default（記事・一覧）、home（トップ：ヒーロー付き）
 pages/           index / page/[p] / article/[id] / article/about / tag/[tagId]/page/[p] / draft
 server/api/      microCMS プロキシ、sitemap のURL生成

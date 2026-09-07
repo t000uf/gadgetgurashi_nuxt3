@@ -10,34 +10,34 @@
   <svg class="bg-pattern" aria-hidden="true" focusable="false">
     <defs>
       <g id="ic-phone">
-        <rect x="7" y="2" width="14" height="24" rx="4" stroke="#c7cfd9" stroke-width="2" fill="none" stroke-linejoin="round" />
-        <line x1="11" y1="21" x2="17" y2="21" stroke="#c7cfd9" stroke-width="2" stroke-linecap="round" />
+        <rect x="7" y="2" width="14" height="24" rx="4" stroke="currentColor" stroke-width="2" fill="none" stroke-linejoin="round" />
+        <line x1="11" y1="21" x2="17" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
       </g>
       <g id="ic-headphone">
-        <path d="M6 18 Q6 6 14 6 Q22 6 22 18" stroke="#c7cfd9" stroke-width="2" fill="none" stroke-linecap="round" />
-        <rect x="3" y="16" width="6" height="9" rx="2.5" stroke="#c7cfd9" stroke-width="2" fill="none" />
-        <rect x="19" y="16" width="6" height="9" rx="2.5" stroke="#c7cfd9" stroke-width="2" fill="none" />
+        <path d="M6 18 Q6 6 14 6 Q22 6 22 18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" />
+        <rect x="3" y="16" width="6" height="9" rx="2.5" stroke="currentColor" stroke-width="2" fill="none" />
+        <rect x="19" y="16" width="6" height="9" rx="2.5" stroke="currentColor" stroke-width="2" fill="none" />
       </g>
       <g id="ic-watch">
-        <rect x="8" y="8" width="12" height="14" rx="4" stroke="#c7cfd9" stroke-width="2" fill="none" />
-        <line x1="11" y1="8" x2="11" y2="3" stroke="#c7cfd9" stroke-width="2" stroke-linecap="round" />
-        <line x1="17" y1="8" x2="17" y2="3" stroke="#c7cfd9" stroke-width="2" stroke-linecap="round" />
-        <line x1="11" y1="22" x2="11" y2="27" stroke="#c7cfd9" stroke-width="2" stroke-linecap="round" />
-        <line x1="17" y1="22" x2="17" y2="27" stroke="#c7cfd9" stroke-width="2" stroke-linecap="round" />
+        <rect x="8" y="8" width="12" height="14" rx="4" stroke="currentColor" stroke-width="2" fill="none" />
+        <line x1="11" y1="8" x2="11" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+        <line x1="17" y1="8" x2="17" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+        <line x1="11" y1="22" x2="11" y2="27" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+        <line x1="17" y1="22" x2="17" y2="27" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
       </g>
       <g id="ic-router">
-        <rect x="3" y="12" width="22" height="9" rx="3" stroke="#c7cfd9" stroke-width="2" fill="none" />
-        <line x1="9" y1="12" x2="9" y2="5" stroke="#c7cfd9" stroke-width="2" stroke-linecap="round" />
-        <line x1="19" y1="12" x2="19" y2="5" stroke="#c7cfd9" stroke-width="2" stroke-linecap="round" />
+        <rect x="3" y="12" width="22" height="9" rx="3" stroke="currentColor" stroke-width="2" fill="none" />
+        <line x1="9" y1="12" x2="9" y2="5" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+        <line x1="19" y1="12" x2="19" y2="5" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
       </g>
       <g id="ic-mug">
-        <path d="M5 8 h14 v11 a5 5 0 0 1 -5 5 h-4 a5 5 0 0 1 -5 -5 z" stroke="#c7cfd9" stroke-width="2" fill="none" stroke-linejoin="round" />
-        <path d="M19 11 h3 a3.5 3.5 0 0 1 0 7 h-3" stroke="#c7cfd9" stroke-width="2" fill="none" stroke-linecap="round" />
+        <path d="M5 8 h14 v11 a5 5 0 0 1 -5 5 h-4 a5 5 0 0 1 -5 -5 z" stroke="currentColor" stroke-width="2" fill="none" stroke-linejoin="round" />
+        <path d="M19 11 h3 a3.5 3.5 0 0 1 0 7 h-3" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" />
       </g>
       <g id="ic-bulb">
-        <path d="M14 4 a7 7 0 0 1 4.5 12.4 c-1 .9 -1.5 1.9 -1.5 3.1 h-6 c0 -1.2 -.5 -2.2 -1.5 -3.1 A7 7 0 0 1 14 4 Z" stroke="#c7cfd9" stroke-width="2" fill="none" stroke-linejoin="round" />
-        <line x1="11" y1="23" x2="17" y2="23" stroke="#c7cfd9" stroke-width="2" stroke-linecap="round" />
-        <line x1="12" y1="26" x2="16" y2="26" stroke="#c7cfd9" stroke-width="2" stroke-linecap="round" />
+        <path d="M14 4 a7 7 0 0 1 4.5 12.4 c-1 .9 -1.5 1.9 -1.5 3.1 h-6 c0 -1.2 -.5 -2.2 -1.5 -3.1 A7 7 0 0 1 14 4 Z" stroke="currentColor" stroke-width="2" fill="none" stroke-linejoin="round" />
+        <line x1="11" y1="23" x2="17" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+        <line x1="12" y1="26" x2="16" y2="26" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
       </g>
 
       <!--
@@ -67,6 +67,7 @@
   z-index: -1;
   width: 100vw;
   height: 100vh;
+  color: $color-header-border;
   pointer-events: none;
 }
 </style>
