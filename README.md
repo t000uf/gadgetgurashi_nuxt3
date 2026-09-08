@@ -1,7 +1,7 @@
 # がじぇっとぐらし！
 
 ガジェットレビューブログ [gadgetgurashi.com](https://www.gadgetgurashi.com) のフロントエンド。
-Nuxt 3 + microCMS + Netlify。
+Nuxt 4 + microCMS + Netlify。
 
 ## セットアップ
 
