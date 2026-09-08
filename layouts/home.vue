@@ -1,4 +1,11 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import DefaultHeroImage from '@/assets/imgs/DSCF1982.jpg'
+
+const { thumbnailUrl } = useThumbnail()
+const { data: top } = await useTopContent()
+
+const heroImage = computed(() => thumbnailUrl(top.value?.image?.url, 1600) ?? DefaultHeroImage)
+</script>
 
 <template>
   <div class="layout">
@@ -6,7 +13,7 @@
     <TheHeader />
     <main class="container">
       <div class="hero">
-        <img src="@/assets/imgs/DSCF1982.jpg" alt="" class="hero__image">
+        <img :src="heroImage" alt="" class="hero__image">
       </div>
       <div class="contents">
         <div class="contents__main">

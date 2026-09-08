@@ -190,5 +190,6 @@ RELATEDはさらにその下で独立したブロック。詳しくは「背景�
 
 - ロゴマーク／ロゴタイプは仮置き（`components/BrandLogo.vue`）。別途デザインを詰める
 - 記事のアイキャッチは実写に差し替え前提。未設定時は縞模様のプレースホルダー（`@include placeholder-stripe`）が出る
-- ヒーロー画像は既存の `assets/imgs/DSCF1982.jpg` を流用中。「物撮り風 product shot」への差し替えを想定
+- ヒーロー画像はmicroCMSのオブジェクト形式API `top`（`image`フィールド）から差し込み可能。
+  未設定時は既存の `assets/imgs/DSCF1982.jpg` にフォールバックする。「物撮り風 product shot」への差し替えを想定
 - ホバー／フォーカス状態はモックで未定義のため、実装側で `:focus-visible` にオレンジのアウトラインを定義した
