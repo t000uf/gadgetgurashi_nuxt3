@@ -12,19 +12,28 @@ const props = withDefaults(
 )
 
 const { formatDot } = useDate()
+const { thumbnailUrl } = useThumbnail()
 
 const date = computed(() => formatDot(props.content.createdAt))
 const tags = computed(() => props.content.tag ?? [])
 // 一覧カードのタグは、記事へのリンク（<a>）の中に別のリンクをネストできないため
 // card__link の外に置く。表示しすぎないよう先頭3件までに絞る
 const listTags = computed(() => tags.value.slice(0, 3))
+
+// variantごとの実表示幅（Retina考慮で2倍）に合わせてmicroCMSの画像を配信サイズで取得する
+const thumbnailWidth: Record<typeof props.variant, number> = {
+  featured: 1200,
+  default: 600,
+  compact: 128,
+}
+const thumbnail = computed(() => thumbnailUrl(props.content.thumbnail?.url, thumbnailWidth[props.variant]))
 </script>
 
 <template>
   <div class="card" :class="`card--${variant}`">
     <NuxtLink :to="`/article/${content.id}/`" class="card__link">
       <div class="card__visual">
-        <img v-if="content.thumbnail?.url" class="card__image" :src="content.thumbnail.url" :alt="content.title"
+        <img v-if="thumbnail" class="card__image" :src="thumbnail" :alt="content.title"
           loading="lazy">
         <div v-else class="card__image card__image--placeholder" />
         <span v-if="variant === 'featured'" class="card__badge card__badge--featured">注目</span>
