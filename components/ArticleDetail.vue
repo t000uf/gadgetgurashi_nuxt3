@@ -9,8 +9,10 @@ const props = defineProps<{
 
 const { formatDot } = useDate()
 const { readingTime } = useArticleMeta()
+const { thumbnailUrl } = useThumbnail()
 
 const minutes = computed(() => readingTime(props.content.text))
+const thumbnail = computed(() => thumbnailUrl(props.content.thumbnail?.url, 1200))
 </script>
 
 <template>
@@ -19,7 +21,7 @@ const minutes = computed(() => readingTime(props.content.text))
       <Breadcrumb :current="breadcrumb" />
 
       <div class="detail__visual">
-        <img v-if="content.thumbnail?.url" class="detail__thumbnail" :src="content.thumbnail.url" :alt="content.title">
+        <img v-if="thumbnail" class="detail__thumbnail" :src="thumbnail" :alt="content.title">
         <div v-else class="detail__thumbnail detail__thumbnail--placeholder" />
       </div>
 
