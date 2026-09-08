@@ -29,9 +29,6 @@
         "sass-loader": "^13.2.2"
     },
     "packageManager": "pnpm@10.33.0",
-    "volta": {
-        "node": "24.14.1"
-    },
     "engines": {
         "npm": "npmではなくpnpmを使用してください",
         "yarn": "yarnではなくpnpmを使用してください"
