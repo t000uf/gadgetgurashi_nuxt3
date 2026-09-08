@@ -35,3 +35,6 @@
 ## 一覧
 
 - [0001. Nuxt2からNuxt3(SSR)への移行と旧リポジトリの終了](0001-nuxt3-ssr-migration.md)
+- [0002. server/api/** にCache-Controlを設定してNetlifyのCDNキャッシュを効かせる](0002-netlify-cache-headers.md)
+- [0003. Nuxt4 / Node.js 24系へのアップグレード](0003-nuxt4-node24-upgrade.md)
+- [0004. Node.jsバージョン管理をVoltaからmiseに移行](0004-volta-to-mise-migration.md)
