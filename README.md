@@ -32,3 +32,4 @@ pnpm typecheck  # 型チェック
 
 - [AGENTS.md](./AGENTS.md) — 構成・規約・環境変数（AIエージェント／新規参加者向け）
 - [docs/DESIGN.md](./docs/DESIGN.md) — デザインシステム（v8リブランディング）
+- [docs/adr/](./docs/adr/) — アーキテクチャ決定記録（ADR）。フレームワーク移行など経緯を残すべき決定
