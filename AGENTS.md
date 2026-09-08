@@ -48,6 +48,7 @@ pages/           index / page/[p] / article/[id] / article/about / tag/[tagId]/p
 server/api/      microCMS プロキシ、sitemap のURL生成
 types/           microCMS のレスポンス型
 docs/DESIGN.md   デザインシステム（v8リブランディング）
+docs/adr/        アーキテクチャ決定記録（ADR）。フレームワーク移行など経緯を残すべき決定
 ```
 
 ## スタイルの規約
