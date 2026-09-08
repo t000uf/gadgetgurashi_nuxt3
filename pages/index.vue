@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import type { Article, MicroCMSList } from '@/types'
+import type { MicroCMSObjectContent } from 'microcms-js-sdk'
+import type { Article, MicroCMSList, Top } from '@/types'
 
 definePageMeta({
   layout: 'home'
@@ -8,6 +9,8 @@ definePageMeta({
 const route = useRoute()
 const page = Number(route.params.p) || 1
 const limit = 10
+
+const { data: top } = await useFetch<MicroCMSObjectContent & Top>('/api/top')
 
 const { data } = await useFetch<MicroCMSList<Article>>('/api/article', {
   query: {
@@ -24,11 +27,10 @@ const pager = computed(() =>
 <template>
   <div class="home">
     <section class="intro">
-      <p class="intro__eyebrow">WELCOME</p>
-      <h1 class="intro__title">ガジェットのレビューと記録</h1>
+      <p class="intro__eyebrow">{{ top?.eyebrow ?? 'WELCOME' }}</p>
+      <h1 class="intro__title">{{ top?.title ?? 'ガジェットのレビューと記録' }}</h1>
       <p class="intro__text">
-        このブログはただの一般オタクが購入したガジェットやその他の話題について、レビューや感想を好き勝手書き散らした記事の置き場所です。
-        素人目線なので、詳細なレビューや正確な情報は他のサイトなど複数の情報を参考にしてください。更新は不定期でのんびりやっています。
+        {{ top?.text ?? 'このブログはただの一般オタクが購入したガジェットやその他の話題について、レビューや感想を好き勝手書き散らした記事の置き場所です。素人目線なので、詳細なレビューや正確な情報は他のサイトなど複数の情報を参考にしてください。更新は不定期でのんびりやっています。' }}
       </p>
       <p class="intro__link">
         <NuxtLink to="/article/about">このブログについて →</NuxtLink>
