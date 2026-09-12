@@ -3,52 +3,9 @@
 // ハンドルをタップすると全見出しが上方向に開く。
 // position: fixed を使うため、backdrop-filterを持つ記事カードの中ではなく
 // レイアウト直下（NavButtonと同じ階層）に置くこと
-import { activeTocIds } from '@/composables/useToc'
-
 const state = useTocState()
 const isOpen = ref(false)
 const containerRef = ref<HTMLElement>()
-const pillsRef = ref<HTMLElement>()
-
-const activeIds = computed(() => activeTocIds(state.value.toc, state.value.activeId))
-
-// h4は親のh3が現在地のときだけ出す（普段はh3だけの一覧）。
-// 親を持たないh4は畳む相手がいないので常に出す
-const visiblePills = computed(() => {
-  return state.value.toc.filter((item) => {
-    return item.level !== 'h4' || !item.parentId || activeIds.value.has(item.parentId)
-  })
-})
-
-// CSSの .toc-bar__pills の gap と揃える
-const PILL_GAP = 6
-
-// 読み進めるとピル列が横スクロールして現在地が見える位置に来る。
-// scrollIntoViewはページ自体も縦に動かしてしまうので、列のscrollLeftだけを動かす
-const scrollActivePillIntoView = async () => {
-  await nextTick()
-  const row = pillsRef.value
-  if (!row) return
-  const index = visiblePills.value.findIndex((item) => item.id === state.value.activeId)
-  const pill = row.children[index] as HTMLElement | undefined
-  if (!pill) return
-
-  // stickyは場所を取らず上に重なるだけなので、左端に貼り付いたh3の幅ぶんは常に隠れる
-  const stickyIndex = visiblePills.value.findIndex((item) => {
-    return item.level === 'h3' && activeIds.value.has(item.id)
-  })
-  const sticky = stickyIndex >= 0 && stickyIndex !== index
-    ? (row.children[stickyIndex] as HTMLElement | undefined)
-    : undefined
-  const blindSpot = sticky ? sticky.offsetWidth + PILL_GAP : 0
-
-  // すでに見えているなら動かさない。毎回詰め直すと、同じセクションを読んでいる間に
-  // 先に読んだ兄弟h4が固定中のh3の下へ流れていってしまう
-  const offsetInView = pill.offsetLeft - row.scrollLeft
-  if (offsetInView >= blindSpot && offsetInView + pill.offsetWidth <= row.clientWidth) return
-
-  row.scrollTo({ left: pill.offsetLeft - blindSpot, behavior: 'smooth' })
-}
 
 const close = () => {
   isOpen.value = false
@@ -96,8 +53,6 @@ const handlePointerDown = (e: PointerEvent) => {
   if (!containerRef.value?.contains(e.target as Node)) close()
 }
 
-watch(() => state.value.activeId, scrollActivePillIntoView)
-
 // 開いたままバーがしまわれると、画面外に一覧が残ったままになる
 watch(() => state.value.isInBody, (isInBody) => {
   if (!isInBody) close()
@@ -125,6 +80,7 @@ onUnmounted(() => {
     <button type="button" class="toc-bar__handle" :aria-expanded="isOpen" aria-controls="toc-bar-list"
       :aria-label="isOpen ? 'もくじを閉じる' : 'もくじを開く'" @click="toggle" @pointerdown="onHandlePointerDown"
       @pointermove="onHandlePointerMove" @pointerup="onHandlePointerUp" @pointercancel="onHandlePointerUp" />
+
     <div class="toc-bar__wrap">
       <div class="toc-bar__main">
         <p class="toc-bar__head">
@@ -139,10 +95,7 @@ onUnmounted(() => {
         </div>
 
         <div class="toc-bar__current" :class="{ 'is-hidden': isOpen }" :inert="isOpen">
-          <div ref="pillsRef" class="toc-bar__pills">
-            <a v-for="item in visiblePills" :key="item.id" :href="`#${item.id}`" class="toc-bar__pill"
-              :class="[`toc-bar__pill--${item.level}`, { 'is-active': activeIds.has(item.id) }]">{{ item.text }}</a>
-          </div>
+          <TocPills :toc="state.toc" :active-id="state.activeId" class="toc-bar__pills" />
         </div>
       </div>
       <div class="toc-bar__sub">
@@ -282,62 +235,6 @@ onUnmounted(() => {
 }
 
 .toc-bar__pills {
-  position: relative; // ピルのoffsetLeftをこの列基準で測るため
-  display: flex;
-  overflow-x: auto;
-  gap: 6px;
   flex: 1;
-  min-width: 0;
-  scrollbar-width: none;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-}
-
-// メトリクスはbadge()と同じ。淡い塗り／ベタ塗りの2状態が要るのでmixinは使わず展開する
-.toc-bar__pill {
-  flex: none;
-  overflow: hidden;
-  max-width: 60vw;
-  padding: 4px 12px;
-  border-radius: $radius-pill;
-  font-family: $font-heading;
-  font-weight: 700;
-  font-size: 12px;
-  line-height: 1.4;
-  text-decoration: none;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  transition: background-color 0.2s ease, color 0.2s ease;
-}
-
-// 通常は淡い塗りで控えさせ、現在地だけベタ塗りにして読んでいる場所を際立たせる
-.toc-bar__pill--h2,
-.toc-bar__pill--h3 {
-  background-color: rgba($color-primary, 0.12);
-  color: $color-primary;
-
-  &.is-active {
-    background-color: $color-primary;
-    color: #fff;
-  }
-}
-
-// 現在のセクションの見出しは左端に貼り付け、配下のh4がその右を流れるようにする
-.toc-bar__pill--h3.is-active {
-  position: sticky;
-  left: 0;
-  z-index: 1;
-}
-
-.toc-bar__pill--h4 {
-  background-color: rgba($color-secondary, 0.12);
-  color: $color-secondary;
-
-  &.is-active {
-    background-color: $color-secondary;
-    color: #fff;
-  }
 }
 </style>
