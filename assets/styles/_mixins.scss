@@ -218,6 +218,13 @@
     @include heading-4;
   }
 
+  // ヘッダーが固定なので、目次から飛んだとき見出しがその下に潜らないよう逃がす
+  :deep(h2),
+  :deep(h3),
+  :deep(h4) {
+    scroll-margin-top: $header-height + 16px;
+  }
+
   :deep(h2:first-child),
   :deep(h3:first-child) {
     margin-top: 0;

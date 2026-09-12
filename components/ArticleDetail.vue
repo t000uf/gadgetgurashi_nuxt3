@@ -94,6 +94,7 @@ useToc(
   @include heading-1;
 
   margin-bottom: 12px;
+  scroll-margin-top: $header-height + 16px;
 }
 
 .detail__meta {
