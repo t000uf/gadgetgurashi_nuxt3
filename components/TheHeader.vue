@@ -60,7 +60,7 @@ const isAbout = computed(() => route.path.startsWith('/article/about'))
 // 背景パターンの上に乗るため、ロゴタイプとナビゲーションはそれぞれ独立した
 // 半透明+backdrop-filterのピルとして塗る（ヘッダー全体は透明のまま）
 .header__brand {
-  @include content-block($color-header-bg);
+  @include content-block($color-header-bg, $opacity-header);
 
   display: flex;
   align-items: center;
@@ -92,7 +92,7 @@ const isAbout = computed(() => route.path.startsWith('/article/about'))
 }
 
 .header__nav {
-  @include content-block($color-header-bg);
+  @include content-block($color-header-bg, $opacity-header);
 
   display: flex;
   align-items: center;

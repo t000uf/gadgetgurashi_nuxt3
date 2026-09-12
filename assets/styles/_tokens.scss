@@ -25,6 +25,13 @@ $color-card: #ffffff; // カード背景
 $color-placeholder-1: #dfe4ea; // プレースホルダー画像 縞1
 $color-placeholder-2: #d2d9e2; // プレースホルダー画像 縞2
 
+// --- Opacity -------------------------------------------------
+// 背景パターンの上に乗る面の透け具合（content-block mixinに渡す）。
+// 役割ごとに分けておき、まとめて動かさない
+$opacity-block: 0.95; // コンテンツのまとまり（記事本文・一覧・サイドバー）
+$opacity-header: 0.85; // ヘッダー／フッターの浮遊ピル
+$opacity-overlay: 0.75; // 本文の上に重なるもの（もくじバー）
+
 // --- Typography ---------------------------------------------
 $font-heading: 'Zen Maru Gothic', 'Hiragino Maru Gothic ProN', sans-serif;
 $font-body: 'Zen Kaku Gothic New', 'Hiragino Sans', 'Noto Sans JP', sans-serif;

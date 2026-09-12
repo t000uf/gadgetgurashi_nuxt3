@@ -160,9 +160,9 @@ onUnmounted(() => {
   }
 }
 
-// 塗りはヘッダー／フッターのピルと同じ content-block（不透明度0.95＋blur）に揃える
+// 本文の上に重なるので、ヘッダーのピルより透かして下の記事を見せる
 .toc-bar {
-  @include content-block($color-header-bg);
+  @include content-block($color-header-bg, $opacity-overlay);
 
   position: fixed;
   right: 0;

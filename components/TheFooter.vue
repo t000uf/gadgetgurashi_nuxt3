@@ -40,7 +40,7 @@ const year = new Date().getFullYear()
 }
 
 .footer__brand {
-  @include content-block($color-header-bg);
+  @include content-block($color-header-bg, $opacity-header);
 
   display: flex;
   align-items: center;
@@ -58,7 +58,7 @@ const year = new Date().getFullYear()
 }
 
 .footer__nav {
-  @include content-block($color-header-bg);
+  @include content-block($color-header-bg, $opacity-header);
 
   display: flex;
   align-items: center;
@@ -87,7 +87,7 @@ const year = new Date().getFullYear()
 
 .footer__copyright {
   @include label($color-meta);
-  @include content-block($color-header-bg);
+  @include content-block($color-header-bg, $opacity-header);
 
   border-radius: $radius-pill;
   padding: 6px 16px;
