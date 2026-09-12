@@ -137,6 +137,8 @@ onUnmounted(() => {
 .toc-bar__wrap {
   display: flex;
   flex-direction: row;
+  align-items: flex-start;
+  margin-bottom: 10px;
 }
 
 // 左カラム：ハンドル・タイトル・目次。min-width:0がないと中のピル列が横スクロールしない
@@ -197,7 +199,7 @@ onUnmounted(() => {
   color: $color-base;
   font-family: $font-heading;
   font-weight: 700;
-  font-size: 16px;
+  font-size: 14px;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
