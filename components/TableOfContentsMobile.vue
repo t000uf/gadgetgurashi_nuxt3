@@ -138,7 +138,7 @@ onUnmounted(() => {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  margin-bottom: 10px;
+  padding-bottom: 10px;
 }
 
 // 左カラム：ハンドル・タイトル・目次。min-width:0がないと中のピル列が横スクロールしない
