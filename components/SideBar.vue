@@ -18,6 +18,8 @@
   @include content-block;
 
   width: 100%;
+  // 1カラムのSP/タブレットでは本文の下に積まれるので、本文と同じ幅で揃える
+  max-width: $content-width;
   padding: 8px;
   border-radius: $radius-card;
 }

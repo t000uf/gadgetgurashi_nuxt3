@@ -48,12 +48,14 @@ const isAbout = computed(() => route.path.startsWith('/article/about'))
   background: transparent;
 }
 
+// container-width は本文＋サイドバーの2カラム分なので、1カラムのSP/タブレットでは
+// ピルが本文カラムから離れて間延びする。lgになるまでは本文と同じ幅に収める
 .header__inner {
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  max-width: $container-width;
+  max-width: $content-width;
   padding: 0 24px;
 }
 
@@ -209,6 +211,13 @@ const isAbout = computed(() => route.path.startsWith('/article/about'))
 
   .header__link-text {
     display: none;
+  }
+}
+
+// PCは本文＋サイドバーの2カラムになるので、その全幅までピルを広げる
+@media screen and (min-width: $bp-lg) {
+  .header__inner {
+    max-width: $container-width;
   }
 }
 </style>

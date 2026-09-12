@@ -30,13 +30,14 @@ const year = new Date().getFullYear()
   background: transparent;
 }
 
+// ヘッダーと同じ考え方。1カラムのSP/タブレットでは本文と同じ幅に収める
 .footer__inner {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 20px;
   width: 100%;
-  max-width: $container-width;
+  max-width: $content-width;
 }
 
 .footer__brand {
@@ -98,6 +99,12 @@ const year = new Date().getFullYear()
   .footer__inner {
     flex-direction: column;
     gap: 16px;
+  }
+}
+
+@media screen and (min-width: $bp-lg) {
+  .footer__inner {
+    max-width: $container-width;
   }
 }
 </style>

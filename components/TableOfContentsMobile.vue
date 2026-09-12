@@ -122,7 +122,9 @@ onUnmounted(() => {
   bottom: 0;
   left: 0;
   z-index: 900;
-  border-top: 1px solid $color-border;
+  // タブレット（$bp-lg直下のiPad Proなど）で間延びしないよう、本文カラムの幅に合わせて中央に置く
+  max-width: $content-width;
+  margin: 0 auto;
   border-radius: $radius-card $radius-card 0 0;
   transition: transform 0.25s ease;
 
