@@ -170,7 +170,8 @@ onUnmounted(() => {
   left: 0;
   z-index: 900;
   border-top: 1px solid $color-border;
-  border-radius: $radius-card transition: transform 0.25s ease;
+  border-radius: $radius-card $radius-card 0 0;
+  transition: transform 0.25s ease;
 
   // 本文を読み終えたら下にしまう。関連記事やフッターに被らせない
   &.is-hidden {
