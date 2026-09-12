@@ -2,8 +2,12 @@
 
 <template>
   <aside class="side">
-    <p class="side__label">SPONSORED</p>
-    <AdsByGoogle ad-slot="7173714878" />
+    <TableOfContentsDesktop />
+    <div class="side__sponsord">
+      <p class="side__sponsord__label">SPONSORED</p>
+      <AdsByGoogle ad-slot="7173714878" />
+    </div>
+
   </aside>
 </template>
 
@@ -14,11 +18,15 @@
   @include content-block;
 
   width: 100%;
-  padding: 16px;
+  padding: 8px;
   border-radius: $radius-card;
 }
 
-.side__label {
+.side__sponsord {
+  padding: 4px;
+}
+
+.side__sponsord__label {
   @include label($color-meta);
 
   margin: 0 0 10px;

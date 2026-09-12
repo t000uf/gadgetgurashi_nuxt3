@@ -13,6 +13,14 @@ const { thumbnailUrl } = useThumbnail()
 
 const minutes = computed(() => readingTime(props.content.text))
 const thumbnail = computed(() => thumbnailUrl(props.content.thumbnail?.url, 1200))
+
+const bodyRef = ref<HTMLElement>()
+
+useToc(
+  computed(() => props.content.title),
+  computed(() => props.content.text),
+  bodyRef,
+)
 </script>
 
 <template>
@@ -33,7 +41,7 @@ const thumbnail = computed(() => thumbnailUrl(props.content.thumbnail?.url, 1200
       </p>
       <TagLink v-if="content.tag" :tags="content.tag" class="detail__tags--top" />
 
-      <div class="detail__text" v-html="content.text" />
+      <div ref="bodyRef" class="detail__text" v-html="content.text" />
 
       <TagLink v-if="content.tag" :tags="content.tag" class="detail__tags" />
     </div>

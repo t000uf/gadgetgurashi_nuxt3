@@ -12,6 +12,7 @@
         <SideBar />
       </div>
     </main>
+    <TableOfContentsMobile />
     <NavButton />
     <TheFooter />
   </div>
