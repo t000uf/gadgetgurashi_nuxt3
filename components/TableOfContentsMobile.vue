@@ -58,21 +58,38 @@ watch(() => state.value.isInBody, (isInBody) => {
   if (!isInBody) close()
 })
 
-// 開いている間だけ、Escapeキーと外側のタップで閉じる
+// 開いたままページを読み進めると一覧が本文を覆い続けるので、スクロールが始まったら閉じる。
+// 即座に閉じると指が触れた程度の揺れでも消えてしまうため、少し待ってから閉じる。
+// スクロール中にタイマーを延長しないのは、読み続けている間ずっと開いたままになるのを避けるため
+const SCROLL_CLOSE_DELAY = 400
+let scrollCloseTimer: ReturnType<typeof setTimeout> | undefined
+
+const handleScroll = () => {
+  if (scrollCloseTimer) return
+  scrollCloseTimer = setTimeout(close, SCROLL_CLOSE_DELAY)
+}
+
+const removeOpenListeners = () => {
+  document.removeEventListener('keydown', handleKeydown)
+  document.removeEventListener('pointerdown', handlePointerDown)
+  window.removeEventListener('scroll', handleScroll)
+  clearTimeout(scrollCloseTimer)
+  scrollCloseTimer = undefined
+}
+
+// 開いている間だけ、Escapeキー・外側のタップ・ページのスクロールで閉じる。
+// 一覧自体のスクロールはwindowまで伝わらないので、一覧を送っている間は閉じない
 watch(isOpen, (open) => {
   if (open) {
     document.addEventListener('keydown', handleKeydown)
     document.addEventListener('pointerdown', handlePointerDown)
+    window.addEventListener('scroll', handleScroll, { passive: true })
     return
   }
-  document.removeEventListener('keydown', handleKeydown)
-  document.removeEventListener('pointerdown', handlePointerDown)
+  removeOpenListeners()
 })
 
-onUnmounted(() => {
-  document.removeEventListener('keydown', handleKeydown)
-  document.removeEventListener('pointerdown', handlePointerDown)
-})
+onUnmounted(removeOpenListeners)
 </script>
 
 <template>
