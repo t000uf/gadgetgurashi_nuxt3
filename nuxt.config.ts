@@ -62,6 +62,12 @@ export default defineNuxtConfig({
           rel: 'stylesheet',
           href: 'https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=JetBrains+Mono:wght@500;700&display=swap',
         },
+        {
+          rel: 'alternate',
+          type: 'application/rss+xml',
+          title: 'がじぇっとぐらし！',
+          href: 'https://gadgetgurashi.com/rss.xml',
+        },
       ],
       script: [
         {
