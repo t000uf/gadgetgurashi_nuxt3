@@ -33,8 +33,7 @@ const thumbnail = computed(() => thumbnailUrl(props.content.thumbnail?.url, thum
   <div class="card" :class="`card--${variant}`">
     <NuxtLink :to="`/article/${content.id}/`" class="card__link">
       <div class="card__visual">
-        <img v-if="thumbnail" class="card__image" :src="thumbnail" :alt="content.title"
-          loading="lazy">
+        <img v-if="thumbnail" class="card__image" :src="thumbnail" :alt="content.title" loading="lazy">
         <div v-else class="card__image card__image--placeholder" />
         <span v-if="variant === 'featured'" class="card__badge card__badge--featured">注目</span>
       </div>
@@ -122,7 +121,7 @@ const thumbnail = computed(() => thumbnailUrl(props.content.thumbnail?.url, thum
 
   display: inline-block;
   margin-top: 6px;
-  font-size: 13px;
+  font-size: 14px;
 }
 
 // featured / default は背景パターン（layouts/home.vue）の上に乗るブロック。
@@ -178,7 +177,7 @@ const thumbnail = computed(() => thumbnailUrl(props.content.thumbnail?.url, thum
   }
 
   .card__title {
-    font-size: 15px;
+    font-size: 16px;
   }
 }
 

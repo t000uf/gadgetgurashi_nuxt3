@@ -30,6 +30,7 @@ defineProps<{
   border-radius: $radius-pill;
   background-color: rgba($color-secondary, 0.1);
   font-size: 12px;
+  font-weight: 600;
   text-decoration: none;
   transition: background-color 0.2s ease, border-color 0.2s ease;
 
