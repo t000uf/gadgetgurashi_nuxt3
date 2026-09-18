@@ -52,7 +52,15 @@ export default defineNuxtConfig({
         { name: 'twitter:site', content: '@gadgetgurashi' },
         { name: 'twitter:site', content: '@nzn_gadget' },
       ],
-      link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+      link: [
+        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+        {
+          rel: 'alternate',
+          type: 'application/rss+xml',
+          title: 'がじぇっとぐらし！',
+          href: 'https://gadgetgurashi.com/rss.xml',
+        },
+      ],
       script: [
         {
           src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js',
