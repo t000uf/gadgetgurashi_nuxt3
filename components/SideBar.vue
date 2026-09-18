@@ -1,8 +1,13 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+const articleShare = useArticleShare()
+</script>
 
 <template>
   <aside class="side">
     <TableOfContentsDesktop />
+    <div v-if="articleShare" class="side__share">
+      <ShareButtons :url="articleShare.url" :title="articleShare.title" />
+    </div>
     <div class="side__sponsord">
       <p class="side__sponsord__label">SPONSORED</p>
       <AdsByGoogle ad-slot="7173714878" />
@@ -22,6 +27,15 @@
   max-width: $content-width;
   padding: 8px;
   border-radius: $radius-card;
+}
+
+.side__share {
+  padding: 4px;
+  margin-bottom: 16px;
+
+  :deep(.share__section) {
+    align-items: flex-start;
+  }
 }
 
 .side__sponsord {
