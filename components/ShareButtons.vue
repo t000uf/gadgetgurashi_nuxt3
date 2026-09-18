@@ -44,9 +44,11 @@ const copyLink = async () => {
 
 <style lang="scss" scoped>
 .share__section {
+  @include content-card(8px, 8px);
+
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
 }
 
 .share {

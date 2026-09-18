@@ -92,10 +92,6 @@ useHead({
   background-color: $color-placeholder-1;
 }
 
-.article__tail {
-  @include content-card;
-}
-
 .article__share {
   display: flex;
   justify-content: flex-end;
