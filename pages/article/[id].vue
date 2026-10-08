@@ -106,5 +106,10 @@ useHead({
   display: flex;
   justify-content: flex-start;
   margin: 0 0 32px;
+
+  // SPは本文・RELATEDの余白が0になるので、ShareButtonsの8pxを打ち消して左端を揃える
+  @media screen and (max-width: $bp-sm) {
+    margin-left: -8px;
+  }
 }
 </style>

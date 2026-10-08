@@ -8,7 +8,9 @@ const articleShare = useArticleShare()
       <TableOfContentsDesktop />
     </div>
 
-    <ShareButtons v-if="articleShare" :url="articleShare.url" :title="articleShare.title" />
+    <div v-if="articleShare" class="side__share">
+      <ShareButtons :url="articleShare.url" :title="articleShare.title" />
+    </div>
 
     <div class="side__sponsord">
       <p class="side__sponsord__label">SPONSORED</p>
@@ -39,6 +41,15 @@ const articleShare = useArticleShare()
     display: block;
 
     @include content-card(8px);
+  }
+}
+
+// 1カラムではサイドバーが本文の下に積まれ、記事末尾のSHAREと重複するのでPC限定にする
+.side__share {
+  display: none;
+
+  @media screen and (min-width: $bp-lg) {
+    display: block;
   }
 }
 
