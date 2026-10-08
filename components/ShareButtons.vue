@@ -22,7 +22,7 @@ const copyLink = async () => {
 </script>
 
 <template>
-  <section class="share__section">
+  <div class="share__section">
     <div class="share">
       <span class="share__label">SHARE</span>
 
@@ -36,10 +36,10 @@ const copyLink = async () => {
     </div>
     <div class="share__sub">
       <Transition name="copied">
-        <span v-if="copied" class="share__copied">コピーしました</span>
+        <span v-if="copied" class="share__copied">ページのリンクをコピーしました</span>
       </Transition>
     </div>
-  </section>
+  </div>
 </template>
 
 <style lang="scss" scoped>

@@ -94,7 +94,7 @@ useHead({
 
 .article__share {
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
   margin: 0 0 32px;
 }
 </style>
