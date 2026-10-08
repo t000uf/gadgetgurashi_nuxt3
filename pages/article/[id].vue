@@ -92,6 +92,16 @@ useHead({
   background-color: $color-placeholder-1;
 }
 
+// SHAREのラベルをRELATED（content-cardの28px）の左端に揃える。
+// ShareButtons自身が8pxのパディングを持つため、その分を差し引く
+.article__tail {
+  padding: 0 20px;
+
+  @media screen and (max-width: $bp-sm) {
+    padding: 0;
+  }
+}
+
 .article__share {
   display: flex;
   justify-content: flex-start;

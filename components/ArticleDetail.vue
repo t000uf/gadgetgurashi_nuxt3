@@ -118,11 +118,15 @@ useToc(
 .detail__affiliate {
   @include card;
 
-  max-width: 460px;
-  margin: 32px auto;
+  // 外枠を本文・RELATED（content-cardの28px）の左端に揃える
+  margin: 32px 28px;
   padding: 4px 20px 12px;
   border: 2px solid $color-primary;
   word-break: break-all;
+
+  @media screen and (max-width: $bp-sm) {
+    margin: 32px 0;
+  }
 
   :deep(img) {
     width: 100%;
