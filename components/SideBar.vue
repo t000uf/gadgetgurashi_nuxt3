@@ -1,5 +1,9 @@
 <script lang="ts" setup>
+const route = useRoute()
 const articleShare = useArticleShare()
+
+// 記事以外のページはURLだけ渡す（Xのカードはog:titleから作られる）
+const share = computed(() => articleShare.value ?? { url: `https://gadgetgurashi.com${route.path}`, title: '' })
 </script>
 
 <template>
@@ -8,8 +12,8 @@ const articleShare = useArticleShare()
       <TableOfContentsDesktop />
     </div>
 
-    <div v-if="articleShare" class="side__share">
-      <ShareButtons :url="articleShare.url" :title="articleShare.title" />
+    <div class="side__share">
+      <ShareButtons :url="share.url" :title="share.title" />
     </div>
 
     <div class="side__sponsord">

@@ -5,7 +5,9 @@ const props = defineProps<{
 }>()
 
 const shareUrl = computed(() => {
-  return `https://x.com/intent/tweet?url=${encodeURIComponent(props.url)}&text=${encodeURIComponent(props.title)}`
+  const params = new URLSearchParams({ url: props.url })
+  if (props.title) params.set('text', props.title)
+  return `https://x.com/intent/tweet?${params}`
 })
 
 const copied = ref(false)
