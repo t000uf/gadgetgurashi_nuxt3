@@ -138,13 +138,21 @@ H3は上64px＋上に1pxの罫線＋`padding-top: 32px`（下は`heading-3`の20
 ### 記事詳細（`pages/article/[id].vue`）
 
 パンくず「← TOP」（`components/Breadcrumb.vue`。カテゴリバッジは廃止済み）→ アイキャッチ（角丸12px・バッジなし）→ H1＋オレンジ下線バー →
-メタ情報（日付・更新日・読了◯分）→ 本文 → タグ → 関連商品リンク → 2pxの区切り線 → 「シェアする →」（右寄せ・ブルー）→
+メタ情報（日付・更新日・読了◯分）→ 本文 → タグ → 関連商品リンク → 2pxの区切り線 → SHARE（ラベル＋X／リンクコピーの丸アイコン、左寄せ）→
 RELATED（ラベル＋2カラムのサムネイル付き関連記事。各カードにタグも表示する）。
 
 背景パターンとの関係では、この一連の流れは3つのブロックに分かれる：
 ①パンくず〜タグ（本文の読み物としてのまとまり）、②関連商品リンク（`@include card`の白カード。
 それ自体が独立した見た目のため単独でパターンの上に浮かせる）、③区切り線〜シェア〜広告。
 RELATEDはさらにその下で独立したブロック。詳しくは「背景パターン」の節を参照。
+
+**左端の揃え**：本文（`content-card`の28px）を基準に、関連商品リンク・SHARE・RELATEDの左端を揃える。
+SP（`$bp-sm`以下）は`content-card`の余白が0になるので、いずれも画面端（コンテナの16px）に揃う。
+
+- 関連商品リンク：枠付きの白カードなので**外枠**を揃える（`margin: 32px 28px`、SPは`32px 0`）
+- SHARE：`ShareButtons`自体が8pxの余白を持つ`content-card`なので、外側（`.article__tail`）は
+  28px−8px＝20pxにして**「SHARE」の文字**を揃える。SPは外側0＋`margin-left: -8px`で8pxを打ち消す
+- RELATED：`content-card(24px 28px, 20px 0)`のまま（基準と同じ）
 
 ## カードとバッジのルール
 
@@ -176,15 +184,17 @@ RELATEDはさらにその下で独立したブロック。詳しくは「背景�
   足さずデフォルトの`$color-bg`のまま使う（詳細は「ヘッダー」の節を参照）
 - aboutページ（`pages/article/about.vue`）は一連の読み物なので、ページ全体をひとつの
   `content-block`（`.about`）として塗る
-- 記事詳細ページ（`pages/article/[id].vue`）は本文の読み物部分（`.article__block`＝パンくず〜タグ）
-  をひとつの`content-block`にするが、**関連商品リンク（`.article__affiliate`）とRELATED
-  （`.article__related`）はこのブロックから分離する**。関連商品リンクはCMS入力の自由度が高く
+- 記事詳細ページ（`pages/article/[id].vue`）は本文の読み物部分（`.detail__block`＝パンくず〜タグ）
+  をひとつの`content-block`にするが、**関連商品リンク（`.detail__affiliate`）とRELATED
+  （`.detail__related`）はこのブロックから分離する**。関連商品リンクはCMS入力の自由度が高く
   本文と地続きに見せる必要がないこと、RELATEDは別記事への導線でありまとまりとして独立させたい
   ことが理由。関連商品リンクはもともと`@include card`の白背景カードなので追加の塗りは不要、
-  RELATEDには`.article__related`として`content-block`を別途持たせる
+  RELATEDには`.detail__related`として`content-block`を別途持たせる
 - サイドバーの「SPONSORED」（`components/SideBar.vue`）はSP/PCで見た目を統一し、常に
   `content-block`（デフォルトの`$color-bg`）として塗る（以前はPCのみカード化、SPは無地だった。
   当初`$color-card`の白背景で塗っていたが、独自の色を足さない方針に合わせて`$color-bg`に統一した）
+- サイドバーのSHARE（`.side__share`）はもくじと同じくPC（`$bp-lg`以上）限定。1カラムでは
+  サイドバーが本文の下に積まれ、記事末尾のSHAREと重複するため
 
 ## 未確定・今後の作業
 
