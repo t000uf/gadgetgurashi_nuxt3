@@ -176,12 +176,16 @@ RELATEDはさらにその下で独立したブロック。詳しくは「背景�
   足さずデフォルトの`$color-bg`のまま使う（詳細は「ヘッダー」の節を参照）
 - aboutページ（`pages/article/about.vue`）は一連の読み物なので、ページ全体をひとつの
   `content-block`（`.about`）として塗る
-- 記事詳細ページ（`pages/article/[id].vue`）は本文の読み物部分（`.article__block`＝パンくず〜タグ）
-  をひとつの`content-block`にするが、**関連商品リンク（`.article__affiliate`）とRELATED
-  （`.article__related`）はこのブロックから分離する**。関連商品リンクはCMS入力の自由度が高く
+- 記事詳細ページ（`pages/article/[id].vue`）は本文の読み物部分（`.detail__block`＝パンくず〜タグ）
+  をひとつの`content-block`にするが、**関連商品リンク（`.detail__affiliate`）とRELATED
+  （`.detail__related`）はこのブロックから分離する**。関連商品リンクはCMS入力の自由度が高く
   本文と地続きに見せる必要がないこと、RELATEDは別記事への導線でありまとまりとして独立させたい
-  ことが理由。関連商品リンクはもともと`@include card`の白背景カードなので追加の塗りは不要、
-  RELATEDには`.article__related`として`content-block`を別途持たせる
+  ことが理由。関連商品リンクはRELATEDと同じ`content-card`の箱・同じラベル（`$color-meta`）に載せ、`AmazonCard`を縦に並べる（旧HTML手貼りのフォールバック時のみ白背景カード枠）。
+  RELATEDには`.detail__related`として`content-block`を別途持たせる
+- Amazon商品カード（`components/AmazonCard.vue`）は`@include card`＋`2px solid $color-primary`の
+  枠で、左に商品画像（未設定時は`placeholder-stripe`）、右に商品名と「Amazonで見る」を並べる。
+  本文中（`{{amazon:ASIN}}`）と関連商品リンク枠の両方で同じカードを使う。価格は表示しない。
+  経緯は`docs/adr/0005-amazon-affiliate.md`
 - サイドバーの「SPONSORED」（`components/SideBar.vue`）はSP/PCで見た目を統一し、常に
   `content-block`（デフォルトの`$color-bg`）として塗る（以前はPCのみカード化、SPは無地だった。
   当初`$color-card`の白背景で塗っていたが、独自の色を足さない方針に合わせて`$color-bg`に統一した）
