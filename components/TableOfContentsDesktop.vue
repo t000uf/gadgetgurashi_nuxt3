@@ -43,7 +43,6 @@ const toggle = () => {
 @media screen and (min-width: $bp-lg) {
   .toc-panel {
     display: block;
-    margin-bottom: 16px;
   }
 }
 
