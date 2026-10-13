@@ -33,7 +33,6 @@ pnpm lint       # ⚠️ 現状動かない（後述）
 | `MICROCMS_SERVICE_DOMAIN` | microCMS のサービスドメイン |
 | `MICROCMS_API_KEY` | microCMS の APIキー |
 | `GA_TRACKING_ID` | Google Analytics |
-| `NUXT_PUBLIC_AMAZON_ASSOCIATE_TAG` | AmazonアソシエイトのトラッキングID（未設定ならタグなしリンク） |
 
 APIキーはクライアントに出さないため、microCMS へのアクセスは必ず `server/api/**` のプロキシ経由で行う。
 ページからは `useFetch('/api/article')` のように自前のAPIを叩くこと。
@@ -43,7 +42,7 @@ APIキーはクライアントに出さないため、microCMS へのアクセ�
 ```
 assets/styles/   デザイントークン（_tokens.scss）、mixin（_mixins.scss）、グローバル（global.scss）
 components/      自動インポートされる単一ファイルコンポーネント
-composables/     useDate / useArticleMeta / useScrollTop / useAmazon
+composables/     useDate / useArticleMeta / useScrollTop
 layouts/         default（記事・一覧）、home（トップ：ヒーロー付き）
 pages/           index / page/[p] / article/[id] / article/about / tag/[tagId]/page/[p] / draft
 server/api/      microCMS プロキシ、sitemap のURL生成
