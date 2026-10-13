@@ -43,6 +43,9 @@ const isAbout = computed(() => route.path.startsWith('/article/about'))
   justify-content: center;
   width: 100%;
   height: $header-height;
+  // 左右の余白は .header__inner ではなくこちらに持たせる。innerに付けると
+  // max-width の内側に食い込み、ピルの並びがコンテンツ幅より余白ぶん狭くなる
+  padding: 0 24px;
   // ヘッダー本体は透明のまま。重ね順は「ヘッダーのピル > コンテンツ > 背景色 > 背景パターン」。
   // ヘッダー自身に不透明な塗りを持たせるとコンテンツより手前に来てしまうため、
   // 塗りはピル（.header__brand / .header__nav）だけに持たせる
@@ -57,7 +60,6 @@ const isAbout = computed(() => route.path.startsWith('/article/about'))
   align-items: center;
   width: 100%;
   max-width: $content-width;
-  padding: 0 24px;
 }
 
 // 背景パターンの上に乗るため、ロゴタイプとナビゲーションはそれぞれ独立した
@@ -173,7 +175,7 @@ const isAbout = computed(() => route.path.startsWith('/article/about'))
 }
 
 @media screen and (max-width: $bp-sm) {
-  .header__inner {
+  .header {
     padding: 0 14px;
   }
 
