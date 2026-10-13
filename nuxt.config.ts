@@ -71,6 +71,14 @@ export default defineNuxtConfig({
       ],
       script: [
         {
+          // 手動で選んだ配色テーマを初回描画の前に復元する（遅れるとOS設定の配色が一瞬見える）。
+          // キーと値は composables/useTheme.ts と揃えること
+          key: 'theme-init',
+          innerHTML:
+            "(function(){try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}})()",
+          tagPosition: 'head',
+        },
+        {
           src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js',
           'data-ad-client': 'ca-pub-7931455677905492',
           async: true,

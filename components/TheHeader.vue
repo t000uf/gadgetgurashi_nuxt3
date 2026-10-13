@@ -27,6 +27,7 @@ const isAbout = computed(() => route.path.startsWith('/article/about'))
           class="header__link header__link--about"
           :class="{ 'is-active': isAbout }"
         >ABOUT</NuxtLink>
+        <ThemeToggle />
       </nav>
     </div>
   </header>
@@ -182,10 +183,12 @@ const isAbout = computed(() => route.path.startsWith('/article/about'))
     padding: 0 14px;
   }
 
+  // SPのナビはアイコン2つ（HOME／テーマ切り替え）。アイコン自体は20pxだが、
+  // タップ範囲はそれぞれピルの高さいっぱいの40px四方に取る（隙間はその中に含める）
   .header__nav {
     height: 40px;
-    gap: 14px;
-    padding: 0 12px;
+    gap: 0;
+    padding: 0 4px;
   }
 
   .header__logotype {
@@ -202,7 +205,16 @@ const isAbout = computed(() => route.path.startsWith('/article/about'))
   }
 
   .header__link--home {
+    justify-content: center;
+    width: 40px;
+    height: 40px;
     padding-bottom: 2px;
+
+    // タップ範囲を広げても、下線バーはアイコンの直下・アイコン幅のままにする
+    &::after {
+      bottom: 9px;
+      width: 20px;
+    }
   }
 
   .header__link-icon {

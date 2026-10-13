@@ -26,9 +26,9 @@ defineProps<{
   @include label($color-secondary);
 
   padding: 3px 10px;
-  border: 1px solid rgba($color-secondary, 0.4);
+  border: 1px solid with-alpha($color-secondary, 0.4);
   border-radius: $radius-pill;
-  background-color: rgba($color-secondary, 0.1);
+  background-color: with-alpha($color-secondary, 0.1);
   font-size: 12px;
   font-weight: 600;
   text-decoration: none;
@@ -36,7 +36,7 @@ defineProps<{
 
   &:hover {
     border-color: $color-secondary;
-    background-color: rgba($color-secondary, 0.18);
+    background-color: with-alpha($color-secondary, 0.18);
   }
 }
 </style>

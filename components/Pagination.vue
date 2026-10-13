@@ -97,11 +97,11 @@ const getPath = (p: number) => {
 
   &.is-active {
     background-color: $color-primary;
-    color: #fff;
+    color: $color-on-accent;
 
     &:hover {
       background-color: $color-primary-dark;
-      color: #fff;
+      color: $color-on-accent;
     }
   }
 }

@@ -1,4 +1,35 @@
+@use 'sass:math';
 @use 'tokens' as *;
+
+// =============================================================
+// テーマ（ライト／ダーク）
+// =============================================================
+// テーマのmap（$theme-light / $theme-dark）を --color-* として出力する。global.scss 専用
+@mixin theme-vars($theme) {
+  @each $name, $value in $theme {
+    --color-#{$name}: #{$value};
+  }
+}
+
+// ダーク時だけ当てたいスタイル用。OS設定がダーク（手動でライトを選んでいない場合）か、
+// 手動でダークを選んだ場合（<html data-theme="dark">）に効く。
+// 色はトークンが自動で切り替わるので、これが要るのは表示の出し分けなど色以外だけ
+@mixin dark-mode {
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme='light']) & {
+      @content;
+    }
+  }
+
+  :root[data-theme='dark'] & {
+    @content;
+  }
+}
+
+// トークンを透過させる。$color-* は var() なので rgba($color, $alpha) は使えない
+@function with-alpha($color, $alpha) {
+  @return color-mix(in srgb, #{$color} #{math.percentage($alpha)}, transparent);
+}
 
 // =============================================================
 // 見出しシステム（デザイントークンとして重要）
@@ -126,7 +157,7 @@
   padding: 4px 12px;
   border-radius: $radius-pill;
   background-color: $bg;
-  color: #fff;
+  color: $color-on-accent;
   font-family: $font-heading;
   font-weight: 700;
   font-size: 12px;
@@ -146,7 +177,8 @@
 // うっすら透けさせる。透け具合は役割ごとに $opacity-block / $opacity-header /
 // $opacity-overlay を使い分ける（個別の色を変えたい場合は $color を渡す）
 @mixin content-block($color: $color-bg, $opacity: $opacity-block) {
-  background-color: rgba($color, $opacity);
+  background-color: $color; // color-mix非対応ブラウザでは不透明で塗る
+  background-color: with-alpha($color, $opacity);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 }
@@ -255,6 +287,12 @@
     background-color: $color-card;
     font-family: $font-mono;
     font-size: 14px;
+  }
+
+  // エディタへの貼り付けで混入するインラインの背景色（白）を打ち消す。
+  // 残っているとダークで「白地に明るい文字」になり読めない
+  :deep([style*='background-color']) {
+    background-color: transparent !important;
   }
 
   // CMS本文のYouTube等の埋め込みがカード幅を超えないようにする
