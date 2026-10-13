@@ -69,10 +69,7 @@ useToc(
     <div v-if="content.products?.length || content.affiliate" class="detail__affiliate">
       <p class="detail__affiliate-label">関連商品リンク</p>
       <template v-if="content.products?.length">
-        <AmazonCard
-          v-for="product in content.products"
-          :key="product.asin"
-          :product="product"
+        <AmazonCard v-for="product in content.products" :key="product.asin" :product="product"
           class="detail__affiliate-item" />
       </template>
       <div v-else class="detail__affiliate-legacy" v-html="content.affiliate" />
@@ -169,10 +166,13 @@ useToc(
 
 .detail__affiliate-legacy {
   @include card;
-
   padding: 4px 20px 12px;
   border: 2px solid $color-primary;
   word-break: break-all;
+
+  @media screen and (max-width: $bp-sm) {
+    margin: 32px 0;
+  }
 
   :deep(img) {
     width: 100%;
