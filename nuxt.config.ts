@@ -23,6 +23,8 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       adsenseId: 'ca-pub-7931455677905492',
+      // 環境変数 NUXT_PUBLIC_AMAZON_ASSOCIATE_TAG で上書きする
+      amazonAssociateTag: '',
     },
   },
 
