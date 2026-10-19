@@ -1,11 +1,11 @@
 # AGENTS.md
 
-がじぇっとぐらし！（https://gadgetgurashi.com ）の Nuxt 3 ブログ。
+がじぇっとぐらし！（https://gadgetgurashi.com ）の Nuxt 4 ブログ。
 AIエージェント／新しく参加する人が最初に読むファイル。
 
 ## 技術スタック
 
-- Nuxt 3（SSR、Netlify にデプロイ）
+- Nuxt 4（SSR、Netlify にデプロイ。旧来の `app/` なしのディレクトリ構成のまま）
 - TypeScript（`strict: true`。ビルド時の型チェックは無効、`pnpm typecheck` で別途実行）
 - SCSS（scoped style + `assets/styles` のトークン／mixin）
 - microCMS（記事・タグ・aboutのヘッドレスCMS）
@@ -36,16 +36,26 @@ pnpm lint       # ⚠️ 現状動かない（後述）
 
 APIキーはクライアントに出さないため、microCMS へのアクセスは必ず `server/api/**` のプロキシ経由で行う。
 ページからは `useFetch('/api/article')` のように自前のAPIを叩くこと。
+新しいプロキシは `server/utils/microcms.ts` の `fetchMicroCMS` を使う。
+
+ページで `useFetch` したら `throwIfNotFound(error, data)` を呼ぶ。取得失敗や該当なしを
+そのまま描画すると、空のページが200で返り soft 404 になる。
+
+キャッシュは `nuxt.config.ts` の `routeRules`（Netlify の `isr`）で一括管理する（ADR 0005）。
+APIに `Cache-Control` を個別に付けない。プレビュー系など、キャッシュしてはいけないルートは
+`isr: false` を足す。
 
 ## ディレクトリ
 
 ```
 assets/styles/   デザイントークン（_tokens.scss）、mixin（_mixins.scss）、グローバル（global.scss）
 components/      自動インポートされる単一ファイルコンポーネント
-composables/     useDate / useArticleMeta / useScrollTop / useTheme
+composables/     useDate / useArticleMeta / useArticleShare / useScrollTop / useTheme /
+                 useThumbnail / useToc / useTopContent / usePageNumber / throwIfNotFound
 layouts/         default（記事・一覧）、home（トップ：ヒーロー付き）
 pages/           index / page/[p] / article/[id] / article/about / tag/[tagId]/page/[p] / draft
 server/api/      microCMS プロキシ、sitemap のURL生成
+server/utils/    microCMS 呼び出しの共通処理（fetchMicroCMS）
 types/           microCMS のレスポンス型
 docs/DESIGN.md   デザインシステム（v8リブランディング）
 docs/adr/        アーキテクチャ決定記録（ADR）。フレームワーク移行など経緯を残すべき決定
@@ -56,6 +66,9 @@ docs/adr/        アーキテクチャ決定記録（ADR）。フレームワー
 - **色・フォント・角丸・余白は必ず `assets/styles/_tokens.scss` の変数を使う。値の直書きは禁止。**
 - ライト／ダークの2テーマ。`$color-*` は実色ではなくCSS変数の参照なので、`rgba()` などSassの色関数に
   渡さない。透過は `with-alpha($color-primary, 0.1)` を使う。色を足すときは `$theme-light` / `$theme-dark` の両方に入れる。
+- オレンジ／ブルーのベタ塗りに乗る文字は `$color-on-accent`。`#fff` を直書きしない。
+- テーマで表示を出し分けるときは `@include dark-mode` を使う。テンプレート（`v-if` など）を現在の
+  テーマに依存させない（サーバーはテーマを知らないので、ハイドレーション不整合になる）。
 - 見出しは `@include heading-1` 〜 `heading-4` を使う。独自の見出しスタイルを作らない。
 - CMS本文（`v-html`）の組版は `@include article-typography` 一択。記事・about・下書きで共有する。
 - クラス名は BEM 風（`.card`, `.card__title`, `.card--featured`, 状態は `.is-active`）。
@@ -84,5 +97,6 @@ docs/adr/        アーキテクチャ決定記録（ADR）。フレームワー
 - `assets/imgs/` のマテリアルアイコンSVG（`arrow_*`, `home_*`, `upgrade_*`）は
   `components/AppIcon.vue` にパスデータとしてインライン化して使用中（`fill="currentColor"`で
   呼び出し元の色を継承させるため、`url()`/`mask-image`ではなくSVGを直接埋め込んでいる）。
+  `sun` / `moon` などは元SVGを置かずに `AppIcon.vue` に直接足したもので、`assets/imgs/` に対応ファイルはない。
   `report_*`, `description_*`, `gadget_life*.png` は v8 デザインで参照されなくなった。
   ロゴ確定後にまとめて整理する。

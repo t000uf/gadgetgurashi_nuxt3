@@ -8,8 +8,6 @@ const props = defineProps<{
   activeId: string
 }>()
 
-const emit = defineEmits<{ select: [] }>()
-
 const rowRef = ref<HTMLElement>()
 
 const activeIds = computed(() => activeTocIds(props.toc, props.activeId))
@@ -58,8 +56,7 @@ watch(() => props.activeId, scrollActivePillIntoView)
 <template>
   <div ref="rowRef" class="toc-pills">
     <a v-for="item in visiblePills" :key="item.id" :href="`#${item.id}`" class="toc-pills__pill"
-      :class="[`toc-pills__pill--${item.level}`, { 'is-active': activeIds.has(item.id) }]"
-      @click="emit('select')">{{ item.text }}</a>
+      :class="[`toc-pills__pill--${item.level}`, { 'is-active': activeIds.has(item.id) }]">{{ item.text }}</a>
   </div>
 </template>
 

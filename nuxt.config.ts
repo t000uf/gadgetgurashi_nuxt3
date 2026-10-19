@@ -96,6 +96,14 @@ export default defineNuxtConfig({
       },
     ],
   ],
+  // NetlifyのCDNで60秒キャッシュし、以降は古いものを返しつつ裏で再生成する（ADR 0005）。
+  // 下書きプレビューは未公開コンテンツなのでキャッシュしない
+  routeRules: {
+    '/**': { isr: 60 },
+    '/draft': { isr: false },
+    '/api/draft': { isr: false },
+  },
+
   site: {
     url: 'https://gadgetgurashi.com',
   },

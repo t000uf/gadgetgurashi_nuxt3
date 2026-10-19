@@ -1,15 +1,14 @@
 <script lang="ts" setup>
-import type { MicroCMSListContent } from 'microcms-js-sdk'
-import type { Tag } from '@/types'
-
 const props = defineProps<{
   pager: number[]
   current: number
-  tag?: MicroCMSListContent & Tag
+  // タグ一覧のときだけ渡す。Tagオブジェクトではなくルートのidを受け取り、
+  // タグ情報の取得結果に関係なくタグ内でページ送りする
+  tagId?: string
 }>()
 
 const getPath = (p: number) => {
-  return `/${props.tag ? `tag/${props.tag.id}/` : ''}page/${p}/`
+  return `/${props.tagId ? `tag/${props.tagId}/` : ''}page/${p}/`
 }
 </script>
 
@@ -58,7 +57,7 @@ const getPath = (p: number) => {
 
 <style lang="scss" scoped>
 // 背景パターン（layouts/home.vue, layouts/default.vue）の上に乗るブロック。
-// 外側の.paginationは余白（パターンが見える）、.pagination__innerだけ不透明に塗る
+// 外側の.paginationは余白（パターンが見える）、.pagination__innerだけ塗る（content-block）
 .pagination {
   display: flex;
   justify-content: center;

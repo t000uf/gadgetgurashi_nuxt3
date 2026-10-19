@@ -25,7 +25,9 @@ const toggle = () => {
       </div>
     </div>
 
-    <TocPills :toc="state.toc" :active-id="state.activeId" />
+    <div class="toc-panel__pills" :class="{ 'is-hidden': isOpen }" :inert="isOpen">
+      <TocPills :toc="state.toc" :active-id="state.activeId" />
+    </div>
 
     <button type="button" class="toc-panel__toggle" :aria-expanded="isOpen" aria-controls="toc-panel-list"
       :aria-label="isOpen ? 'もくじを閉じる' : 'もくじを開く'" @click="toggle">
@@ -120,6 +122,7 @@ const toggle = () => {
 
 // 一覧を開いたら現在地のピル列は畳む（一覧側がその役目を引き取るため）
 .toc-panel__pills {
+  overflow: hidden;
   max-height: 40px;
   opacity: 1;
   transition: max-height 0.25s ease, opacity 0.25s ease;

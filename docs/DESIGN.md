@@ -44,8 +44,9 @@ Claude Design で決定した方向性を実装に落とし込んだもの。
   ナビピルが狭くスイッチを置けないため。**SPのナビのアイコン（HOME／テーマ切り替え）は、アイコン自体は
   20pxのまま、タップ範囲をピルの高さいっぱいの40px四方に取る**（`components/TheHeader.vue`）
 
-手動で選ぶと `<html data-theme="light|dark">`
-が付き、OS設定より優先される（`localStorage` の `theme` に保存）。
+手動で選ぶと `<html data-theme="light|dark">` が付き、OS設定より優先される（`localStorage` の `theme` に保存）。
+一度選ぶと「OSに従う」状態へ戻すUIはない（`localStorage` を消せば戻る）。スイッチは `role="switch"` で、
+`aria-checked`（オン＝ダーク）はマウント後に付ける（SSR時点ではテーマが分からないため）。
 
 - **仕組み**：実値は `_tokens.scss` の `$theme-light` / `$theme-dark`（Sass map）に持ち、`global.scss` が
   `--color-*` として出力する。`$color-*` はその `var()` 参照なので、コンポーネント側はテーマを意識せず
@@ -57,16 +58,18 @@ Claude Design で決定した方向性を実装に落とし込んだもの。
   （名前は「hover用」の意味で読む）
 - **`$color-on-accent`**：オレンジ／ブルーのベタ塗り（バッジ・ページネーションの現在ページ・もくじの現在地）に
   乗る文字色。ライトは白、ダークは明るくなったブルーの上で白が読めないため濃色にしている。`#fff` を直書きしない
-- **上に戻るボタン**（`components/NavButton.vue`）：オレンジ塗りだが例外的に `$color-on-accent` に従わず、
-  ダークでも矢印を明るいまま（`$color-base`）にする。目次側の↑（`ReadingProgressButton`）と色を揃えるため
+- **上に戻るボタン**（`components/NavButton.vue`）：オレンジ塗りだが、ダークでは例外的に `$color-on-accent`
+  に従わず矢印を明るいまま（`$color-base`）にする。ダーク時に目次側の↑（`ReadingProgressButton`）と色を揃えるため
 - **ロゴ**（`components/BrandLogo.vue`）：土台のスクエアは `$color-base` なので、ダークでは明るいスクエアに反転する
-- **色以外の出し分け**（アイコンの表示切り替えなど）は `@include dark-mode { ... }` を使う。サーバーは
+- **テーマによる出し分け**は `@include dark-mode { ... }` を使う。主な用途は色以外（アイコンの表示切り替えなど）で、
+  色はトークンに任せるのが原則。上の NavButton のようにトークンの対応自体をテーマで変えたい例外にも使う。サーバーは
   閲覧者のテーマを知らないため、テンプレート側（`v-if` など）で現在のテーマに依存させない（ハイドレーション不整合になる）
 - **切り替えのアニメーション**：View Transitions で画面全体をクロスフェードさせる（`$duration-theme`＝0.6s）。
   要素ごとの `transition` に任せると部品によって色の変わる速さがばらつくため。スイッチ自身はフェードから外し、
-  つまみのスライドを見せる。未対応ブラウザと `prefers-reduced-motion` では即時に切り替える
+  つまみのスライドを見せる。未対応ブラウザと `prefers-reduced-motion` では即時に切り替え、つまみも動かさない
 - **初回描画のチラつき防止**：手動で選んだテーマは `nuxt.config.ts` の `app.head.script` のインラインscriptが
-  スタイルシートより先に復元する。`localStorage` のキー名は `composables/useTheme.ts` と揃えること
+  `<head>` 内で同期実行され、初回描画（bodyのレンダリング）より前に復元する。`localStorage` のキー名は
+  `composables/useTheme.ts` と揃えること
 - **CMS本文**：エディタへの貼り付けで混入するインラインの `background-color`（白）は `article-typography` で
   打ち消している。インラインの文字色が見つかった場合も同じ方針で対処する
 - **対象外**：AdSenseの広告枠の中身、写真（ヒーロー・アイキャッチ・本文画像）はテーマで変えない
@@ -100,7 +103,7 @@ CMS本文（v-html）の `h2` / `h3` / `h4` にも `@include article-typography`
 **H1（全幅下線） > H3（全幅下線・実質の大見出し） > H2/H4（丸ドット）** としている。
 mixin名と`<h2>`〜`<h4>`タグの対応自体は変えず、CSSの中身だけをこの優先度に合わせて割り当てている
 （`assets/styles/_mixins.scss` 参照）。H2とH4は当初のモック案でH3に使われていた丸ドットデザインを
-共有する（H2はCMS本文でほぼ未使用、H4はCMS本文の小見出みとして実際に使われる）。
+共有する（H2はCMS本文でほぼ未使用、H4はCMS本文の小見出しとして実際に使われる）。
 
 | レベル | HTMLタグ                               | 用途                     | 指定                                                                                                                                                                                                      |
 | ------ | -------------------------------------- | ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -123,8 +126,9 @@ H3は上64px＋上に1pxの罫線＋`padding-top: 32px`（下は`heading-3`の20
 - カード全体：14px（`$radius-card`）
 - 画像（大）：12px（`$radius-image`）
 - 画像（小・グリッド内）：10px（`$radius-image-sm`）
-- バッジ / pill / ページネーション丸ボタン：20px または 50%（`$radius-pill`）
+- バッジ / pill：20px（`$radius-pill`）。ページネーションなどの丸ボタンは `border-radius: 50%`（トークン外）
 - アクセントバー：2px（`$radius-bar`）
+- CMS本文のインラインコード：4px（`$radius-code`）
 
 ## 余白
 
@@ -134,11 +138,12 @@ H3は上64px＋上に1pxの罫線＋`padding-top: 32px`（下は`heading-3`の20
 
 ## 画面
 
-### ヘッダー（全ページ共通・fixed / 高さ56px）
+### ヘッダー（全ページ共通・fixed / 高さ68px＝`$header-height`）
 
-ヘッダー本体（`.header`）は常に透明。左＝ロゴタイプ（ロゴマーク＋「がじぇっとぐらし！」）、
-右＝`HOME` / `ABOUT`（Zen Maru Gothic 500, 15px）を、それぞれ独立した高さ36px・`$color-header-bg`
-塗りのピルとして重ねる（`$radius-pill`）。2つのピルの高さは必ず揃える（`height`指定＋`padding: 0 __px`。
+ヘッダー本体（`.header`）は常に透明。左＝ロゴのピル（ロゴマーク＋「がじぇっとぐらし！」）、
+右＝ナビのピル（`HOME` / `ABOUT`（Zen Maru Gothic 500, 16px）＋末尾にテーマ切り替え）の2つを、
+それぞれ独立した高さ44px（SPは40px）・`$color-header-bg` 塗りのピルとして重ねる（`$radius-pill`）。
+2つのピルの高さは必ず揃える（`height`指定＋`padding: 0 __px`。
 片方だけ縦paddingで高さを決めると誤差でズレるため）。
 現在のページのリンクはオレンジ＋bold＋下に2pxのアクティブバー、非アクティブは `$color-nav-inactive`。
 
@@ -146,9 +151,13 @@ H3は上64px＋上に1pxの罫線＋`padding-top: 32px`（下は`heading-3`の20
 透明で、ロゴ（`.footer__brand`）・ナビ（`.footer__nav`）・著作権表記（`.footer__copyright`）を
 それぞれ独立した`$color-header-bg`のピルとして塗る（ヘッダーのピルと完全に同じ色・同じ目的＝
 背景パターンを隠すこと）。
-フッターの「PAGE TOP」ボタンと、固定スクロールボタン（旧`components/NavButton.vue`）は
-どちらも廃止した。前者はページ最下部で両者が並んで表示されて機能が重複していたため、
-後者もその後の見直しで不要と判断した。トップに戻る手段は現状ブラウザ標準の操作に委ねる。
+フッターの「PAGE TOP」ボタンは、固定の上に戻るボタンとページ最下部で並んで機能が重複していたため廃止した。
+上に戻る手段は次の2つで役割を分けている：
+
+- `components/NavButton.vue`：右下に固定するオレンジの丸ボタン。400px以上スクロールしたら出す。
+  SPの記事ページでもくじバーが出ている間と、PCの記事ページ（サイドバーのもくじに↑がある）では出さない
+- `components/ReadingProgressButton.vue`：もくじ（SPのバー／PCのサイドバー）に付く、読了率のリング付き↑
+
 フッターの上端の区切り線（旧`border-top`）も、本体が透明になったことで不要になり撤去した。
 
 **重ね順（z軸）の原則：「ヘッダー／フッターのピル > コンテンツ > 背景色 > 背景パターン」。**
@@ -179,7 +188,7 @@ H3は上64px＋上に1pxの罫線＋`padding-top: 32px`（下は`heading-3`の20
 ### 記事詳細（`pages/article/[id].vue`）
 
 パンくず「← TOP」（`components/Breadcrumb.vue`。カテゴリバッジは廃止済み）→ アイキャッチ（角丸12px・バッジなし）→ H1＋オレンジ下線バー →
-メタ情報（日付・更新日・読了◯分）→ 本文 → タグ → 関連商品リンク → 2pxの区切り線 → SHARE（ラベル＋X／リンクコピーの丸アイコン、左寄せ）→
+メタ情報（日付・更新日・読了◯分）→ タグ → 本文 → タグ → 関連商品リンク → 2pxの区切り線 → SHARE（ラベル＋X／リンクコピーの丸アイコン、左寄せ）→
 RELATED（ラベル＋2カラムのサムネイル付き関連記事。各カードにタグも表示する）。
 
 背景パターンとの関係では、この一連の流れは3つのブロックに分かれる：
@@ -197,9 +206,13 @@ SP（`$bp-sm`以下）は`content-card`の余白が0になるので、いずれ�
 
 ## カードとバッジのルール
 
-- 記事カードは画像・タイトル・日付のみ。**背景の色塗りやドロップシャドウは使わない**
-- バッジは必ず画像に重ねる（pill形状）。注目＝オレンジ、カテゴリ＝ブルー
+- 記事カード（`components/ArticleCard.vue`）は画像・タイトル・日付・タグ。`featured` のみ本文の抜粋も出す。
+  見た目は `variant`（`featured` / `default` / `compact`）で切り替え、別コンポーネントは作らない
+- `featured` / `default` は背景パターンを隠すため `content-block` で塗る（`compact`＝RELATEDの横並び行は塗らない）。
+  **独自の色塗りやドロップシャドウは足さない**
+- 画像に重ねるバッジは「注目」（オレンジ、pill形状）のみ。タグはカード本文側に `TagLink`（ブルー）で出す
 - hover は画像のわずかな拡大とタイトルのオレンジ化のみ
+- 画像の `alt` は空にする（同じリンク内に見出しがあり、タイトルが二重に読み上げられるため）
 
 ## 背景パターン
 
@@ -218,11 +231,15 @@ SP（`$bp-sm`以下）は`content-card`の余白が0になるので、いずれ�
 - コンテンツは「行」ごとではなく**まとまり単位**（ヘッダー／フッターの各ピル・イントロブロック・
   区切り線・記事一覧の見出し・各記事カード・ページネーション・記事詳細ページ全体・aboutページ全体・
   サイドバーのSPONSOREDなど）でブロックとして塗る。まとまり同士の余白部分ではパターンを見せる
-- 塗りは完全な不透明ではなく `@include content-block($color: $color-bg, $opacity: 0.95)`
-  （`assets/styles/_mixins.scss`）を使う。`with-alpha($color, 0.95)` + `backdrop-filter: blur(10px)`で、
-  パターンがうっすら透けるすりガラス調にする。色を変えたいブロック（ヘッダー／フッターの
+- 塗りは完全な不透明ではなく `@include content-block($color: $color-bg, $opacity: $opacity-block)`
+  （`assets/styles/_mixins.scss`）を使う。`with-alpha($color, $opacity)` + `backdrop-filter: blur(10px)`で、
+  パターンがうっすら透けるすりガラス調にする。透け具合は役割ごとのトークンで指定する：
+  コンテンツのまとまり＝`$opacity-block`（0.95）、ヘッダー／フッターのピル＝`$opacity-header`（0.85）、
+  本文に重なるもくじバー＝`$opacity-overlay`（0.75）。色を変えたいブロック（ヘッダー／フッターの
   各ピルは`$color-header-bg`）は`content-block($color)`で指定する。サイドバーは独自の色を
-  足さずデフォルトの`$color-bg`のまま使う（詳細は「ヘッダー」の節を参照）
+  足さずデフォルトの`$color-bg`のまま使う（下のSPONSOREDの項を参照）。
+  `color-mix()` 非対応ブラウザでは `content-block` だけは不透明な塗りにフォールバックするが、
+  他の `with-alpha` の利用箇所（タグ・もくじのピルの淡い塗りなど）は宣言ごと無視される（許容している）
 - aboutページ（`pages/article/about.vue`）は一連の読み物なので、ページ全体をひとつの
   `content-block`（`.about`）として塗る
 - 記事詳細ページ（`pages/article/[id].vue`）は本文の読み物部分（`.detail__block`＝パンくず〜タグ）

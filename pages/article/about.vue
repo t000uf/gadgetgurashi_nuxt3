@@ -4,10 +4,11 @@ import type { About } from '@/types'
 
 const { formatDot } = useDate()
 
-const { data: content } = await useFetch<MicroCMSObjectContent & About>('/api/about')
+const { data: content, error } = await useFetch<MicroCMSObjectContent & About>('/api/about')
+throwIfNotFound(error, content)
 
 useHead({
-  title: computed(() => `${content.value?.title} - がじぇっとぐらし！`),
+  title: computed(() => `${content.value?.title ?? ''} - がじぇっとぐらし！`),
 })
 </script>
 
@@ -25,7 +26,7 @@ useHead({
 
 <style lang="scss" scoped>
 // 背景パターン（layouts/default.vue）の上に乗るブロック。記事詳細ページと同様、
-// ページ全体をひとつの不透明な塗りブロックとして扱う
+// ページ全体をひとつの塗りブロックとして扱う
 .about {
   @include content-card(28px, 20px 0);
 

@@ -3,10 +3,10 @@ import type { Article, Tag, MicroCMSList } from '@/types'
 
 const route = useRoute()
 const tagId = route.params.tagId as string
-const page = Number(route.params.p) || 1
+const page = usePageNumber()
 const limit = 10
 
-const [{ data: articleData }, { data: tagData }] = await Promise.all([
+const [{ data: articleData, error: articleError }, { data: tagData, error: tagError }] = await Promise.all([
   useFetch<MicroCMSList<Article>>('/api/article', {
     query: {
       fields: 'id,title,thumbnail,preview,tag,createdAt',
@@ -15,14 +15,16 @@ const [{ data: articleData }, { data: tagData }] = await Promise.all([
       offset: (page - 1) * limit,
     }
   }),
+  // 一覧から探すと件数上限を超えたタグが見つからないので、IDで直接引く
   useFetch<MicroCMSList<Tag>>('/api/tag', {
-    query: { limit: 100 }
+    query: { ids: tagId, fields: 'id,tagName' }
   })
 ])
 
-const selectedTag = computed(() =>
-  tagData.value?.contents.find((tag) => tag.id === tagId)
-)
+const selectedTag = computed(() => tagData.value?.contents[0])
+throwIfNotFound(tagError, selectedTag)
+// 記事0件のタグは1ページ目だけ表示し、範囲外のページは404にする
+throwIfNotFound(articleError, computed(() => page === 1 || articleData.value?.contents.length))
 
 const pager = computed(() =>
   [...Array(Math.ceil((articleData.value?.totalCount ?? 0) / limit)).keys()]
@@ -37,6 +39,6 @@ const pager = computed(() =>
     :contents="articleData?.contents"
     :pager="pager"
     :current="page"
-    :tag="selectedTag"
+    :tag-id="tagId"
   />
 </template>

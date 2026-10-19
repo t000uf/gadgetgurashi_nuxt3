@@ -5,11 +5,21 @@
 // - アイコンボタン：押すと切り替わる先を示す（ライト表示中は月、ダーク表示中は太陽）
 // サーバーはテーマを知らないので、出し分けはすべてCSS（dark-mode mixin）で行う。
 // 押せる範囲はどちらもナビのピルの高さいっぱいに取る
-const { toggle } = useTheme()
+const { current, toggle } = useTheme()
+
+// 支援技術向けのオン／オフ（オン＝ダーク）。SSR時点では分からないので、マウントまでは出さない
+const isDark = ref<boolean>()
+onMounted(() => {
+  isDark.value = current() === 'dark'
+})
+const onClick = () => {
+  isDark.value = toggle() === 'dark'
+}
 </script>
 
 <template>
-  <button type="button" class="theme-toggle" aria-label="配色テーマを切り替え" @click="toggle">
+  <button type="button" role="switch" class="theme-toggle" aria-label="ダークモード" :aria-checked="isDark"
+    @click="onClick">
     <span class="theme-toggle__track">
       <span class="theme-toggle__knob">
         <AppIcon name="sun" :size="14" class="theme-toggle__light" />
@@ -69,6 +79,10 @@ $knob-inset: 3px; // (track-height - knob-size) / 2
 
   @include dark-mode {
     transform: translateX($track-width - $knob-size - $knob-inset * 2);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
   }
 }
 
