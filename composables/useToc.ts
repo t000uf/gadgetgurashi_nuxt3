@@ -31,7 +31,7 @@ const emptyTocState = (): TocState => ({
 // バーの高さぶん。本文の下端がここまで上がったら読み終えたとみなす
 const BAR_CLEARANCE = 100
 
-// ArticleDetail(本文)とSideBar(PC目次)は別コンポーネントツリーなので、
+// ArticleDetail(本文)と目次（SideBarのPC目次・SPのバー）・NavButtonは別コンポーネントツリーなので、
 // useStateでSSR安全に共有する（モジュールスコープのrefだとリクエスト間で状態が漏れる）
 export const useTocState = () => useState<TocState>('toc', emptyTocState)
 
@@ -116,7 +116,7 @@ export const useToc = (
       { rootMargin: '-100px 0px -70% 0px' },
     )
 
-    // 記事タイトルも観測対象に加える。最初のh2/h3より上にいる間はタイトルがハイライトされる
+    // 記事タイトルも観測対象に加える。最初の見出しより上にいる間はタイトルがハイライトされる
     ;[TOC_TITLE_ID, ...toc.map((item) => item.id)].forEach((id) => {
       const el = document.getElementById(id)
       if (el) observer?.observe(el)

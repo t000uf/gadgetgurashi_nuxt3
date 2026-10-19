@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-// ホームページ全体の背景に敷くガジェットモチーフの装飾パターン。
-// 4x2の正方形グリッドを30°回転させつつ、各アイコン自体はpatternTransformの逆回転で
+// ページ全体の背景に敷くガジェットモチーフの装飾パターン（layouts/home.vue・default.vue で使用）。
+// 144×216のタイル（2列×3行）を30°回転させつつ、各アイコン自体は逆回転で
 // 正立(0°)を維持する。タイルは継ぎ目なく反復する。
-// コンテンツ側の実装は layouts/home.vue 参照（この上に乗る各ブロックは
-// background-color: $color-bg で不透明に塗り、隙間だけこのパターンを見せる）。
+// この上に乗る各ブロックは content-block mixin（半透明＋backdrop-filter）で塗り、
+// 隙間だけこのパターンを見せる。
 </script>
 
 <template>

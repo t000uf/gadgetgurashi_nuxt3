@@ -55,7 +55,7 @@ onUnmounted(() => {
     background-color: $color-primary-dark;
   }
 
-  // ダークでも矢印は明るいまま。目次側の↑（ReadingProgressButton）と同じ色に揃える
+  // ダークでは矢印を明るいままにし、目次側の↑（ReadingProgressButton）の $color-base と揃える
   @include dark-mode {
     color: $color-base;
   }
