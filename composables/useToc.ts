@@ -13,7 +13,10 @@ export type TocState = {
   title: string
   toc: TocItem[]
   activeId: string
-  /** 本文を読んでいる最中か。読み終えた後はフッターや関連記事を隠さないようバーを引っ込める */
+  /**
+   * 本文をまだ読み終えていないか（本文より上にいる間も含む）。
+   * 読み終えた後はフッターや関連記事を隠さないようバーを引っ込める
+   */
   isInBody: boolean
 }
 
@@ -93,12 +96,16 @@ export const useToc = (
     state.value = { title: title.value ?? '', toc, activeId: TOC_TITLE_ID, isInBody: true }
     if (toc.length === 0) return
 
-    // 本文の下端を通り過ぎたらバーを引っ込める（下端をバーの高さぶん切り上げて判定する）
+    // 本文の下端を通り過ぎたらバーを引っ込める（下端をバーの高さぶん切り上げて判定する）。
+    // 交差だけで判定すると、アイキャッチやタイトルが長く本文が画面外から始まる記事でだけ
+    // ページトップでバーが隠れてしまうので、本文がまだ画面より下にある間も「読み終えていない」とする
     if (body.value) {
       bodyObserver = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
-            state.value = { ...state.value, isInBody: entry.isIntersecting }
+            const viewportBottom = entry.rootBounds?.bottom ?? window.innerHeight - BAR_CLEARANCE
+            const isBeforeBody = entry.boundingClientRect.top >= viewportBottom
+            state.value = { ...state.value, isInBody: entry.isIntersecting || isBeforeBody }
           })
         },
         { rootMargin: `0px 0px -${BAR_CLEARANCE}px 0px` },
