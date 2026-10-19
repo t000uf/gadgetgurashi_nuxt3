@@ -9,26 +9,67 @@ Claude Design で決定した方向性を実装に落とし込んだもの。
 
 ## カラー
 
-| 用途                               | 値                    | 変数                          |
-| ---------------------------------- | --------------------- | ----------------------------- |
-| ベース（濃色・ロゴ・見出し）       | `#1f2530`             | `$color-base`                 |
-| 本文グレー                         | `#40485a`             | `$color-body`                 |
-| メタ情報グレー（日付・パンくず等） | `#6b7488`             | `$color-meta`                 |
-| ナビ非アクティブ                   | `#6b7488`             | `$color-nav-inactive`         |
-| サイト背景                         | `#f4f6f8`             | `$color-bg`                   |
-| ヘッダー／フッター背景             | `#e6eaef`             | `$color-header-bg`            |
-| ヘッダー境界線                     | `#c7cfd9`             | `$color-header-border`        |
-| セクション境界線                   | `#d2d9e2`             | `$color-border`               |
-| カード背景                         | `#ffffff`             | `$color-card`                 |
-| プレースホルダー画像 縞1 / 縞2     | `#dfe4ea` / `#d2d9e2` | `$color-placeholder-1` / `-2` |
-| **プライマリ（ブランド）**         | `#e8791e` オレンジ    | `$color-primary`              |
-| **セカンダリ（アクセント）**       | `#4f74d6` ブルー      | `$color-secondary`            |
+| 用途                               | ライト                | ダーク                | 変数                          |
+| ---------------------------------- | --------------------- | --------------------- | ----------------------------- |
+| ベース（濃色・ロゴ・見出し）       | `#1f2530`             | `#e9edf3`             | `$color-base`                 |
+| 本文グレー                         | `#40485a`             | `#c3cad6`             | `$color-body`                 |
+| メタ情報グレー（日付・パンくず等） | `#6b7488`             | `#8f99ab`             | `$color-meta`                 |
+| ナビ非アクティブ                   | `#6b7488`             | `#8f99ab`             | `$color-nav-inactive`         |
+| サイト背景                         | `#f4f6f8`             | `#14181f`             | `$color-bg`                   |
+| ヘッダー／フッター背景             | `#e6eaef`             | `#1e242e`             | `$color-header-bg`            |
+| ヘッダー境界線・背景パターンの線   | `#c7cfd9`             | `#333c4a`             | `$color-header-border`        |
+| セクション境界線                   | `#d2d9e2`             | `#2c3440`             | `$color-border`               |
+| カード背景                         | `#ffffff`             | `#232a35`             | `$color-card`                 |
+| プレースホルダー画像 縞1 / 縞2     | `#dfe4ea` / `#d2d9e2` | `#242b36` / `#2c3440` | `$color-placeholder-1` / `-2` |
+| **プライマリ（ブランド）**         | `#e8791e` オレンジ    | `#e8791e`（同じ）     | `$color-primary`              |
+| プライマリ hover                   | `#c8620f`             | `#f5923e`             | `$color-primary-dark`         |
+| **セカンダリ（アクセント）**       | `#4f74d6` ブルー      | `#7d9cf0`             | `$color-secondary`            |
+| セカンダリ hover                   | `#3d5cb0`             | `#a3b9f5`             | `$color-secondary-dark`       |
+| アクセント塗りの上の文字           | `#ffffff`             | `#14181f`             | `$color-on-accent`            |
 
 オレンジ＝ブランド／注目表示／見出しアクセント、ブルー＝カテゴリタグ・リンク・二次的な導線。
 **この2色以外の新しい色は追加しない。** hover用の `$color-primary-dark` / `$color-secondary-dark` は同系トーンの派生。
 
 `$color-body` / `$color-meta` / `$color-nav-inactive` は初期実装時より濃く調整済み（本文・日付等の
 可読性フィードバックへの対応）。淡いグレーはメタ情報であっても最低限のコントラストを確保すること。
+
+## ダークモード
+
+ライト／ダークの2テーマ。初期値はOS設定（`prefers-color-scheme`）に従い、ヘッダーのナビピル末尾の
+`components/ThemeToggle.vue` で手動切り替えできる。見た目は幅で変える：
+
+- PC・タブレット（`$bp-md`以上）：トグルスイッチ。48×26pxのトラックに20pxのつまみ
+  （左＝ライト・太陽／右＝ダーク・月）
+- SP（`$bp-sm`以下）：アイコンボタン（ライト表示中は月、ダーク表示中は太陽＝切り替わる先）。
+  ナビピルが狭くスイッチを置けないため。**SPのナビのアイコン（HOME／テーマ切り替え）は、アイコン自体は
+  20pxのまま、タップ範囲をピルの高さいっぱいの40px四方に取る**（`components/TheHeader.vue`）
+
+手動で選ぶと `<html data-theme="light|dark">`
+が付き、OS設定より優先される（`localStorage` の `theme` に保存）。
+
+- **仕組み**：実値は `_tokens.scss` の `$theme-light` / `$theme-dark`（Sass map）に持ち、`global.scss` が
+  `--color-*` として出力する。`$color-*` はその `var()` 参照なので、コンポーネント側はテーマを意識せず
+  これまでどおり `$color-bg` などを使えばよい。**色を足す／変えるときは必ず両方のmapを更新する**
+- **透過**：`$color-*` は実色ではないので `rgba($color-primary, 0.1)` のようなSassの色関数は使えない。
+  `with-alpha($color-primary, 0.1)`（`_mixins.scss`。中身は `color-mix()`）を使う
+- **配色の考え方**：ライトと同じ青みグレーの色相のまま明度を反転。オレンジは据え置き、ブルーは暗い地で
+  リンク文字のコントラストが足りないため明るくしている。hover用の `-dark` はダークでは逆に明るい側へ振る
+  （名前は「hover用」の意味で読む）
+- **`$color-on-accent`**：オレンジ／ブルーのベタ塗り（バッジ・ページネーションの現在ページ・もくじの現在地）に
+  乗る文字色。ライトは白、ダークは明るくなったブルーの上で白が読めないため濃色にしている。`#fff` を直書きしない
+- **上に戻るボタン**（`components/NavButton.vue`）：オレンジ塗りだが例外的に `$color-on-accent` に従わず、
+  ダークでも矢印を明るいまま（`$color-base`）にする。目次側の↑（`ReadingProgressButton`）と色を揃えるため
+- **ロゴ**（`components/BrandLogo.vue`）：土台のスクエアは `$color-base` なので、ダークでは明るいスクエアに反転する
+- **色以外の出し分け**（アイコンの表示切り替えなど）は `@include dark-mode { ... }` を使う。サーバーは
+  閲覧者のテーマを知らないため、テンプレート側（`v-if` など）で現在のテーマに依存させない（ハイドレーション不整合になる）
+- **切り替えのアニメーション**：View Transitions で画面全体をクロスフェードさせる（`$duration-theme`＝0.6s）。
+  要素ごとの `transition` に任せると部品によって色の変わる速さがばらつくため。スイッチ自身はフェードから外し、
+  つまみのスライドを見せる。未対応ブラウザと `prefers-reduced-motion` では即時に切り替える
+- **初回描画のチラつき防止**：手動で選んだテーマは `nuxt.config.ts` の `app.head.script` のインラインscriptが
+  スタイルシートより先に復元する。`localStorage` のキー名は `composables/useTheme.ts` と揃えること
+- **CMS本文**：エディタへの貼り付けで混入するインラインの `background-color`（白）は `article-typography` で
+  打ち消している。インラインの文字色が見つかった場合も同じ方針で対処する
+- **対象外**：AdSenseの広告枠の中身、写真（ヒーロー・アイキャッチ・本文画像）はテーマで変えない
 
 ## タイポグラフィ
 
@@ -167,7 +208,7 @@ SP（`$bp-sm`以下）は`content-card`の余白が0になるので、いずれ�
 
 - SVGの`<pattern>`に`patternTransform="rotate(30)"`を適用してグリッド全体を30°回転させ、
   各アイコンには個別に`rotate(-30)`をかけて相殺する（アイコン自体は常に正立を維持）
-- タイルは144×216px（2列×3行）、アイコンは`#c7cfd9`の線幅2px相当、継ぎ目なく反復
+- タイルは144×216px（2列×3行）、アイコンは`$color-header-border`の線幅2px相当、継ぎ目なく反復
 - `layouts/home.vue`と`layouts/default.vue`の`.layout`直下・最初の子要素として配置し、
   ページ全体の背景に1枚だけ敷く。`.layout`には`position: relative; z-index: 0;`を必須で付け、
   スタッキングコンテキストを作ってパターン(`z-index: -1`)をその中に閉じ込めること
@@ -178,7 +219,7 @@ SP（`$bp-sm`以下）は`content-card`の余白が0になるので、いずれ�
   区切り線・記事一覧の見出し・各記事カード・ページネーション・記事詳細ページ全体・aboutページ全体・
   サイドバーのSPONSOREDなど）でブロックとして塗る。まとまり同士の余白部分ではパターンを見せる
 - 塗りは完全な不透明ではなく `@include content-block($color: $color-bg, $opacity: 0.95)`
-  （`assets/styles/_mixins.scss`）を使う。`rgba($color, 0.95)` + `backdrop-filter: blur(10px)`で、
+  （`assets/styles/_mixins.scss`）を使う。`with-alpha($color, 0.95)` + `backdrop-filter: blur(10px)`で、
   パターンがうっすら透けるすりガラス調にする。色を変えたいブロック（ヘッダー／フッターの
   各ピルは`$color-header-bg`）は`content-block($color)`で指定する。サイドバーは独自の色を
   足さずデフォルトの`$color-bg`のまま使う（詳細は「ヘッダー」の節を参照）

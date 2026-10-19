@@ -47,12 +47,17 @@ onUnmounted(() => {
   border: none;
   border-radius: 50%;
   background-color: $color-primary;
-  color: #fff;
+  color: $color-on-accent;
   cursor: pointer;
   transition: background-color 0.2s ease;
 
   &:hover {
     background-color: $color-primary-dark;
+  }
+
+  // ダークでも矢印は明るいまま。目次側の↑（ReadingProgressButton）と同じ色に揃える
+  @include dark-mode {
+    color: $color-base;
   }
 }
 

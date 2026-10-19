@@ -98,12 +98,12 @@ watch(() => props.activeId, scrollActivePillIntoView)
 // 通常は淡い塗りで控えさせ、現在地だけベタ塗りにして読んでいる場所を際立たせる
 .toc-pills__pill--h2,
 .toc-pills__pill--h3 {
-  background-color: rgba($color-primary, 0.12);
+  background-color: with-alpha($color-primary, 0.12);
   color: $color-primary;
 
   &.is-active {
     background-color: $color-primary;
-    color: #fff;
+    color: $color-on-accent;
   }
 }
 
@@ -115,12 +115,12 @@ watch(() => props.activeId, scrollActivePillIntoView)
 }
 
 .toc-pills__pill--h4 {
-  background-color: rgba($color-secondary, 0.12);
+  background-color: with-alpha($color-secondary, 0.12);
   color: $color-secondary;
 
   &.is-active {
     background-color: $color-secondary;
-    color: #fff;
+    color: $color-on-accent;
   }
 }
 </style>

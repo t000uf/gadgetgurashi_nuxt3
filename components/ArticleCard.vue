@@ -221,7 +221,7 @@ const thumbnail = computed(() => thumbnailUrl(props.content.thumbnail?.url, thum
 
   padding: 2px 8px;
   border-radius: $radius-pill;
-  background-color: rgba($color-secondary, 0.1);
+  background-color: with-alpha($color-secondary, 0.1);
   font-size: 12px;
 }
 

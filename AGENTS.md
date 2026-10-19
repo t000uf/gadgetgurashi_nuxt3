@@ -42,7 +42,7 @@ APIキーはクライアントに出さないため、microCMS へのアクセ�
 ```
 assets/styles/   デザイントークン（_tokens.scss）、mixin（_mixins.scss）、グローバル（global.scss）
 components/      自動インポートされる単一ファイルコンポーネント
-composables/     useDate / useArticleMeta / useScrollTop
+composables/     useDate / useArticleMeta / useScrollTop / useTheme
 layouts/         default（記事・一覧）、home（トップ：ヒーロー付き）
 pages/           index / page/[p] / article/[id] / article/about / tag/[tagId]/page/[p] / draft
 server/api/      microCMS プロキシ、sitemap のURL生成
@@ -54,6 +54,8 @@ docs/adr/        アーキテクチャ決定記録（ADR）。フレームワー
 ## スタイルの規約
 
 - **色・フォント・角丸・余白は必ず `assets/styles/_tokens.scss` の変数を使う。値の直書きは禁止。**
+- ライト／ダークの2テーマ。`$color-*` は実色ではなくCSS変数の参照なので、`rgba()` などSassの色関数に
+  渡さない。透過は `with-alpha($color-primary, 0.1)` を使う。色を足すときは `$theme-light` / `$theme-dark` の両方に入れる。
 - 見出しは `@include heading-1` 〜 `heading-4` を使う。独自の見出しスタイルを作らない。
 - CMS本文（`v-html`）の組版は `@include article-typography` 一択。記事・about・下書きで共有する。
 - クラス名は BEM 風（`.card`, `.card__title`, `.card--featured`, 状態は `.is-active`）。

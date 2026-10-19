@@ -27,6 +27,7 @@ const isAbout = computed(() => route.path.startsWith('/article/about'))
           class="header__link header__link--about"
           :class="{ 'is-active': isAbout }"
         >ABOUT</NuxtLink>
+        <ThemeToggle />
       </nav>
     </div>
   </header>
@@ -42,6 +43,9 @@ const isAbout = computed(() => route.path.startsWith('/article/about'))
   justify-content: center;
   width: 100%;
   height: $header-height;
+  // 左右の余白は .header__inner ではなくこちらに持たせる。innerに付けると
+  // max-width の内側に食い込み、ピルの並びがコンテンツ幅より余白ぶん狭くなる
+  padding: 0 24px;
   // ヘッダー本体は透明のまま。重ね順は「ヘッダーのピル > コンテンツ > 背景色 > 背景パターン」。
   // ヘッダー自身に不透明な塗りを持たせるとコンテンツより手前に来てしまうため、
   // 塗りはピル（.header__brand / .header__nav）だけに持たせる
@@ -56,7 +60,6 @@ const isAbout = computed(() => route.path.startsWith('/article/about'))
   align-items: center;
   width: 100%;
   max-width: $content-width;
-  padding: 0 24px;
 }
 
 // 背景パターンの上に乗るため、ロゴタイプとナビゲーションはそれぞれ独立した
@@ -172,7 +175,7 @@ const isAbout = computed(() => route.path.startsWith('/article/about'))
 }
 
 @media screen and (max-width: $bp-sm) {
-  .header__inner {
+  .header {
     padding: 0 14px;
   }
 
@@ -182,10 +185,12 @@ const isAbout = computed(() => route.path.startsWith('/article/about'))
     padding: 0 14px;
   }
 
+  // SPのナビはアイコン2つ（HOME／テーマ切り替え）。アイコン自体は20pxだが、
+  // タップ範囲はそれぞれピルの高さいっぱいの40px四方に取る（隙間はその中に含める）
   .header__nav {
     height: 40px;
-    gap: 14px;
-    padding: 0 12px;
+    gap: 0;
+    padding: 0 4px;
   }
 
   .header__logotype {
@@ -202,7 +207,16 @@ const isAbout = computed(() => route.path.startsWith('/article/about'))
   }
 
   .header__link--home {
+    justify-content: center;
+    width: 40px;
+    height: 40px;
     padding-bottom: 2px;
+
+    // タップ範囲を広げても、下線バーはアイコンの直下・アイコン幅のままにする
+    &::after {
+      bottom: 9px;
+      width: 20px;
+    }
   }
 
   .header__link-icon {

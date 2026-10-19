@@ -1,6 +1,28 @@
 // グローバルスタイル（nuxt.config.ts の css で1度だけ読み込む）
 // トークン／mixin は additionalData 経由で自動的に利用できる
 
+// テーマの実値。既定はライトで、OS設定がダークならダーク。手動で選んだ場合は
+// <html data-theme> がOS設定より優先される（nuxt.config.ts のインラインscriptと useTheme が付ける）
+:root {
+  @include theme-vars($theme-light);
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    @include theme-vars($theme-dark);
+
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme='dark'] {
+  @include theme-vars($theme-dark);
+
+  color-scheme: dark;
+}
+
 *,
 *::before,
 *::after {
@@ -61,13 +83,35 @@ img {
 }
 
 ::selection {
-  background-color: rgba($color-primary, 0.25);
+  background-color: with-alpha($color-primary, 0.25);
   color: $color-base;
 }
 
 ::-moz-selection {
-  background-color: rgba($color-primary, 0.25);
+  background-color: with-alpha($color-primary, 0.25);
   color: $color-base;
+}
+
+// テーマ切り替え（useTheme）は View Transitions で画面全体をクロスフェードさせる。
+// 要素ごとに transition を持たせると、色が変わる速さが部品によってばらつくため。
+// 切り替えスイッチ自身（view-transition-name: theme-toggle）はフェードさせず、
+// 新しい状態をそのまま出してつまみのスライドを見せる
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: $duration-theme;
+  animation-timing-function: ease;
+}
+
+::view-transition-group(theme-toggle) {
+  animation: none;
+}
+
+::view-transition-old(theme-toggle) {
+  display: none;
+}
+
+::view-transition-new(theme-toggle) {
+  animation: none;
 }
 
 @keyframes fadein {
