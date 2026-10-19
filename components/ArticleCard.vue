@@ -33,7 +33,7 @@ const thumbnail = computed(() => thumbnailUrl(props.content.thumbnail?.url, thum
   <div class="card" :class="`card--${variant}`">
     <NuxtLink :to="`/article/${content.id}/`" class="card__link">
       <div class="card__visual">
-        <img v-if="thumbnail" class="card__image" :src="thumbnail" :alt="content.title" loading="lazy">
+        <img v-if="thumbnail" class="card__image" :src="thumbnail" alt="" loading="lazy">
         <div v-else class="card__image card__image--placeholder" />
         <span v-if="variant === 'featured'" class="card__badge card__badge--featured">注目</span>
       </div>
@@ -125,7 +125,7 @@ const thumbnail = computed(() => thumbnailUrl(props.content.thumbnail?.url, thum
 }
 
 // featured / default は背景パターン（layouts/home.vue）の上に乗るブロック。
-// 画像とテキストをまとめてサイト背景色で不透明に塗り、パターンを隠す
+// 画像とテキストをまとめてcontent-block（半透明＋すりガラス）で塗り、パターンを隠す
 // （compactは記事詳細ページのRELATED欄で使う横並び行のため対象外）
 .card--featured,
 .card--default {

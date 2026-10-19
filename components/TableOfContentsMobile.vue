@@ -93,7 +93,9 @@ onUnmounted(removeOpenListeners)
 </script>
 
 <template>
-  <div v-if="state.toc.length" ref="containerRef" class="toc-bar" :class="{ 'is-hidden': !state.isInBody }">
+  <!-- しまっている間は画面外でもTabで入れてしまうのでinertで外す -->
+  <div v-if="state.toc.length" ref="containerRef" class="toc-bar" :class="{ 'is-hidden': !state.isInBody }"
+    :inert="!state.isInBody">
     <button type="button" class="toc-bar__handle" :aria-expanded="isOpen" aria-controls="toc-bar-list"
       :aria-label="isOpen ? 'もくじを閉じる' : 'もくじを開く'" @click="toggle" @pointerdown="onHandlePointerDown"
       @pointermove="onHandlePointerMove" @pointerup="onHandlePointerUp" @pointercancel="onHandlePointerUp" />

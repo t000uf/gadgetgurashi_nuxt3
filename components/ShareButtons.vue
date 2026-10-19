@@ -10,17 +10,25 @@ const shareUrl = computed(() => {
   return `https://x.com/intent/tweet?${params}`
 })
 
-const copied = ref(false)
-let copiedTimer: ReturnType<typeof setTimeout> | undefined
+// コピー結果の通知。非HTTPS・権限拒否などでクリップボードに書けないこともある
+const message = ref('')
+let messageTimer: ReturnType<typeof setTimeout> | undefined
 
 const copyLink = async () => {
-  await navigator.clipboard.writeText(props.url)
-  copied.value = true
-  clearTimeout(copiedTimer)
-  copiedTimer = setTimeout(() => {
-    copied.value = false
+  try {
+    await navigator.clipboard.writeText(props.url)
+    message.value = 'ページのリンクをコピーしました'
+  } catch (error) {
+    console.error('[ShareButtons] リンクのコピーに失敗しました', error)
+    message.value = 'リンクをコピーできませんでした'
+  }
+  clearTimeout(messageTimer)
+  messageTimer = setTimeout(() => {
+    message.value = ''
   }, 2000)
 }
+
+onUnmounted(() => clearTimeout(messageTimer))
 </script>
 
 <template>
@@ -36,9 +44,9 @@ const copyLink = async () => {
         <AppIcon name="link" :size="18" />
       </button>
     </div>
-    <div class="share__sub">
+    <div class="share__sub" role="status">
       <Transition name="copied">
-        <span v-if="copied" class="share__copied">ページのリンクをコピーしました</span>
+        <span v-if="message" class="share__copied">{{ message }}</span>
       </Transition>
     </div>
   </div>
