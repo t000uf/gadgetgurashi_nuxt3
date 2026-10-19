@@ -1,6 +1,6 @@
 # 0002. server/api/** にCache-Controlを設定してNetlifyのCDNキャッシュを効かせる
 
-- ステータス: 承認済み
+- ステータス: 廃止（後継: [0005](0005-netlify-isr-route-rules.md)）
 - 日付: 2026-09-08
 
 ## コンテキスト

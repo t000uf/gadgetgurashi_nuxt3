@@ -5,18 +5,14 @@ definePageMeta({
   layout: 'home'
 })
 
-const route = useRoute()
-const page = Number(route.params.p) || 1
 const limit = 10
 
 const { data: top } = await useTopContent()
 
-const { data } = await useFetch<MicroCMSList<Article>>('/api/article', {
-  query: {
-    limit,
-    offset: (page - 1) * limit,
-  }
+const { data, error } = await useFetch<MicroCMSList<Article>>('/api/article', {
+  query: { limit }
 })
+throwIfNotFound(error, data)
 
 const pager = computed(() =>
   [...Array(Math.ceil((data.value?.totalCount ?? 0) / limit)).keys()]
@@ -37,7 +33,7 @@ const pager = computed(() =>
     </section>
 
     <section class="section-heading">
-      <h2 class="section-title allkiji">記事一覧</h2>
+      <h2 class="section-title">記事一覧</h2>
     </section>
     <ArticleList v-if="data?.contents" :contents="data.contents" featured />
     <Pagination :pager="pager" :current="1" />
@@ -52,7 +48,7 @@ const pager = computed(() =>
 }
 
 // 背景パターン（layouts/home.vue）の上に乗るブロックは、パターンを完全に隠すよう
-// サイト背景色で不透明に塗る。ブロック同士の余白ではパターンが見える
+// content-blockで塗る。ブロック同士の余白ではパターンが見える
 .intro {
   @include content-card(28px, 20px 0);
 }
