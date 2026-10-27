@@ -15,11 +15,14 @@ description: Dependabot が develop 向けに出した依存更新PRを棚卸し
   コード修正が必要な更新は、issue を立てて `develop` から `chore/#<issue番号>-<説明>` を切り、その中で更新＋修正を行い、元の Dependabot PR は閉じる。
 - マージ方法は既存の運用に合わせて **「Create a merge commit」**（`gh pr merge <n> --merge`）。ブランチはリポジトリ設定で自動削除される。
 - `pnpm dev` をポート 3000 で起動しない（ユーザーの手動確認用）。ローカルで動かすなら `pnpm build` → `PORT=3100 pnpm preview`。
-- ローカルの `pnpm` は Volta 経由で Volta 側の古い Node（`.mise.toml` と違う）で動くことがあり、`ERR_PNPM_UNSUPPORTED_ENGINE` になったり lockfile の依存解決がずれたりする。
+- Volta を入れている環境では、ローカルの `pnpm` が Volta 側の古い Node（`.mise.toml` と違う）で動くことがあり、`ERR_PNPM_UNSUPPORTED_ENGINE` になったり lockfile の依存解決がずれたりする。
   ローカルで pnpm を叩くときは `mise exec -- npx -y pnpm@<package.json の packageManager の版> <コマンド>` を使い、`pnpm exec node -v` が `.mise.toml` の版になっていることを確かめる。
 - npm のメジャーは動作検証が必要なので Dependabot では出さない設定（`ignore` の `"*"` / semver-major）。
   Node.js 本体も Dependabot の対象外。どちらも手動で上げるもので、このスキルでは扱わない
-  （設定前に出ていたメジャーPRが残っている場合だけ、下の「メジャー更新の調査」で扱う）。
+  （設定前に出ていたメジャーPRが残っている場合や、Actions のメジャーを含む場合は、下の「メジャー更新の調査」で扱う。
+  手動でメジャーを上げるときの調査にも使える）。
+- この ignore はセキュリティアップデートにも効く。いまは Dependabot security updates を無効にしているので影響はないが、
+  有効にする場合は、メジャーでしか直らない脆弱性の PR が出ない点に注意する（Security タブの Dependabot alerts で確認する）。
 
 ## 手順
 
@@ -61,21 +64,21 @@ gh pr comment <n> --body "@dependabot rebase"
 |---|---|
 | minor / patch のグループ（nuxt / dev-dependencies / dependencies） | CI（`pnpm install --frozen-lockfile` / `typecheck` / `build`）が緑ならマージ候補 |
 | github-actions のグループ | CI が緑ならマージ候補。メジャーが含まれる場合は入力値・非推奨の変更を release notes で確認 |
-| メジャー（設定前に出ていた個別PR） | 下の「メジャー更新の調査」を行ってから判断 |
+| メジャー（残っている個別PR） | 下の「メジャー更新の調査」を行ってから判断 |
 
-#### メジャー更新の調査
+#### メジャー更新の調査（残っている個別PR／Actions のメジャー／手動で上げるとき）
 
 1. **そもそも使っているか**を確認する。使っていない依存なら、更新ではなく削除を提案する。
    ```bash
    grep -rn "<パッケージ名>" --include=*.ts --include=*.vue --include=*.js --include=*.mjs \
      --exclude-dir=node_modules --exclude-dir=.nuxt --exclude-dir=.output .
    ```
-   （例: Nuxt 4 は Vite でビルドするので、webpack 用の `sass-loader` などは不要な可能性が高い）
+   （例: Nuxt 4 は Vite でビルドするので、webpack 用の loader 類は不要なことが多い）
 2. PR本文の release notes / CHANGELOG / migration guide から破壊的変更を洗い出し、このリポジトリの使い方（`nuxt.config.ts` の設定、呼び出し箇所）に当たるかを確認する。
 3. 必要ならローカルで検証する。
    ```bash
    gh pr checkout <n>
-   P="mise exec -- npx -y pnpm@10.33.0"   # Volta の pnpm を避ける（「守ること」参照）
+   P="mise exec -- npx -y $(node -p "require('./package.json').packageManager")"   # Volta の pnpm を避ける（「守ること」参照）
    $P install --frozen-lockfile
    $P typecheck && $P build
    git switch develop   # 終わったら戻る
@@ -89,9 +92,9 @@ gh pr comment <n> --body "@dependabot rebase"
 
 | PR | 内容 | 種別 | CI | 判定 | 補足 |
 |---|---|---|---|---|---|
-| #48 | dev-dependencies 3件 | minor/patch | ✅ | マージ可 | |
-| #49 | dependencies 2件 | minor/patch | ⏳ | rebase 待ち | |
-| #57 | github-actions 2件 | Actions（メジャー含む） | ✅ | 要確認 | `actions/checkout` の入力値変更: … |
+| #<n> | dev-dependencies 3件 | minor/patch | ✅ | マージ可 | |
+| #<n> | dependencies 2件 | minor/patch | ⏳ | rebase 待ち | |
+| #<n> | github-actions 2件 | Actions（メジャー含む） | ✅ | 要確認 | `actions/checkout` の入力値変更: … |
 
 ### 5. マージ
 
@@ -103,9 +106,10 @@ gh pr merge <n> --merge
 ```
 
 マージしたら、残りのPRについて手順2（rebase 依頼）→ CI 確認 → マージを繰り返す。
-見送るPRは理由をコメントして閉じる（`@dependabot ignore this minor version` などで以後の提案も止められる）。
+見送るPRは理由をコメントして閉じる（グループPRでは `@dependabot ignore <パッケージ名> minor version` / `@dependabot ignore <パッケージ名>` で、その依存だけ以後の提案を止められる。
+理由をつけずに閉じただけだと、次の週にまた同じ内容で出てくる）。
 削除することにした依存は、issue を立てて `chore/#<issue番号>-<説明>` で `package.json` から外す
-（その依存の Dependabot PR は、マージ後に Dependabot が自動で閉じる）。
+（その依存を含む Dependabot PR は、マージ後に自動で閉じられるか、その依存を除いて作り直される）。
 
 ### 6. 後片付け
 

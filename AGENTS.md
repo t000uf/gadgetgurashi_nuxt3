@@ -118,7 +118,8 @@ git-flow を簡素化した運用（ADR 0006）。`master` / `release/*` / `dev/
 - Dependabot（`.github/dependabot.yml`）が毎週月曜に npm の更新PRを `develop` 向けに出す。
   minor / patch は `nuxt` 関連・devDependencies・dependencies の3グループにまとめる。
   npm のメジャーは動作検証が必要なので Dependabot では出さず、`pnpm outdated` で確認して手動で上げる
-  （Netlify のデプロイプレビューでも確認する）。
+  （Netlify のデプロイプレビューでも確認する）。この ignore はセキュリティアップデートにも効くので、
+  メジャーでしか直らない脆弱性は GitHub の Dependabot alerts で確認して手動で上げる。
   GitHub Actions のバージョンも月1回、1つのPRにまとめて出す。本番には次のリリースで一緒に出る。
   公開直後のバージョンは cooldown で見送る（npm はマイナー7日・パッチ3日、Actions は7日。セキュリティアップデートは対象外）。
 - CI（`.github/workflows/ci.yml`）が、PR ごとと develop / production への push で `pnpm install --frozen-lockfile` /
