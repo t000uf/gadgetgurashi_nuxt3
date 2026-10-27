@@ -92,34 +92,33 @@ docs/adr/        アーキテクチャ決定記録（ADR）。フレームワー
 
 ## Git / ブランチ
 
-git-flow を簡素化した運用（ADR 0006）。`develop` / `release/*` / `production` は使わない。
+git-flow を簡素化した運用（ADR 0006）。`master` / `release/*` / `dev/<x.y.z>` は使わない。
 
 | ブランチ | 役割 | 切り元 → マージ先 |
 |---|---|---|
-| `master` | 本番（Netlify の本番デプロイ） | — |
-| `dev/<x.y.z>` | 次のリリースに入れる変更をまとめる | `master` → `master` |
-| `feature/#<issue番号>-<説明>` | 機能追加 | `dev/*` → `dev/*` |
-| `fix/#<issue番号>` | 不具合修正 | `dev/*` → `dev/*`（緊急時は `master` → `master`） |
-| `chore/#<issue番号>-<説明>` / `docs/#<issue番号>-<説明>` | 依存更新・設定・ドキュメント | `dev/*` → `dev/*` |
+| `production` | 本番（Netlify の本番デプロイ） | — |
+| `develop` | 既定ブランチ。次のリリースに入れる変更をまとめる | — → `production` |
+| `feature/#<issue番号>-<説明>` | 機能追加 | `develop` → `develop` |
+| `fix/#<issue番号>` | 不具合修正 | `develop` → `develop`（緊急時は `production` → `production`） |
+| `chore/#<issue番号>-<説明>` / `docs/#<issue番号>-<説明>` | 依存更新・設定・ドキュメント | `develop` → `develop` |
 
-- 作業ブランチは issue ごとに切り、Pull Request で `dev/*` にマージする。
-- リリースは `dev/<x.y.z>` → `master` の Pull Request で行い、Netlify のデプロイプレビューで確認してからマージする。
-  マージ後、master のマージコミットに `v<x.y.z>` のタグを付け、`dev/<x.y.z>` は削除する。
-- 緊急の修正は `master` から `fix/#<issue番号>` を切って master に直接マージする（パッチを1つ上げてタグを付ける）。
-  開発中の `dev/*` があれば、master をそちらにマージして取り込む。
-- master へは必ず Pull Request 経由でマージする（直接 push しない）。
+- 作業ブランチは issue ごとに切り、Pull Request で `develop` にマージする。
+- リリースは `develop` → `production` の Pull Request で行い、Netlify のデプロイプレビューで確認してからマージする。
+  マージ後、production のマージコミットに `v<x.y.z>` のタグを付ける。
+- 緊急の修正は `production` から `fix/#<issue番号>` を切って production に直接マージする（パッチを1つ上げてタグを付ける）。
+  そのあと production を develop にマージして取り込む。
+- production と develop へは必ず Pull Request 経由でマージする（直接 push しない）。
 
 ## 依存パッケージ・Node.js の更新
 
 - Node.js のバージョンは `.mise.toml` と `netlify.toml` の `NODE_VERSION` を同じパッチまで揃える。
   `@types/node` のメジャーも Node のメジャーに合わせる。
-- Dependabot（`.github/dependabot.yml`）が毎週月曜に npm の更新PRを出す。向き先は既定ブランチ（`master`）。
+- Dependabot（`.github/dependabot.yml`）が毎週月曜に npm の更新PRを `develop` 向けに出す。
   minor / patch は `nuxt` 関連・devDependencies・dependencies の3グループにまとめ、メジャーは個別PRになる。
-  GitHub Actions のバージョンも月1回、1つのPRにまとめて出す。
-- CI（`.github/workflows/ci.yml`）が、PR ごとと master への push で `pnpm install --frozen-lockfile` /
+  GitHub Actions のバージョンも月1回、1つのPRにまとめて出す。本番には次のリリースで一緒に出る。
+- CI（`.github/workflows/ci.yml`）が、PR ごとと develop / production への push で `pnpm install --frozen-lockfile` /
   `pnpm typecheck` / `pnpm build` を回す。Dependabot のPRもこれが通っていればマージしてよい
   （ランタイムの挙動が変わりうるメジャー更新は、Netlify のデプロイプレビューでも確認する）。
-  開発中のリリースブランチ（`dev/*`）があるときは、そちらに取り込んでから master に上げてもよい。
 
 ## 既知の問題
 

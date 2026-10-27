@@ -12,25 +12,31 @@ git-flow をベースに、`master`（本番）・`develop`・`dev/<x.y.z>`・`r
 
 - `develop` から作業ブランチを切ったことがなく、master からの戻しマージ（PR #14, #30）だけが行われていた。
   7.1.0 以降は更新も止まっている。
-- `dev/<x.y.z>` が git-flow の develop の役割（変更をまとめる場所）をすでに担っている。
-- `release/<x.y.z>` でやっていたリリース前の確認は、`dev/<x.y.z>` → `master` の Pull Request に付く
+- 変更をまとめる役は、バージョンごとに作る `dev/<x.y.z>` が担っていた。ブランチ名が毎回変わるため、
+  Dependabot の向き先や CI の対象に固定で指定できない。
+- `release/<x.y.z>` でやっていたリリース前の確認は、リリース用の Pull Request に付く
   Netlify のデプロイプレビューで代わりができる。
-- `production` は 2026-09-07 以降更新されていない。
+- v8 からは、本番ブランチを `master` から `production` に切り替える予定だった。
 
 ## 決定
 
-- 使うのは `master`（本番）・`dev/<x.y.z>`（リリース単位のまとめ）・作業ブランチ
+- 使うのは `production`（本番）・`develop`（既定ブランチ、次のリリースのまとめ）・作業ブランチ
   （`feature/*` / `fix/*` / `chore/*` / `docs/*`）だけにする。
-- `develop` / `release/*` / `production` は廃止する。
-- リリースは `dev/<x.y.z>` → `master` の Pull Request で行い、マージ後に `v<x.y.z>` のタグを付ける。
-- 緊急の修正は `master` から `fix/#<issue番号>` を切って master に直接マージし、開発中の `dev/*` に master を取り込む。
+- `master` / `release/*` / `dev/<x.y.z>` は廃止する。
+- リリースは `develop` → `production` の Pull Request で行い、マージ後に `v<x.y.z>` のタグを付ける。
+- 緊急の修正は `production` から `fix/#<issue番号>` を切って production に直接マージし、production を develop に取り込む。
 
 具体的な手順は AGENTS.md の「Git / ブランチ」に書く。
 
 ## 影響
 
-- リリースのたびに必要だった release ブランチの作成と develop への戻しマージがなくなる。
-- Dependabot の PR は既定ブランチの `master` に来るため、開発中の `dev/*` とは別に本番へ入る。
-  `dev/*` 側には master を取り込んで反映する。
-- 不要になったブランチ（`develop`、`release/*`、`production`、過去の `dev/7.*`）は、
-  Netlify の本番ブランチ設定が `master` であることを確かめてから削除する。
+- リリースのたびに必要だった release ブランチの作成と、本番からの戻しマージがなくなる（緊急修正のときだけ戻す）。
+- まとめ役の名前が `develop` に固定されるので、Dependabot の PR（`target-branch: develop`）や CI の対象に指定できる。
+  依存の更新は本番に直接入らず、次のリリースで一緒に出る。
+- 移行は次の順で行う（いずれも fast-forward で済む）。
+  1. master を production に取り込む（v7.1.0 時点の本番を production に揃える）
+  2. Netlify の本番ブランチを `production` に切り替える
+  3. dev/8.0.0 を develop に取り込む
+  4. GitHub の既定ブランチを `develop` に変える（Dependabot は既定ブランチの設定ファイルを読むので、
+     ここで初めて動き出す）
+  5. 不要になったブランチ（`master`、`release/*`、`dev/*`、マージ済みの作業ブランチ）を削除する
