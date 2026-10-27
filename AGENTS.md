@@ -103,18 +103,20 @@ git-flow を簡素化した運用（ADR 0006）。`master` / `release/*` / `dev/
 | `chore/#<issue番号>-<説明>` / `docs/#<issue番号>-<説明>` | 依存更新・設定・ドキュメント | `develop` → `develop` |
 
 - 作業ブランチは issue ごとに切り、Pull Request で `develop` にマージする。
-- リリースは `develop` → `production` の Pull Request で行い、Netlify のデプロイプレビューで確認してからマージする。
-  マージ後、production のマージコミットに `v<x.y.z>` のタグを付ける。
-- 緊急の修正は `production` から `fix/#<issue番号>` を切って production に直接マージする（パッチを1つ上げてタグを付ける）。
-  そのあと production を develop にマージして取り込む。
-- production と develop へは必ず Pull Request 経由でマージする（直接 push しない）。
+- リリースは `develop` → `production` の Pull Request で行い、Netlify のデプロイプレビューで確認してから
+  「Create a merge commit」でマージする。そのマージコミットに `v<x.y.z>` のタグを付ける。
+- 緊急の修正は `production` から `fix/#<issue番号>` を切り、production に「Create a merge commit」でマージする
+  （パッチを1つ上げてタグを付ける）。そのあと production → develop の Pull Request で取り込む。
+- production と develop へは必ず Pull Request 経由でマージする（GitHub のルールセット `protect` で
+  直接 push・force push・削除を禁止している）。
 
 ## 依存パッケージ・Node.js の更新
 
-- Node.js のバージョンは `.mise.toml` と `netlify.toml` の `NODE_VERSION` を同じパッチまで揃える。
-  `@types/node` のメジャーも Node のメジャーに合わせる。
+- Node.js のバージョンは `.mise.toml`（ローカル・CI が読む）と `netlify.toml` の `NODE_VERSION`（Netlify が読む）を
+  同じパッチまで揃え、CI と本番で同じ Node を使う。どちらも Dependabot の対象外なので手動で上げる。
+  `@types/node` のメジャーも Node のメジャーに合わせて手動で上げる（Dependabot ではメジャーを無視している）。
 - Dependabot（`.github/dependabot.yml`）が毎週月曜に npm の更新PRを `develop` 向けに出す。
-  minor / patch は `nuxt` 関連・devDependencies・dependencies の3グループにまとめ、メジャーは個別PRになる。
+  minor / patch は `nuxt` 関連・devDependencies・dependencies の3グループにまとめ、メジャーは個別PRになる（`@types/node` のメジャーは出さない）。
   GitHub Actions のバージョンも月1回、1つのPRにまとめて出す。本番には次のリリースで一緒に出る。
 - CI（`.github/workflows/ci.yml`）が、PR ごとと develop / production への push で `pnpm install --frozen-lockfile` /
   `pnpm typecheck` / `pnpm build` を回す。Dependabot のPRもこれが通っていればマージしてよい

@@ -20,9 +20,9 @@ jobs:
       - uses: actions/checkout@v7
       # pnpm のバージョンは package.json の packageManager から読む
       - uses: pnpm/action-setup@v6
-      # Node のバージョンは .mise.toml から読む（netlify.toml と揃えてある）
+      # Node のバージョンは .mise.toml から読む（netlify.toml と揃える規約は AGENTS.md「依存パッケージ・Node.js の更新」）
       - uses: jdx/mise-action@v5
       - run: pnpm install --frozen-lockfile
       - run: pnpm typecheck
-      # microCMS などのシークレットはビルドには不要（実行時にだけ使う）
+      # シークレットなしでもビルドは通る（microCMS のキーは実行時にだけ使う。GA_TRACKING_ID は未設定なら計測タグが無効になるだけ）
       - run: pnpm build
