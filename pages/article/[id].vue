@@ -10,6 +10,8 @@ const { data: content } = await useFetch<MicroCMSListContent & Article>(
   { query: { depth: 2 } }
 )
 
+const toJsonLd = (value: unknown) => JSON.stringify(value).replace(/</g, '\\u003c')
+
 useHead({
   title: computed(() => `${content.value?.title} - がじぇっとぐらし！`),
   meta: computed(() => [
@@ -20,7 +22,40 @@ useHead({
     { property: 'og:url', content: `https://gadgetgurashi.com/article/${content.value?.id}` },
     { property: 'og:image', content: content.value?.thumbnail?.url },
     { name: 'twitter:card', content: 'summary_large_image' },
-  ])
+  ]),
+  script: computed(() => {
+    if (!content.value) return []
+
+    const articleUrl = `https://gadgetgurashi.com/article/${content.value.id}`
+
+    return [
+      {
+        type: 'application/ld+json',
+        innerHTML: toJsonLd({
+          '@context': 'https://schema.org',
+          '@type': 'Article',
+          headline: content.value.title,
+          image: content.value.thumbnail?.url ? [content.value.thumbnail.url] : undefined,
+          datePublished: content.value.createdAt,
+          dateModified: content.value.revisedAt ?? content.value.createdAt,
+          author: { '@type': 'Organization', name: 'がじぇっとぐらし！' },
+          publisher: { '@type': 'Organization', name: 'がじぇっとぐらし！' },
+          mainEntityOfPage: { '@type': 'WebPage', '@id': articleUrl },
+        }),
+      },
+      {
+        type: 'application/ld+json',
+        innerHTML: toJsonLd({
+          '@context': 'https://schema.org',
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'TOP', item: 'https://gadgetgurashi.com' },
+            { '@type': 'ListItem', position: 2, name: content.value.title, item: articleUrl },
+          ],
+        }),
+      },
+    ]
+  }),
 })
 </script>
 
