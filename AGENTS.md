@@ -92,8 +92,22 @@ docs/adr/        アーキテクチャ決定記録（ADR）。フレームワー
 
 ## Git / ブランチ
 
-- `master` が本番。`develop` と作業ブランチ（`feature/*`, `fix/#<issue番号>`, `release/*`）を使う。
-- master へは Pull Request 経由でマージする。
+git-flow を簡素化した運用（ADR 0006）。`develop` / `release/*` / `production` は使わない。
+
+| ブランチ | 役割 | 切り元 → マージ先 |
+|---|---|---|
+| `master` | 本番（Netlify の本番デプロイ） | — |
+| `dev/<x.y.z>` | 次のリリースに入れる変更をまとめる | `master` → `master` |
+| `feature/#<issue番号>-<説明>` | 機能追加 | `dev/*` → `dev/*` |
+| `fix/#<issue番号>` | 不具合修正 | `dev/*` → `dev/*`（緊急時は `master` → `master`） |
+| `chore/#<issue番号>-<説明>` / `docs/#<issue番号>-<説明>` | 依存更新・設定・ドキュメント | `dev/*` → `dev/*` |
+
+- 作業ブランチは issue ごとに切り、Pull Request で `dev/*` にマージする。
+- リリースは `dev/<x.y.z>` → `master` の Pull Request で行い、Netlify のデプロイプレビューで確認してからマージする。
+  マージ後、master のマージコミットに `v<x.y.z>` のタグを付け、`dev/<x.y.z>` は削除する。
+- 緊急の修正は `master` から `fix/#<issue番号>` を切って master に直接マージする（パッチを1つ上げてタグを付ける）。
+  開発中の `dev/*` があれば、master をそちらにマージして取り込む。
+- master へは必ず Pull Request 経由でマージする（直接 push しない）。
 
 ## 依存パッケージ・Node.js の更新
 
