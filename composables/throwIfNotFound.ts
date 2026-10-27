@@ -6,7 +6,8 @@ import type { Ref } from 'vue';
 export const createNotFoundError = () => createError({ statusCode: 404, fatal: import.meta.client });
 
 // useFetchの失敗・空データをエラーページへ回す。
-// 何もしないと空のページが200で返り、soft 404としてインデックスに残る
+// 何もしないと空のページが200で返り、soft 404としてインデックスに残る。
+// 5xxをCDNにキャッシュさせない処理は server/plugins/no-store-on-error.ts で一括して行う
 export const throwIfNotFound = (
   error: Ref<{ statusCode?: number } | null | undefined>,
   data: Ref<unknown>,
@@ -15,10 +16,6 @@ export const throwIfNotFound = (
     const statusCode = error.value.statusCode ?? 500;
     if (statusCode === 404) {
       throw createNotFoundError();
-    }
-    // 一時的な障害をCDNにキャッシュさせない（キャッシュしてよいのは404だけ）
-    if (import.meta.server) {
-      useResponseHeader('Netlify-CDN-Cache-Control').value = 'no-store';
     }
     throw createError({ statusCode, fatal: true, cause: error.value });
   }

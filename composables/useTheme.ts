@@ -6,6 +6,7 @@ const STORAGE_KEY = 'theme';
 // 配色テーマの手動切り替え。未選択のあいだはOS設定に従う（CSS側の prefers-color-scheme）。
 // 選んだ結果は <html data-theme> に持ち、表示の出し分けは dark-mode mixin で行う
 // （サーバーはテーマを知らないので、テンプレートでは現在のテーマに依存させない）
+
 // startViewTransition のコールバック（DOMへの反映）は次のフレームで走る。
 // 反映前にもう一度押されたら、DOMではなくこちらを見て正しく反転させる
 let pending: Theme | null = null;

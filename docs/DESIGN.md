@@ -87,7 +87,7 @@ Claude Design で決定した方向性を実装に落とし込んだもの。
 （CMS）中の `<code>` インライン要素のみで、これは意図的な例外（コード表記の慣習に合わせるため）。
 
 日付・パンくず・タグ・eyebrowラベルなど「読ませる短いテキスト」は `@include label($color)` で
-Zen Maru Gothic 500 / 15px に統一する（ヘッダーナビと同じ扱い）。ただしカード内の日付・関連記事の
+Zen Maru Gothic 500 / 15px に統一する（フッターナビと同じ扱い）。ただしカード内の日付・関連記事の
 タグチップ・ページネーションの数字・フッターの著作権表記など、絶対的なスペースが小さいUI部品は
 `label` mixinを使いつつ `font-size` を12〜14px程度に個別調整してよい（`components/ArticleCard.vue`
 の `.card__date` / `.card__tag` 参照）。
@@ -147,7 +147,7 @@ H3は上64px＋上に1pxの罫線＋`padding-top: 32px`（下は`heading-3`の20
 片方だけ縦paddingで高さを決めると誤差でズレるため）。
 現在のページのリンクはオレンジ＋bold＋下に2pxのアクティブバー、非アクティブは `$color-nav-inactive`。
 
-フッターのHOME/ABOUTも同じ書体（Zen Maru Gothic 500）で統一（サイズはフッターだけ15px）。フッター本体（`.footer`）もヘッダーと同じく常に
+フッターのHOME/ABOUTも同じ書体（Zen Maru Gothic 500）で統一（サイズはPCではフッターだけ15px）。フッター本体（`.footer`）もヘッダーと同じく常に
 透明で、ロゴ（`.footer__brand`）・ナビ（`.footer__nav`）・著作権表記（`.footer__copyright`）を
 それぞれ独立した`$color-header-bg`のピルとして塗る（ヘッダーのピルと完全に同じ色・同じ目的＝
 背景パターンを隠すこと）。
@@ -208,7 +208,7 @@ SP（`$bp-sm`以下）は`content-card`の余白が0になるので、いずれ�
 ## カードとバッジのルール
 
 - 記事カード（`components/ArticleCard.vue`）は画像・タイトル・日付・タグ。`featured` のみ本文の抜粋も出す。
-  `compact`（RELATED）は日付を出さず、タグはリンクなしのチップ（`.card__tag`）にする
+  `compact`（RELATED）は日付を出さず、タグはリンクなしのチップ（`.card__tag`）にする。
   見た目は `variant`（`featured` / `default` / `compact`）で切り替え、別コンポーネントは作らない
 - `featured` / `default` は背景パターンを隠すため `content-block` で塗る（`compact`＝RELATEDの横並び行は塗らない）。
   **独自の色塗りやドロップシャドウは足さない**

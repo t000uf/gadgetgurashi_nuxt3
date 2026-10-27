@@ -21,19 +21,25 @@
   Netlify の CDN でキャッシュする。Nitro の Netlify preset がこれを
   `Netlify-CDN-Cache-Control: public, max-age=60, stale-while-revalidate=31536000, durable` に変換する
 - 下書きプレビュー（`/draft`・`/api/draft`）は `isr: false` で除外する。サイトマップ（`/sitemap.xml`）も、
-  @nuxtjs/sitemap が記事の取得に失敗しても空の一覧を 200 で返すため `isr: false` にする
+  @nuxtjs/sitemap が記事の取得に失敗しても記事の抜けた一覧を 200 で返すため `isr: false` にし、
+  モジュール自身のキャッシュも `sitemap.cacheMaxAgeSeconds: 0` で止める（既定の本番値 600 秒では、
+  関数のメモリと `Cache-Control: s-maxage=600` で失敗時の一覧が10分以上残る）
+- isr を有効にするとページのデータが `_payload.json` に切り出され、HTML と別々にキャッシュ・再生成される。
+  その取得失敗はブラウザで黙って無視されるため、`experimental.payloadExtraction: false` で HTML に埋め込む
 - API の個別の `Cache-Control` は削除し、microCMS 呼び出し（API プロキシ・下書き・RSS・サイトマップの URL 生成）を
-  `server/utils/microcms.ts` の `fetchMicroCMS` に集約する。microCMS の 404 は 404 のまま返し、
-  それ以外の失敗（401/403/429/5xx など）は 502 にまとめて `Netlify-CDN-Cache-Control: no-store` を付ける。
-  401/403 をそのまま返すと、APIキーの設定ミスでサイト全体が「存在しない」扱いになるため
-- ページ側も、404 以外でエラーページを返すときは同じく `no-store` にする（`composables/throwIfNotFound.ts`）。
-  キャッシュしてよいのは 404 だけ。トップページの見出し文（`/api/top`）は取得に失敗しても既定値で表示を続けるが、
-  そのページはキャッシュさせない
+  `server/utils/microcms.ts` の `fetchMicroCMS` に集約する。microCMS の 404・400 はそのまま返し、
+  それ以外の失敗（401/403/429/5xx・タイムアウト）は 502 にまとめる。401/403 は閲覧者側の問題ではなく
+  APIキーの失効など上流の失敗なので、そのまま返すと閲覧者やクローラーに誤ったステータスが伝わるため
+- 5xx のレスポンスは、Nitro の `error` フック（`server/plugins/no-store-on-error.ts`）で一括して
+  `Netlify-CDN-Cache-Control: no-store` にする。呼び出し側ごとに付けると、描画中の例外などで漏れるため。
+  4xx は同じ URL なら同じ結果になるのでキャッシュしてよい
+- トップページの見出し文・ヒーロー画像（`/api/top`）は取得に失敗しても既定値で表示を続けるが、
+  エラーではないのでフックを通らない。そのページは `pages/index.vue` で個別に `no-store` にする
 
 ## 影響
 
 - 初回アクセス・クローラーも含めて、60 秒以内の同じ URL へのリクエストは関数を起動せず CDN から返る
 - 60 秒を過ぎた後のリクエストは古いレスポンスを即座に返し、裏で再生成する。CMS の更新は
   最大で「60 秒＋次の 1 リクエスト」遅れて反映される。デプロイ時はキャッシュが破棄される
-- ブラウザ側には `Cache-Control: public, max-age=0, must-revalidate` が付く（ブラウザにはキャッシュさせない）
+- isr の対象ルートでは、ブラウザ側に `Cache-Control: public, max-age=0, must-revalidate` が付く（ブラウザにはキャッシュさせない）
 - 新しくキャッシュしてはいけないルート（プレビュー系・認証系）を作るときは、`routeRules` に `isr: false` を足すこと

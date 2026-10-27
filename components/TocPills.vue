@@ -12,7 +12,7 @@ const rowRef = ref<HTMLElement>()
 
 const activeIds = computed(() => activeTocIds(props.toc, props.activeId))
 
-// h4は親のh3が現在地のときだけ出す（普段はh3だけの一覧）。
+// h4は親のh3が現在地のときだけ出す（普段はh2・h3だけの一覧）。
 // 親を持たないh4は畳む相手がいないので常に出す
 const visiblePills = computed(() => {
   return props.toc.filter((item) => {

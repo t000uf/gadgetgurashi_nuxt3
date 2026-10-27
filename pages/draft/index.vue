@@ -5,7 +5,7 @@ import type { MicroCMSListContent } from 'microcms-js-sdk'
 const route = useRoute()
 
 const content = ref<(MicroCMSListContent & Article) | null>(null)
-// 取得できなかった理由。URLの誤り（id・draftKeyの不足や不一致）とそれ以外（microCMSの障害など）で
+// 取得できなかった理由。URLの誤り（id・draftKeyの不足、microCMSが400/404を返した場合）とそれ以外（障害など）で
 // 案内を変える。障害なのにURLの確認を促すと、正しいURLを何度も確かめ直すことになる
 const failure = ref<'invalid-url' | 'unavailable' | null>(null)
 

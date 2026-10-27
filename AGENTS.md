@@ -34,18 +34,19 @@ pnpm lint       # ⚠️ 現状動かない（後述）
 | `MICROCMS_API_KEY` | microCMS の APIキー |
 | `GA_TRACKING_ID` | Google Analytics |
 
-APIキーはクライアントに出さないため、microCMS へのアクセスは必ず `server/api/**` のプロキシ経由で行う。
+APIキーはクライアントに出さないため、microCMS へのアクセスは必ずサーバー側（`server/api/**`・`server/routes/**`）で行う。
 ページからは `useFetch('/api/article')` のように自前のAPIを叩くこと。
-新しいプロキシは `server/utils/microcms.ts` の `fetchMicroCMS` を使う。
+サーバー側から microCMS を呼ぶときは、必ず `server/utils/microcms.ts` の `fetchMicroCMS` を使う
+（エラー時のステータスの変換・ログ・タイムアウトをまとめている）。
 
 ページで `useFetch` したら `throwIfNotFound(error, data)` を呼ぶ。取得失敗や該当なしを
 そのまま描画すると、空のページが200で返り soft 404 になる。
 例外は既定値で表示を続けられるトップの `useTopContent` だけで、失敗時は `no-store` を付けるにとどめている
-（`throwIfNotFound` を足すと、見出し文の取得失敗でトップページ全体がエラーになる）。
+（`throwIfNotFound` を足すと、見出し文・ヒーロー画像の取得失敗でトップページ全体がエラーになる）。
 
 キャッシュは `nuxt.config.ts` の `routeRules`（Netlify の `isr`）で一括管理する（ADR 0005）。
 APIに `Cache-Control` を個別に付けない。プレビュー系など、キャッシュしてはいけないルートは
-`isr: false` を足す。
+`isr: false` を足す。5xx を CDN に残さない処理は `server/plugins/no-store-on-error.ts` で一括して行う。
 
 ## ディレクトリ
 
@@ -57,6 +58,8 @@ composables/     useDate / useArticleMeta / useArticleShare / useScrollTop / use
 layouts/         default（記事・一覧）、home（トップ：ヒーロー付き）
 pages/           index / page/[p] / article/[id] / article/about / tag/[tagId]/page/[p] / draft
 server/api/      microCMS プロキシ、sitemap のURL生成
+server/routes/   RSS（rss.xml）
+server/plugins/  5xx を CDN にキャッシュさせない処理
 server/utils/    microCMS 呼び出しの共通処理（fetchMicroCMS）
 types/           microCMS のレスポンス型
 docs/DESIGN.md   デザインシステム（v8リブランディング）
