@@ -1,6 +1,6 @@
 ---
 name: resolve-dependabot
-description: Dependabot が develop 向けに出した依存更新PRを棚卸しし、コンフリクト解消（@dependabot rebase）・CI確認・メジャー更新の影響調査を行ったうえで、ユーザーの承認を得て1件ずつマージする。「dependabot のPRを片付けて」「依存更新PRを解決」「dependabot マージ」などで使う。
+description: Dependabot が develop 向けに出した依存更新PRを棚卸しし、コンフリクト解消（@dependabot rebase）・CI確認を行ったうえで、ユーザーの承認を得て1件ずつマージする。「dependabot のPRを片付けて」「依存更新PRを解決」「dependabot マージ」などで使う。
 ---
 
 # Dependabot PR の解決
@@ -17,7 +17,9 @@ description: Dependabot が develop 向けに出した依存更新PRを棚卸し
 - `pnpm dev` をポート 3000 で起動しない（ユーザーの手動確認用）。ローカルで動かすなら `pnpm build` → `PORT=3100 pnpm preview`。
 - ローカルの `pnpm` は Volta 経由で Volta 側の古い Node（`.mise.toml` と違う）で動くことがあり、`ERR_PNPM_UNSUPPORTED_ENGINE` になったり lockfile の依存解決がずれたりする。
   ローカルで pnpm を叩くときは `mise exec -- npx -y pnpm@<package.json の packageManager の版> <コマンド>` を使い、`pnpm exec node -v` が `.mise.toml` の版になっていることを確かめる。
-- Node.js 本体と `@types/node` のメジャーは Dependabot の対象外（手動更新）。このスキルでは扱わない。
+- npm のメジャーは動作検証が必要なので Dependabot では出さない設定（`ignore` の `"*"` / semver-major）。
+  Node.js 本体も Dependabot の対象外。どちらも手動で上げるもので、このスキルでは扱わない
+  （設定前に出ていたメジャーPRが残っている場合だけ、下の「メジャー更新の調査」で扱う）。
 
 ## 手順
 
@@ -34,7 +36,7 @@ gh pr list --author app/dependabot --state open \
 gh pr view <n> --json title,body,files,mergeable,mergeStateStatus,statusCheckRollup
 ```
 
-- 種別: `nuxt` / `dev-dependencies` / `dependencies` グループ（minor・patch）か、個別PR（**メジャー**）か、`github-actions` か
+- 種別: `nuxt` / `dev-dependencies` / `dependencies` グループ（minor・patch）か、`github-actions` か、（残っていれば）個別のメジャーPRか
 - 状態: `mergeable`（`CONFLICTING` / `MERGEABLE`）、CI（`statusCheckRollup` の `build`）
 - メジャーなら更新前後のバージョン（PR本文の Release notes / Changelog / Commits を読む）
 
@@ -59,7 +61,7 @@ gh pr comment <n> --body "@dependabot rebase"
 |---|---|
 | minor / patch のグループ（nuxt / dev-dependencies / dependencies） | CI（`pnpm install --frozen-lockfile` / `typecheck` / `build`）が緑ならマージ候補 |
 | github-actions のグループ | CI が緑ならマージ候補。メジャーが含まれる場合は入力値・非推奨の変更を release notes で確認 |
-| メジャー（個別PR） | 下の「メジャー更新の調査」を行ってから判断 |
+| メジャー（設定前に出ていた個別PR） | 下の「メジャー更新の調査」を行ってから判断 |
 
 #### メジャー更新の調査
 
@@ -88,8 +90,8 @@ gh pr comment <n> --body "@dependabot rebase"
 | PR | 内容 | 種別 | CI | 判定 | 補足 |
 |---|---|---|---|---|---|
 | #48 | dev-dependencies 3件 | minor/patch | ✅ | マージ可 | |
-| #50 | nuxt-gtag 4→5 | メジャー | ✅ | 要確認 | 破壊的変更: … / プレビュー確認待ち |
-| #51 | sass-loader 13→17 | メジャー | ✅ | 削除提案 | 未使用 |
+| #49 | dependencies 2件 | minor/patch | ⏳ | rebase 待ち | |
+| #57 | github-actions 2件 | Actions（メジャー含む） | ✅ | 要確認 | `actions/checkout` の入力値変更: … |
 
 ### 5. マージ
 
@@ -101,8 +103,9 @@ gh pr merge <n> --merge
 ```
 
 マージしたら、残りのPRについて手順2（rebase 依頼）→ CI 確認 → マージを繰り返す。
-見送るPRは理由をコメントして閉じる（`@dependabot ignore this major version` などで以後の提案も止められる）。
-削除することにした依存は、issue を立てて `chore/#<issue番号>-<説明>` で `package.json` から外し、Dependabot PR は閉じる。
+見送るPRは理由をコメントして閉じる（`@dependabot ignore this minor version` などで以後の提案も止められる）。
+削除することにした依存は、issue を立てて `chore/#<issue番号>-<説明>` で `package.json` から外す
+（その依存の Dependabot PR は、マージ後に Dependabot が自動で閉じる）。
 
 ### 6. 後片付け
 

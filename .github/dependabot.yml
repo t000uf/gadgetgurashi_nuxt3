@@ -11,7 +11,6 @@ updates:
     # 公開直後のバージョンは PR にしない（乗っ取られたパッケージの配布や、すぐ取り下げられる不具合版を避ける）
     # セキュリティアップデートには適用されない
     cooldown:
-      semver-major-days: 14
       semver-minor-days: 7
       semver-patch-days: 3
     commit-message:
@@ -40,8 +39,9 @@ updates:
           - minor
           - patch
     ignore:
-      # @types/node のメジャーは Node 本体（.mise.toml / netlify.toml）のメジャーに合わせて手動で上げる
-      - dependency-name: "@types/node"
+      # メジャーは動作検証が必要なので PR を出さず、手動で上げる
+      # （@types/node のメジャーは Node 本体（.mise.toml / netlify.toml）のメジャーに合わせる）
+      - dependency-name: "*"
         update-types:
           - version-update:semver-major
 
