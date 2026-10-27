@@ -1,0 +1,54 @@
+version: 2
+updates:
+  - package-ecosystem: npm # pnpm-lock.yaml も更新される
+    directory: /
+    target-branch: develop
+    schedule:
+      interval: weekly
+      day: monday
+      timezone: Asia/Tokyo
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: chore
+      include: scope
+    groups:
+      # Nuxt 本体・公式／周辺モジュールは同時に上げないと噛み合わないことがあるのでまとめる
+      # （先に一致したグループが優先されるので、@nuxtjs/eslint-config* もここに入る）
+      nuxt:
+        patterns:
+          - nuxt
+          - "@nuxt/*"
+          - "@nuxtjs/*"
+          - nuxt-*
+        update-types:
+          - minor
+          - patch
+      dev-dependencies:
+        dependency-type: development
+        update-types:
+          - minor
+          - patch
+      dependencies:
+        dependency-type: production
+        update-types:
+          - minor
+          - patch
+    ignore:
+      # @types/node のメジャーは Node 本体（.mise.toml / netlify.toml）のメジャーに合わせて手動で上げる
+      - dependency-name: "@types/node"
+        update-types:
+          - version-update:semver-major
+
+  - package-ecosystem: github-actions
+    directory: /
+    target-branch: develop
+    schedule:
+      interval: monthly
+      timezone: Asia/Tokyo
+    commit-message:
+      prefix: chore
+      include: scope
+    groups:
+      github-actions:
+        patterns:
+          - "*"
