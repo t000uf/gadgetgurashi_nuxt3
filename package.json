@@ -22,7 +22,7 @@
         "vue-tsc": "^3.3.13"
     },
     "dependencies": {
-        "@nuxtjs/sitemap": "^8.0.11",
+        "@nuxtjs/sitemap": "^8.6.2",
         "microcms-js-sdk": "^3.6.0",
         "nuxt-gtag": "^5.0.0",
         "sass": "^1.106.1"
