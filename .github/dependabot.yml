@@ -8,6 +8,12 @@ updates:
       day: monday
       timezone: Asia/Tokyo
     open-pull-requests-limit: 5
+    # 公開直後のバージョンは PR にしない（乗っ取られたパッケージの配布や、すぐ取り下げられる不具合版を避ける）
+    # セキュリティアップデートには適用されない
+    cooldown:
+      semver-major-days: 14
+      semver-minor-days: 7
+      semver-patch-days: 3
     commit-message:
       prefix: chore
       include: scope
@@ -45,6 +51,8 @@ updates:
     schedule:
       interval: monthly
       timezone: Asia/Tokyo
+    cooldown:
+      default-days: 7
     commit-message:
       prefix: chore
       include: scope

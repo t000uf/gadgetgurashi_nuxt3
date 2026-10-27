@@ -118,9 +118,11 @@ git-flow を簡素化した運用（ADR 0006）。`master` / `release/*` / `dev/
 - Dependabot（`.github/dependabot.yml`）が毎週月曜に npm の更新PRを `develop` 向けに出す。
   minor / patch は `nuxt` 関連・devDependencies・dependencies の3グループにまとめ、メジャーは個別PRになる（`@types/node` のメジャーは出さない）。
   GitHub Actions のバージョンも月1回、1つのPRにまとめて出す。本番には次のリリースで一緒に出る。
+  公開直後のバージョンは cooldown で見送る（npm はメジャー14日・マイナー7日・パッチ3日、Actions は7日。セキュリティアップデートは対象外）。
 - CI（`.github/workflows/ci.yml`）が、PR ごとと develop / production への push で `pnpm install --frozen-lockfile` /
   `pnpm typecheck` / `pnpm build` を回す。Dependabot のPRもこれが通っていればマージしてよい
   （ランタイムの挙動が変わりうるメジャー更新は、Netlify のデプロイプレビューでも確認する）。
+  Claude Code では `/resolve-dependabot`（`.claude/skills/resolve-dependabot/SKILL.md`）で、棚卸し・rebase・検証・マージを一通り行える。
 
 ## 既知の問題
 
