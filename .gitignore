@@ -8,3 +8,6 @@ node_modules
 dist
 .DS_Store
 .yarn/install-state.gz
+
+# Claude Code の個人設定（スキルなど .claude/ のほかのファイルはコミットする）
+.claude/settings.local.json
