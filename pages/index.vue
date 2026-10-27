@@ -7,7 +7,12 @@ definePageMeta({
 
 const limit = 10
 
-const { data: top } = await useTopContent()
+// 見出し文・ヒーロー画像は既定値で表示を続けるので、エラーページにはしない。
+// ただし既定値のままのページをCDNに残さないよう、失敗時はキャッシュさせない
+const { data: top, error: topError } = await useTopContent()
+if (import.meta.server && topError.value) {
+  useResponseHeader('Netlify-CDN-Cache-Control').value = 'no-store'
+}
 
 const { data, error } = await useFetch<MicroCMSList<Article>>('/api/article', {
   query: { limit }
@@ -47,7 +52,7 @@ const pager = computed(() =>
   width: 100%;
 }
 
-// 背景パターン（layouts/home.vue）の上に乗るブロックは、パターンを完全に隠すよう
+// 背景パターン（layouts/home.vue）の上に乗るブロックは、パターンが目立たないよう
 // content-blockで塗る。ブロック同士の余白ではパターンが見える
 .intro {
   @include content-card(28px, 20px 0);

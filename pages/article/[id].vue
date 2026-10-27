@@ -14,12 +14,15 @@ const shareUrl = computed(() => `https://gadgetgurashi.com/article/${content.val
 const shareTitle = computed(() => `${content.value?.title ?? ''} - がじぇっとぐらし！`)
 
 const articleShare = useArticleShare()
+let written: ArticleShare | null = null
 watchEffect(() => {
-  articleShare.value = content.value ? { url: shareUrl.value, title: shareTitle.value } : null
+  written = content.value ? { url: shareUrl.value, title: shareTitle.value } : null
+  articleShare.value = written
 })
-// 記事→記事の遷移では次のページのsetupが先に走るので、自分が書いた値のときだけ消す
+// 記事→記事の遷移では次のページのsetupが先に走るので、自分が書いた値のときだけ消す。
+// shareUrlと比べないのは、離れる時点でuseFetchのデータが破棄され、URLが変わっていることがあるため
 onUnmounted(() => {
-  if (articleShare.value?.url === shareUrl.value) articleShare.value = null
+  if (written && toRaw(articleShare.value) === written) articleShare.value = null
 })
 
 const toJsonLd = (value: unknown) => JSON.stringify(value).replace(/</g, '\\u003c')

@@ -1,16 +1,11 @@
-export default defineSitemapEventHandler(async () => {
+export default defineSitemapEventHandler(async (event) => {
   const fetchAll = async (endpoint: string) => {
     const limit = 100;
     let offset = 0;
     let allContents: any[] = [];
 
     while (true) {
-      const data = await $fetch<any>(
-        `https://${process.env.MICROCMS_SERVICE_DOMAIN}.microcms.io/api/v1/${endpoint}?limit=${limit}&offset=${offset}&fields=id`,
-        {
-          headers: { 'X-MICROCMS-API-KEY': process.env.MICROCMS_API_KEY ?? '' },
-        },
-      );
+      const data = await fetchMicroCMS<any>(event, endpoint, { limit, offset, fields: 'id' });
       allContents = [...allContents, ...data.contents];
       if (allContents.length >= data.totalCount) break;
       offset += limit;

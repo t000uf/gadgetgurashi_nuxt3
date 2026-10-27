@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-// SP・タブレット用: 画面下部に固定するバー。閉じている間は全見出しを横スクロールのピル列で示し、
+// SP・タブレット用: 画面下部に固定するバー。閉じている間はh3を中心とした見出しを横スクロールのピル列で示し、
 // ハンドルをタップすると全見出しが上方向に開く。
 // position: fixed を使うため、backdrop-filterを持つ記事カードの中ではなく
 // レイアウト直下（NavButtonと同じ階層）に置くこと
@@ -55,9 +55,10 @@ const handlePointerDown = (e: PointerEvent) => {
   if (!containerRef.value?.contains(e.target as Node)) close()
 }
 
-// 開いたままバーがしまわれると、画面外に一覧が残ったままになる
-watch(() => state.value.isInBody, (isInBody) => {
-  if (!isInBody) close()
+// 開いている間はスクロールを止めているが、リサイズや記事の差し替えでバーがしまわれることはある。
+// そのとき開いたままだと、画面外に一覧が残ってしまう
+watch(() => state.value.isBeforeBodyEnd, (isBeforeBodyEnd) => {
+  if (!isBeforeBodyEnd) close()
 })
 
 // 開いている間は背景のスクロールを止める（ドロワーとして扱う）。止めないと、一覧を送る指の動きや
@@ -72,7 +73,7 @@ const removeOpenListeners = () => {
   lockPageScroll(false)
 }
 
-// 開いている間だけ、Escapeキー・外側のタップで閉じる
+// 開いている間だけ背景のスクロールを止め、Escapeキー・外側のタップで閉じる
 watch(isOpen, (open) => {
   if (open) {
     document.addEventListener('keydown', handleKeydown)
@@ -88,8 +89,8 @@ onUnmounted(removeOpenListeners)
 
 <template>
   <!-- しまっている間は画面外でもTabで入れてしまうのでinertで外す -->
-  <div v-if="state.toc.length" ref="containerRef" class="toc-bar" :class="{ 'is-hidden': !state.isInBody }"
-    :inert="!state.isInBody">
+  <div v-if="state.toc.length" ref="containerRef" class="toc-bar" :class="{ 'is-hidden': !state.isBeforeBodyEnd }"
+    :inert="!state.isBeforeBodyEnd">
     <button type="button" class="toc-bar__handle" :aria-expanded="isOpen" aria-controls="toc-bar-list"
       :aria-label="isOpen ? 'もくじを閉じる' : 'もくじを開く'" @click="toggle" @pointerdown="onHandlePointerDown"
       @pointermove="onHandlePointerMove" @pointerup="onHandlePointerUp" @pointercancel="onHandlePointerUp" />

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 // PC用: サイドバー(広告の上)に置く目次。閉じている間は現在地をピル列で示し、
-// 見出しタップで全見出しの一覧を開く（仕組みはSPのバーと同じ）
+// 右下のトグルボタンで全見出しの一覧を開く（仕組みはSPのバーと同じ）
 const state = useTocState()
 const isOpen = ref(false)
 

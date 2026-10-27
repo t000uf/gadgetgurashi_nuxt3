@@ -125,7 +125,7 @@ const thumbnail = computed(() => thumbnailUrl(props.content.thumbnail?.url, thum
 }
 
 // featured / default は背景パターン（layouts/home.vue）の上に乗るブロック。
-// 画像とテキストをまとめてcontent-block（半透明＋すりガラス）で塗り、パターンを隠す
+// 画像とテキストをまとめてcontent-block（半透明＋すりガラス）で塗り、パターンをほぼ隠す
 // （compactは記事詳細ページのRELATED欄で使う横並び行のため対象外）
 .card--featured,
 .card--default {

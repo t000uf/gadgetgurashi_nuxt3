@@ -17,7 +17,7 @@ export type TocState = {
    * 本文をまだ読み終えていないか（本文より上にいる間も含む）。
    * 読み終えた後はフッターや関連記事を隠さないようバーを引っ込める
    */
-  isInBody: boolean
+  isBeforeBodyEnd: boolean
 }
 
 // 記事タイトル(ArticleDetailのh1)のid。最初の見出しより上にいる間は
@@ -28,7 +28,7 @@ const emptyTocState = (): TocState => ({
   title: '',
   toc: [],
   activeId: TOC_TITLE_ID,
-  isInBody: true,
+  isBeforeBodyEnd: true,
 })
 
 // バーの高さぶん。本文の下端がここまで上がったら読み終えたとみなす
@@ -93,7 +93,7 @@ export const useToc = (
         }
       })
 
-    state.value = { title: title.value ?? '', toc, activeId: TOC_TITLE_ID, isInBody: true }
+    state.value = { title: title.value ?? '', toc, activeId: TOC_TITLE_ID, isBeforeBodyEnd: true }
     if (toc.length === 0) return
 
     // 本文の下端を通り過ぎたらバーを引っ込める（下端をバーの高さぶん切り上げて判定する）。
@@ -105,7 +105,7 @@ export const useToc = (
           entries.forEach((entry) => {
             const viewportBottom = entry.rootBounds?.bottom ?? window.innerHeight - BAR_CLEARANCE
             const isBeforeBody = entry.boundingClientRect.top >= viewportBottom
-            state.value = { ...state.value, isInBody: entry.isIntersecting || isBeforeBody }
+            state.value = { ...state.value, isBeforeBodyEnd: entry.isIntersecting || isBeforeBody }
           })
         },
         { rootMargin: `0px 0px -${BAR_CLEARANCE}px 0px` },

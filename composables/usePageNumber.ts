@@ -2,7 +2,7 @@
 export const usePageNumber = () => {
   const page = Number(useRoute().params.p ?? 1);
   if (!Number.isInteger(page) || page < 1) {
-    throw createError({ statusCode: 404, fatal: true });
+    throw createNotFoundError();
   }
   return page;
 };

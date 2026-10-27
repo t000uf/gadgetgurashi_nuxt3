@@ -6,7 +6,7 @@ const hasToc = computed(() => tocState.value.toc.length > 0)
 
 // 目次バーが出ている間は、そこの読了リング付き↑が役割を担うのでこちらは出さない。
 // 本文を読み終えてバーがしまわれたら、関連記事やフッターで戻る手段が無くなるため復帰させる
-const isTocBarVisible = computed(() => hasToc.value && tocState.value.isInBody)
+const isTocBarVisible = computed(() => hasToc.value && tocState.value.isBeforeBodyEnd)
 
 const buttonActive = ref(false)
 

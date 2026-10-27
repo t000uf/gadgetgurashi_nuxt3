@@ -11,8 +11,11 @@ export const useDate = () => {
   /** 2026.08.14 形式（カード・記事メタ情報） */
   const formatDot = (date: string | undefined) => {
     if (!date) return '';
+    const parsed = new Date(date);
+    // formatToParts は不正な日付で例外を投げ、SSRごと500になるので空にする
+    if (Number.isNaN(parsed.getTime())) return '';
     const parts = Object.fromEntries(
-      dateFormatter.formatToParts(new Date(date)).map((part) => [part.type, part.value]),
+      dateFormatter.formatToParts(parsed).map((part) => [part.type, part.value]),
     );
     return `${parts.year}.${parts.month}.${parts.day}`;
   };

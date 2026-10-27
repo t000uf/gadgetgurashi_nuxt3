@@ -40,6 +40,8 @@ APIキーはクライアントに出さないため、microCMS へのアクセ�
 
 ページで `useFetch` したら `throwIfNotFound(error, data)` を呼ぶ。取得失敗や該当なしを
 そのまま描画すると、空のページが200で返り soft 404 になる。
+例外は既定値で表示を続けられるトップの `useTopContent` だけで、失敗時は `no-store` を付けるにとどめている
+（`throwIfNotFound` を足すと、見出し文の取得失敗でトップページ全体がエラーになる）。
 
 キャッシュは `nuxt.config.ts` の `routeRules`（Netlify の `isr`）で一括管理する（ADR 0005）。
 APIに `Cache-Control` を個別に付けない。プレビュー系など、キャッシュしてはいけないルートは

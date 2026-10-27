@@ -9,9 +9,17 @@ const { current, toggle } = useTheme()
 
 // 支援技術向けのオン／オフ（オン＝ダーク）。SSR時点では分からないので、マウントまでは出さない
 const isDark = ref<boolean>()
-onMounted(() => {
+const sync = () => {
   isDark.value = current() === 'dark'
+}
+// 手動で選んでいない間は、OSの配色の切り替えで見た目（CSS）が変わるので追従させる
+let colorScheme: MediaQueryList | undefined
+onMounted(() => {
+  sync()
+  colorScheme = window.matchMedia('(prefers-color-scheme: dark)')
+  colorScheme.addEventListener('change', sync)
 })
+onUnmounted(() => colorScheme?.removeEventListener('change', sync))
 const onClick = () => {
   isDark.value = toggle() === 'dark'
 }
