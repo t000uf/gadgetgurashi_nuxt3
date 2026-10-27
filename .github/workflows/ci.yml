@@ -1,0 +1,28 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [master]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      # pnpm のバージョンは package.json の packageManager から読む
+      - uses: pnpm/action-setup@v6
+      # Node のバージョンは .mise.toml から読む（netlify.toml と揃えてある）
+      - uses: jdx/mise-action@v5
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      # microCMS などのシークレットはビルドには不要（実行時にだけ使う）
+      - run: pnpm build

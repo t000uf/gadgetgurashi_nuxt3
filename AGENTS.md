@@ -101,8 +101,11 @@ docs/adr/        アーキテクチャ決定記録（ADR）。フレームワー
   `@types/node` のメジャーも Node のメジャーに合わせる。
 - Dependabot（`.github/dependabot.yml`）が毎週月曜に npm の更新PRを出す。向き先は既定ブランチ（`master`）。
   minor / patch は `nuxt` 関連・devDependencies・dependencies の3グループにまとめ、メジャーは個別PRになる。
-- Dependabot のPRはマージ前にブランチを手元に取り、`pnpm install` / `pnpm typecheck` / `pnpm build` が
-  通ることを確認する。開発中のリリースブランチ（`dev/*`）があるときは、そちらに取り込んでから master に上げてもよい。
+  GitHub Actions のバージョンも月1回、1つのPRにまとめて出す。
+- CI（`.github/workflows/ci.yml`）が、PR ごとと master への push で `pnpm install --frozen-lockfile` /
+  `pnpm typecheck` / `pnpm build` を回す。Dependabot のPRもこれが通っていればマージしてよい
+  （ランタイムの挙動が変わりうるメジャー更新は、Netlify のデプロイプレビューでも確認する）。
+  開発中のリリースブランチ（`dev/*`）があるときは、そちらに取り込んでから master に上げてもよい。
 
 ## 既知の問題
 
