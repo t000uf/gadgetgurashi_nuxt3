@@ -13,7 +13,7 @@
     "devDependencies": {
         "@nuxtjs/eslint-config": "^12.0.0",
         "@nuxtjs/eslint-config-typescript": "^12.0.0",
-        "@types/node": "^20.19.37",
+        "@types/node": "^24.19.2",
         "@volar/typescript": "^2.4.28",
         "eslint": "^10.1.0",
         "eslint-config-prettier": "^10.1.8",

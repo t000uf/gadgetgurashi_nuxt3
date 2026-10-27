@@ -95,6 +95,15 @@ docs/adr/        アーキテクチャ決定記録（ADR）。フレームワー
 - `master` が本番。`develop` と作業ブランチ（`feature/*`, `fix/#<issue番号>`, `release/*`）を使う。
 - master へは Pull Request 経由でマージする。
 
+## 依存パッケージ・Node.js の更新
+
+- Node.js のバージョンは `.mise.toml` と `netlify.toml` の `NODE_VERSION` を同じパッチまで揃える。
+  `@types/node` のメジャーも Node のメジャーに合わせる。
+- Dependabot（`.github/dependabot.yml`）が毎週月曜に npm の更新PRを出す。向き先は既定ブランチ（`master`）。
+  minor / patch は `nuxt` 関連・devDependencies・dependencies の3グループにまとめ、メジャーは個別PRになる。
+- Dependabot のPRはマージ前にブランチを手元に取り、`pnpm install` / `pnpm typecheck` / `pnpm build` が
+  通ることを確認する。開発中のリリースブランチ（`dev/*`）があるときは、そちらに取り込んでから master に上げてもよい。
+
 ## 既知の問題
 
 - `pnpm lint` が動かない。ESLint 10 は flat config（`eslint.config.js`）必須だが、設定は `.eslintrc` のまま。
