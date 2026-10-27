@@ -13,8 +13,11 @@ export type TocState = {
   title: string
   toc: TocItem[]
   activeId: string
-  /** 本文を読んでいる最中か。読み終えた後はフッターや関連記事を隠さないようバーを引っ込める */
-  isInBody: boolean
+  /**
+   * 本文をまだ読み終えていないか（本文より上にいる間も含む）。
+   * 読み終えた後はフッターや関連記事を隠さないようバーを引っ込める
+   */
+  isBeforeBodyEnd: boolean
 }
 
 // 記事タイトル(ArticleDetailのh1)のid。最初の見出しより上にいる間は
@@ -25,13 +28,13 @@ const emptyTocState = (): TocState => ({
   title: '',
   toc: [],
   activeId: TOC_TITLE_ID,
-  isInBody: true,
+  isBeforeBodyEnd: true,
 })
 
 // バーの高さぶん。本文の下端がここまで上がったら読み終えたとみなす
 const BAR_CLEARANCE = 100
 
-// ArticleDetail(本文)とSideBar(PC目次)は別コンポーネントツリーなので、
+// ArticleDetail(本文)と目次（SideBarのPC目次・SPのバー）・NavButtonは別コンポーネントツリーなので、
 // useStateでSSR安全に共有する（モジュールスコープのrefだとリクエスト間で状態が漏れる）
 export const useTocState = () => useState<TocState>('toc', emptyTocState)
 
@@ -90,15 +93,19 @@ export const useToc = (
         }
       })
 
-    state.value = { title: title.value ?? '', toc, activeId: TOC_TITLE_ID, isInBody: true }
+    state.value = { title: title.value ?? '', toc, activeId: TOC_TITLE_ID, isBeforeBodyEnd: true }
     if (toc.length === 0) return
 
-    // 本文の下端を通り過ぎたらバーを引っ込める（下端をバーの高さぶん切り上げて判定する）
+    // 本文の下端を通り過ぎたらバーを引っ込める（下端をバーの高さぶん切り上げて判定する）。
+    // 交差だけで判定すると、アイキャッチやタイトルが長く本文が画面外から始まる記事でだけ
+    // ページトップでバーが隠れてしまうので、本文がまだ画面より下にある間も「読み終えていない」とする
     if (body.value) {
       bodyObserver = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
-            state.value = { ...state.value, isInBody: entry.isIntersecting }
+            const viewportBottom = entry.rootBounds?.bottom ?? window.innerHeight - BAR_CLEARANCE
+            const isBeforeBody = entry.boundingClientRect.top >= viewportBottom
+            state.value = { ...state.value, isBeforeBodyEnd: entry.isIntersecting || isBeforeBody }
           })
         },
         { rootMargin: `0px 0px -${BAR_CLEARANCE}px 0px` },
@@ -116,7 +123,7 @@ export const useToc = (
       { rootMargin: '-100px 0px -70% 0px' },
     )
 
-    // 記事タイトルも観測対象に加える。最初のh2/h3より上にいる間はタイトルがハイライトされる
+    // 記事タイトルも観測対象に加える。最初の見出しより上にいる間はタイトルがハイライトされる
     ;[TOC_TITLE_ID, ...toc.map((item) => item.id)].forEach((id) => {
       const el = document.getElementById(id)
       if (el) observer?.observe(el)

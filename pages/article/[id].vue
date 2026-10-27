@@ -3,32 +3,38 @@ import type { MicroCMSListContent } from 'microcms-js-sdk'
 import type { Article } from '@/types'
 
 const route = useRoute()
-const { data: content } = await useFetch<MicroCMSListContent & Article>(
+const { data: content, error } = await useFetch<MicroCMSListContent & Article>(
   `/api/article/${route.params.id}`,
   { query: { depth: 2 } }
 )
+throwIfNotFound(error, content)
 
-const shareUrl = computed(() => `https://gadgetgurashi.com/article/${content.value?.id}/`)
+// og:url・JSON-LD・サイトマップと同じく末尾スラッシュなしに揃える（canonicalを分裂させない）
+const shareUrl = computed(() => `https://gadgetgurashi.com/article/${content.value?.id}`)
 const shareTitle = computed(() => `${content.value?.title ?? ''} - がじぇっとぐらし！`)
 
 const articleShare = useArticleShare()
+let written: ArticleShare | null = null
 watchEffect(() => {
-  articleShare.value = content.value ? { url: shareUrl.value, title: shareTitle.value } : null
+  written = content.value ? { url: shareUrl.value, title: shareTitle.value } : null
+  articleShare.value = written
 })
+// 記事→記事の遷移では次のページのsetupが先に走るので、自分が書いた値のときだけ消す。
+// shareUrlと比べないのは、離れる時点でuseFetchのデータが破棄され、URLが変わっていることがあるため
 onUnmounted(() => {
-  articleShare.value = null
+  if (written && toRaw(articleShare.value) === written) articleShare.value = null
 })
 
 const toJsonLd = (value: unknown) => JSON.stringify(value).replace(/</g, '\\u003c')
 
 useHead({
-  title: computed(() => `${content.value?.title} - がじぇっとぐらし！`),
+  title: shareTitle,
   meta: computed(() => [
     { name: 'description', content: content.value?.preview },
     { property: 'og:type', content: 'blog' },
-    { property: 'og:title', content: `${content.value?.title} - がじぇっとぐらし！` },
+    { property: 'og:title', content: shareTitle.value },
     { property: 'og:description', content: content.value?.preview },
-    { property: 'og:url', content: `https://gadgetgurashi.com/article/${content.value?.id}` },
+    { property: 'og:url', content: shareUrl.value },
     { property: 'og:image', content: content.value?.thumbnail?.url },
     { name: 'twitter:card', content: 'summary_large_image' },
   ]),

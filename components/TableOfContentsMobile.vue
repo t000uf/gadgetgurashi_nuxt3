@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-// SP・タブレット用: 画面下部に固定するバー。閉じている間は全見出しを横スクロールのピル列で示し、
+// SP・タブレット用: 画面下部に固定するバー。閉じている間は現在地まわりの見出しを横スクロールのピル列で示し（表示ルールはTocPills）、
 // ハンドルをタップすると全見出しが上方向に開く。
 // position: fixed を使うため、backdrop-filterを持つ記事カードの中ではなく
 // レイアウト直下（NavButtonと同じ階層）に置くこと
@@ -9,6 +9,8 @@ const containerRef = ref<HTMLElement>()
 
 const close = () => {
   isOpen.value = false
+  // watch を待たずに解除する。一覧のリンクを押したとき、アンカーへのスクロールより先に戻しておくため
+  lockPageScroll(false)
 }
 
 // ドラッグ（上に引けば開く／下に引けば閉じる）。しきい値を超えた時点で確定させ、
@@ -53,37 +55,30 @@ const handlePointerDown = (e: PointerEvent) => {
   if (!containerRef.value?.contains(e.target as Node)) close()
 }
 
-// 開いたままバーがしまわれると、画面外に一覧が残ったままになる
-watch(() => state.value.isInBody, (isInBody) => {
-  if (!isInBody) close()
+// 開いている間はスクロールを止めているが、リサイズや記事の差し替えでバーがしまわれることはある。
+// そのとき開いたままだと、画面外に一覧が残ってしまう
+watch(() => state.value.isBeforeBodyEnd, (isBeforeBodyEnd) => {
+  if (!isBeforeBodyEnd) close()
 })
 
-// 開いたままページを読み進めると一覧が本文を覆い続けるので、スクロールが始まったら閉じる。
-// 即座に閉じると指が触れた程度の揺れでも消えてしまうため、少し待ってから閉じる。
-// スクロール中にタイマーを延長しないのは、読み続けている間ずっと開いたままになるのを避けるため
-const SCROLL_CLOSE_DELAY = 400
-let scrollCloseTimer: ReturnType<typeof setTimeout> | undefined
-
-const handleScroll = () => {
-  if (scrollCloseTimer) return
-  scrollCloseTimer = setTimeout(close, SCROLL_CLOSE_DELAY)
+// 開いている間は背景のスクロールを止める（ドロワーとして扱う）。止めないと、一覧を送る指の動きや
+// バーの外での操作で本文がスクロールしてしまう。一覧自体のスクロールは overscroll-behavior で閉じ込める
+const lockPageScroll = (lock: boolean) => {
+  document.documentElement.style.overflow = lock ? 'hidden' : ''
 }
 
 const removeOpenListeners = () => {
   document.removeEventListener('keydown', handleKeydown)
   document.removeEventListener('pointerdown', handlePointerDown)
-  window.removeEventListener('scroll', handleScroll)
-  clearTimeout(scrollCloseTimer)
-  scrollCloseTimer = undefined
+  lockPageScroll(false)
 }
 
-// 開いている間だけ、Escapeキー・外側のタップ・ページのスクロールで閉じる。
-// 一覧自体のスクロールはwindowまで伝わらないので、一覧を送っている間は閉じない
+// 開いている間だけ背景のスクロールを止め、Escapeキー・外側のタップで閉じる
 watch(isOpen, (open) => {
   if (open) {
     document.addEventListener('keydown', handleKeydown)
     document.addEventListener('pointerdown', handlePointerDown)
-    window.addEventListener('scroll', handleScroll, { passive: true })
+    lockPageScroll(true)
     return
   }
   removeOpenListeners()
@@ -93,7 +88,9 @@ onUnmounted(removeOpenListeners)
 </script>
 
 <template>
-  <div v-if="state.toc.length" ref="containerRef" class="toc-bar" :class="{ 'is-hidden': !state.isInBody }">
+  <!-- しまっている間は画面外でもTabで入れてしまうのでinertで外す -->
+  <div v-if="state.toc.length" ref="containerRef" class="toc-bar" :class="{ 'is-hidden': !state.isBeforeBodyEnd }"
+    :inert="!state.isBeforeBodyEnd">
     <button type="button" class="toc-bar__handle" :aria-expanded="isOpen" aria-controls="toc-bar-list"
       :aria-label="isOpen ? 'もくじを閉じる' : 'もくじを開く'" @click="toggle" @pointerdown="onHandlePointerDown"
       @pointermove="onHandlePointerMove" @pointerup="onHandlePointerUp" @pointercancel="onHandlePointerUp" />
@@ -229,6 +226,7 @@ onUnmounted(removeOpenListeners)
 
   &.is-open {
     overflow-y: auto;
+    overscroll-behavior: contain; // 端まで送ったときに背景へスクロールを伝えない
     max-height: 60vh;
   }
 }

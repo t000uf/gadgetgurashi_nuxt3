@@ -8,13 +8,11 @@ const props = defineProps<{
   activeId: string
 }>()
 
-const emit = defineEmits<{ select: [] }>()
-
 const rowRef = ref<HTMLElement>()
 
 const activeIds = computed(() => activeTocIds(props.toc, props.activeId))
 
-// h4は親のh3が現在地のときだけ出す（普段はh3だけの一覧）。
+// h4は親のh3が現在地のときだけ出す（普段はh2・h3だけの一覧）。
 // 親を持たないh4は畳む相手がいないので常に出す
 const visiblePills = computed(() => {
   return props.toc.filter((item) => {
@@ -58,8 +56,7 @@ watch(() => props.activeId, scrollActivePillIntoView)
 <template>
   <div ref="rowRef" class="toc-pills">
     <a v-for="item in visiblePills" :key="item.id" :href="`#${item.id}`" class="toc-pills__pill"
-      :class="[`toc-pills__pill--${item.level}`, { 'is-active': activeIds.has(item.id) }]"
-      @click="emit('select')">{{ item.text }}</a>
+      :class="[`toc-pills__pill--${item.level}`, { 'is-active': activeIds.has(item.id) }]">{{ item.text }}</a>
   </div>
 </template>
 

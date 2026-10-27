@@ -96,6 +96,17 @@ export default defineNuxtConfig({
       },
     ],
   ],
+  // NetlifyのCDNで60秒キャッシュし、以降は古いものを返しつつ裏で再生成する（ADR 0005）。
+  // 下書きプレビューは未公開コンテンツなのでキャッシュしない。
+  // サイトマップは記事の取得に失敗しても記事の抜けた一覧を200で返す（@nuxtjs/sitemapの仕様）ので、
+  // それがCDNに残らないようキャッシュしない（モジュール自身のキャッシュは sitemap.cacheMaxAgeSeconds で止める）
+  routeRules: {
+    '/**': { isr: 60 },
+    '/draft': { isr: false },
+    '/api/draft': { isr: false },
+    '/sitemap.xml': { isr: false },
+  },
+
   site: {
     url: 'https://gadgetgurashi.com',
   },
@@ -103,5 +114,14 @@ export default defineNuxtConfig({
   sitemap: {
     sources: ['/api/__sitemap__/urls'],
     exclude: ['/draft/**'],
+    // 本番の既定（600秒）だと、生成に失敗したサイトマップを関数のメモリと Cache-Control で10分以上返し続ける
+    cacheMaxAgeSeconds: 0,
+  },
+
+  experimental: {
+    // isr を有効にすると、ページのデータが HTML とは別の _payload.json に切り出される。
+    // 別々にキャッシュ・再生成されるうえ、_payload.json の取得失敗はブラウザで黙って無視されるので、
+    // データは HTML に埋め込んで1つのレスポンスにする
+    payloadExtraction: false,
   },
 });

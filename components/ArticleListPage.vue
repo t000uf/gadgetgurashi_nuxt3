@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import type { MicroCMSListContent } from 'microcms-js-sdk'
-import type { Article, Tag } from '@/types'
+import type { Article } from '@/types'
 
 defineProps<{
   breadcrumb: string
@@ -9,7 +9,7 @@ defineProps<{
   contents?: (MicroCMSListContent & Article)[]
   pager: number[]
   current: number
-  tag?: MicroCMSListContent & Tag
+  tagId?: string
 }>()
 </script>
 
@@ -17,17 +17,17 @@ defineProps<{
   <div>
     <section class="page-heading">
       <Breadcrumb :current="breadcrumb" />
-      <h1 class="page-title allkiji">{{ title }}</h1>
+      <h1 class="page-title">{{ title }}</h1>
       <p class="page-meta">{{ meta }}</p>
     </section>
     <ArticleList v-if="contents" :contents="contents" />
-    <Pagination :pager="pager" :current="current" :tag="tag" />
+    <Pagination :pager="pager" :current="current" :tag-id="tagId" />
   </div>
 </template>
 
 <style lang="scss" scoped>
 // 背景パターン（layouts/default.vue）の上に乗るブロック。トップページの
-// section-heading（pages/index.vue）と同じ考え方で不透明に塗る
+// section-heading（pages/index.vue）と同じ考え方でcontent-blockで塗る
 .page-heading {
   @include content-card(20px 28px, 16px 0);
 

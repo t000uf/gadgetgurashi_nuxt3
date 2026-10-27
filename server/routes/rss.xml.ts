@@ -9,13 +9,10 @@ const escapeXml = (value: string) =>
   value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 export default defineEventHandler(async (event) => {
-  const data = await $fetch<{ contents: FeedArticle[] }>(
-    `https://${process.env.MICROCMS_SERVICE_DOMAIN}.microcms.io/api/v1/article`,
-    {
-      headers: { 'X-MICROCMS-API-KEY': process.env.MICROCMS_API_KEY ?? '' },
-      query: { limit: 20, fields: 'id,title,preview,createdAt' },
-    },
-  );
+  const data = await fetchMicroCMS<{ contents: FeedArticle[] }>(event, 'article', {
+    limit: 20,
+    fields: 'id,title,preview,createdAt',
+  });
 
   const items = data.contents
     .map((article) => {

@@ -16,8 +16,8 @@ const share = computed(() => articleShare.value ?? { url: `https://gadgetgurashi
       <ShareButtons :url="share.url" :title="share.title" />
     </div>
 
-    <div class="side__sponsord">
-      <p class="side__sponsord__label">SPONSORED</p>
+    <div class="side__sponsored">
+      <p class="side__sponsored-label">SPONSORED</p>
       <AdsByGoogle ad-slot="7173714878" />
     </div>
   </aside>
@@ -57,11 +57,11 @@ const share = computed(() => articleShare.value ?? { url: `https://gadgetgurashi
   }
 }
 
-.side__sponsord {
+.side__sponsored {
   @include content-card(8px, 16px 0);
 }
 
-.side__sponsord__label {
+.side__sponsored-label {
   @include label($color-meta);
 
   margin: 0 0 10px;

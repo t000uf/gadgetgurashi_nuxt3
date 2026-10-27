@@ -1,21 +1,24 @@
-export const useDate = () => {
-  /** 2026/08/14 形式（本文中の「投稿日時」など） */
-  const format = (date: string | undefined) => {
-    if (!date) return '';
-    return new Date(date).toLocaleDateString('ja', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-    });
-  };
+// サーバー（Netlify Functions は UTC）とブラウザで日付がずれないよう、タイムゾーンを日本時間に固定する。
+// ずれるとJST 0〜9時の投稿でSSRとハイドレーション後の日付が食い違う
+const dateFormatter = new Intl.DateTimeFormat('ja-JP', {
+  timeZone: 'Asia/Tokyo',
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+});
 
-  /** 2026.08.14 形式（カード・メタ情報のモノスペース表記） */
+export const useDate = () => {
+  /** 2026.08.14 形式（カード・記事メタ情報） */
   const formatDot = (date: string | undefined) => {
     if (!date) return '';
-    const d = new Date(date);
-    const pad = (n: number) => String(n).padStart(2, '0');
-    return `${d.getFullYear()}.${pad(d.getMonth() + 1)}.${pad(d.getDate())}`;
+    const parsed = new Date(date);
+    // formatToParts は不正な日付で例外を投げ、SSRごと500になるので空にする
+    if (Number.isNaN(parsed.getTime())) return '';
+    const parts = Object.fromEntries(
+      dateFormatter.formatToParts(parsed).map((part) => [part.type, part.value]),
+    );
+    return `${parts.year}.${parts.month}.${parts.day}`;
   };
 
-  return { format, formatDot };
+  return { formatDot };
 };
