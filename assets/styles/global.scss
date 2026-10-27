@@ -1,0 +1,125 @@
+// グローバルスタイル（nuxt.config.ts の css で1度だけ読み込む）
+// トークン／mixin は additionalData 経由で自動的に利用できる
+
+// テーマの実値。既定はライトで、OS設定がダークならダーク。手動で選んだ場合は
+// <html data-theme> がOS設定より優先される（nuxt.config.ts のインラインscriptと useTheme が付ける）
+:root {
+  @include theme-vars($theme-light);
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    @include theme-vars($theme-dark);
+
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme='dark'] {
+  @include theme-vars($theme-dark);
+
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  scroll-behavior: smooth;
+  background-color: $color-bg;
+  color: $color-body;
+  font-family: $font-body;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.8;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: $color-base;
+  font-family: $font-heading;
+  font-weight: 700;
+}
+
+a {
+  color: $color-secondary;
+  transition: color 0.2s ease;
+
+  &:visited {
+    color: $color-secondary;
+  }
+
+  &:hover {
+    color: $color-secondary-dark;
+  }
+}
+
+:focus-visible {
+  outline: 2px solid $color-primary;
+  outline-offset: 2px;
+}
+
+img {
+  max-width: 100%;
+}
+
+::selection {
+  background-color: with-alpha($color-primary, 0.25);
+  color: $color-base;
+}
+
+::-moz-selection {
+  background-color: with-alpha($color-primary, 0.25);
+  color: $color-base;
+}
+
+// テーマ切り替え（useTheme）は View Transitions で画面全体をクロスフェードさせる。
+// 要素ごとに transition を持たせると、色が変わる速さが部品によってばらつくため。
+// 切り替えスイッチ自身（view-transition-name: theme-toggle）はフェードさせず、
+// 新しい状態をそのまま出してつまみのスライドを見せる
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: $duration-theme;
+  animation-timing-function: ease;
+}
+
+::view-transition-group(theme-toggle) {
+  animation: none;
+}
+
+::view-transition-old(theme-toggle) {
+  display: none;
+}
+
+::view-transition-new(theme-toggle) {
+  animation: none;
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}

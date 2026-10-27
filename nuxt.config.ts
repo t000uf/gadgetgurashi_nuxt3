@@ -2,6 +2,8 @@
 export default defineNuxtConfig({
   compatibilityDate: '2026-04-02',
 
+  css: ['@/assets/styles/global.scss'],
+
   vite: {
     css: {
       preprocessorOptions: {
@@ -54,6 +56,12 @@ export default defineNuxtConfig({
       ],
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+        { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+        { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
+        {
+          rel: 'stylesheet',
+          href: 'https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=JetBrains+Mono:wght@500;700&display=swap',
+        },
         {
           rel: 'alternate',
           type: 'application/rss+xml',
@@ -62,6 +70,14 @@ export default defineNuxtConfig({
         },
       ],
       script: [
+        {
+          // 手動で選んだ配色テーマを初回描画の前に復元する（遅れるとOS設定の配色が一瞬見える）。
+          // キーと値は composables/useTheme.ts と揃えること
+          key: 'theme-init',
+          innerHTML:
+            "(function(){try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}})()",
+          tagPosition: 'head',
+        },
         {
           src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js',
           'data-ad-client': 'ca-pub-7931455677905492',
@@ -80,6 +96,17 @@ export default defineNuxtConfig({
       },
     ],
   ],
+  // NetlifyのCDNで60秒キャッシュし、以降は古いものを返しつつ裏で再生成する（ADR 0005）。
+  // 下書きプレビューは未公開コンテンツなのでキャッシュしない。
+  // サイトマップは記事の取得に失敗しても記事の抜けた一覧を200で返す（@nuxtjs/sitemapの仕様）ので、
+  // それがCDNに残らないようキャッシュしない（モジュール自身のキャッシュは sitemap.cacheMaxAgeSeconds で止める）
+  routeRules: {
+    '/**': { isr: 60 },
+    '/draft': { isr: false },
+    '/api/draft': { isr: false },
+    '/sitemap.xml': { isr: false },
+  },
+
   site: {
     url: 'https://gadgetgurashi.com',
   },
@@ -87,5 +114,14 @@ export default defineNuxtConfig({
   sitemap: {
     sources: ['/api/__sitemap__/urls'],
     exclude: ['/draft/**'],
+    // 本番の既定（600秒）だと、生成に失敗したサイトマップを関数のメモリと Cache-Control で10分以上返し続ける
+    cacheMaxAgeSeconds: 0,
+  },
+
+  experimental: {
+    // isr を有効にすると、ページのデータが HTML とは別の _payload.json に切り出される。
+    // 別々にキャッシュ・再生成されるうえ、_payload.json の取得失敗はブラウザで黙って無視されるので、
+    // データは HTML に埋め込んで1つのレスポンスにする
+    payloadExtraction: false,
   },
 });

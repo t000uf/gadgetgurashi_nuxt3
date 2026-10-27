@@ -5,16 +5,16 @@ definePageMeta({
   layout: 'default'
 })
 
-const route = useRoute()
-const page = Number(route.params.p) || 1
+const page = usePageNumber()
 const limit = 10
 
-const { data } = await useFetch<MicroCMSList<Article>>('/api/article', {
+const { data, error } = await useFetch<MicroCMSList<Article>>('/api/article', {
   query: {
     limit,
     offset: (page - 1) * limit,
   }
 })
+throwIfNotFound(error, computed(() => data.value?.contents.length))
 
 const pager = computed(() =>
   [...Array(Math.ceil((data.value?.totalCount ?? 0) / limit)).keys()]
@@ -22,11 +22,12 @@ const pager = computed(() =>
 </script>
 
 <template>
-  <div class="sentence_home">
-    <h3 id="allkiji">
-      記事一覧 {{ page }}ページ目
-    </h3>
-    <ArticleList v-if="data?.contents" :contents="data.contents" />
-    <Pagination :pager="pager" :current="page" />
-  </div>
+  <ArticleListPage
+    breadcrumb="ARCHIVE"
+    title="記事一覧"
+    :meta="`PAGE ${page}`"
+    :contents="data?.contents"
+    :pager="pager"
+    :current="page"
+  />
 </template>

@@ -1,0 +1,110 @@
+// =============================================================
+// Design tokens - がじぇっとぐらし！ v8 リブランディング
+// 定義の追加・変更はここだけで行う（値の直書き禁止）
+// =============================================================
+
+// --- Colors -------------------------------------------------
+// ブランドカラー（オレンジ）とアクセント（ブルー）の2色構成。
+// この2色以外の新しい色は追加しない。
+//
+// 実値はテーマごとのmap（$theme-light / $theme-dark）に持ち、global.scss が
+// CSSカスタムプロパティ（--color-*）として出力する。$color-* はその参照なので、
+// 実行時にライト／ダークが切り替わる。
+// $color-* は実色ではなく var() のため、rgba() などSassの色関数には渡せない。
+// 透過させたいときは with-alpha()（_mixins.scss）を使う。
+$theme-light: (
+  'primary': #e8791e,
+  'primary-dark': #c8620f,
+  'secondary': #4f74d6,
+  'secondary-dark': #3d5cb0,
+  'on-accent': #ffffff,
+  'base': #1f2530,
+  'body': #40485a,
+  'meta': #6b7488,
+  'nav-inactive': #6b7488,
+  'bg': #f4f6f8,
+  'header-bg': #e6eaef,
+  'header-border': #c7cfd9,
+  'border': #d2d9e2,
+  'card': #ffffff,
+  'placeholder-1': #dfe4ea,
+  'placeholder-2': #d2d9e2,
+);
+
+// ライトと同じ青みグレーの色相のまま明度を反転させる。オレンジは据え置き、
+// ブルーは暗い地でリンク文字のコントラストが足りないため明るくしている
+$theme-dark: (
+  'primary': #e8791e,
+  'primary-dark': #f5923e,
+  'secondary': #7d9cf0,
+  'secondary-dark': #a3b9f5,
+  'on-accent': #14181f,
+  'base': #e9edf3,
+  'body': #c3cad6,
+  'meta': #8f99ab,
+  'nav-inactive': #8f99ab,
+  'bg': #14181f,
+  'header-bg': #1e242e,
+  'header-border': #333c4a,
+  'border': #2c3440,
+  'card': #232a35,
+  'placeholder-1': #242b36,
+  'placeholder-2': #2c3440,
+);
+
+$color-primary: var(--color-primary); // ブランド／注目表示／見出しアクセント
+$color-primary-dark: var(--color-primary-dark); // hover用（ライトは暗く、ダークは明るく振る）
+$color-secondary: var(--color-secondary); // カテゴリタグ／リンク／二次的な導線
+$color-secondary-dark: var(--color-secondary-dark); // リンクhover（同上）
+$color-on-accent: var(--color-on-accent); // オレンジ／ブルーのベタ塗りに乗る文字
+
+$color-base: var(--color-base); // 濃色：ロゴ／見出し／ヘッダーテキスト
+$color-body: var(--color-body); // 本文グレー（可読性のため濃いめ）
+$color-meta: var(--color-meta); // メタ情報グレー（日付・ラベル。淡すぎないよう調整）
+$color-nav-inactive: var(--color-nav-inactive); // ナビ非アクティブ
+
+$color-bg: var(--color-bg); // サイト背景
+$color-header-bg: var(--color-header-bg); // ヘッダー背景
+$color-header-border: var(--color-header-border); // ヘッダー境界線
+$color-border: var(--color-border); // セクション境界線
+$color-card: var(--color-card); // カード背景
+
+$color-placeholder-1: var(--color-placeholder-1); // プレースホルダー画像 縞1
+$color-placeholder-2: var(--color-placeholder-2); // プレースホルダー画像 縞2
+
+// --- Opacity -------------------------------------------------
+// 背景パターンの上に乗る面の透け具合（content-block mixinに渡す）。
+// 役割ごとに分けておき、まとめて動かさない
+$opacity-block: 0.95; // コンテンツのまとまり（記事本文・一覧・サイドバー）
+$opacity-header: 0.85; // ヘッダー／フッターの浮遊ピル
+$opacity-overlay: 0.75; // 本文の上に重なるもの（もくじバー）
+
+// --- Motion ---------------------------------------------------
+$duration-theme: 0.6s; // ライト／ダーク切り替えのクロスフェード
+
+// --- Typography ---------------------------------------------
+$font-heading: 'Zen Maru Gothic', 'Hiragino Maru Gothic ProN', sans-serif;
+$font-body: 'Zen Kaku Gothic New', 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+$font-mono: 'JetBrains Mono', 'SFMono-Regular', Consolas, monospace;
+
+// --- Radius --------------------------------------------------
+$radius-card: 14px; // カード全体
+$radius-image: 12px; // 画像（大）
+$radius-image-sm: 10px; // 画像（小・グリッド内）
+$radius-pill: 20px; // バッジ / pill
+$radius-bar: 2px; // アクセントバー
+$radius-code: 4px; // 本文のインラインコード
+
+// --- Layout --------------------------------------------------
+$header-height: 68px;
+$content-width: 760px; // 本文カラム
+$container-width: 1080px; // 本文＋サイドバー
+$sidebar-width: 260px;
+
+$space-card: 24px; // カード内パディングの基本単位
+$space-grid: 16px; // 記事グリッドのgap
+
+// --- Breakpoints ---------------------------------------------
+$bp-sm: 639px;
+$bp-md: 640px;
+$bp-lg: 1025px;
