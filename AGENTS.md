@@ -114,13 +114,18 @@ git-flow を簡素化した運用（ADR 0006）。`master` / `release/*` / `dev/
 
 - Node.js のバージョンは `.mise.toml`（ローカル・CI が読む）と `netlify.toml` の `NODE_VERSION`（Netlify が読む）を
   同じパッチまで揃え、CI と本番で同じ Node を使う。どちらも Dependabot の対象外なので手動で上げる。
-  `@types/node` のメジャーも Node のメジャーに合わせて手動で上げる（Dependabot ではメジャーを無視している）。
+  `@types/node` のメジャーも Node のメジャーに合わせて手動で上げる。
 - Dependabot（`.github/dependabot.yml`）が毎週月曜に npm の更新PRを `develop` 向けに出す。
-  minor / patch は `nuxt` 関連・devDependencies・dependencies の3グループにまとめ、メジャーは個別PRになる（`@types/node` のメジャーは出さない）。
+  minor / patch は `nuxt` 関連・devDependencies・dependencies の3グループにまとめる。
+  npm のメジャーは動作検証が必要なので Dependabot では出さず、`pnpm outdated` で確認して手動で上げる
+  （Netlify のデプロイプレビューでも確認する）。この ignore はセキュリティアップデートにも効くので、
+  メジャーでしか直らない脆弱性は GitHub の Dependabot alerts で確認して手動で上げる。
   GitHub Actions のバージョンも月1回、1つのPRにまとめて出す。本番には次のリリースで一緒に出る。
+  公開直後のバージョンは cooldown で見送る（npm はマイナー7日・パッチ3日、Actions は7日。セキュリティアップデートは対象外）。
 - CI（`.github/workflows/ci.yml`）が、PR ごとと develop / production への push で `pnpm install --frozen-lockfile` /
   `pnpm typecheck` / `pnpm build` を回す。Dependabot のPRもこれが通っていればマージしてよい
-  （ランタイムの挙動が変わりうるメジャー更新は、Netlify のデプロイプレビューでも確認する）。
+  （GitHub Actions のメジャーが含まれる場合は、入力値や非推奨の変更を release notes で確認する）。
+  Claude Code では `/resolve-dependabot`（`.claude/skills/resolve-dependabot/SKILL.md`）で、棚卸し・rebase・検証・マージを一通り行える。
 
 ## 既知の問題
 
