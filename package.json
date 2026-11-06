@@ -18,9 +18,9 @@
         "@volar/typescript": "^2.4.30",
         "eslint": "^10.13.0",
         "eslint-config-prettier": "^10.1.8",
-        "nuxt": "^4.6.3",
+        "nuxt": "^4.6.4",
         "typescript": "^5.0.4",
-        "vue-tsc": "^3.3.13"
+        "vue-tsc": "^3.3.14"
     },
     "dependencies": {
         "@nuxtjs/sitemap": "^8.6.2",
