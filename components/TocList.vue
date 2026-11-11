@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import type { TocItem } from '@/composables/useToc'
-import { activeTocIds } from '@/composables/useToc'
 
 const props = defineProps<{
   toc: TocItem[]
