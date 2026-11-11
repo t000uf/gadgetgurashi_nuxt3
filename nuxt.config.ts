@@ -44,14 +44,9 @@ export default defineNuxtConfig({
           property: 'og:description',
           content: 'オタクがガジェットやその他話題について書き散らします',
         },
-        {
-          property: 'og:image',
-          content: 'https://gadgetgurashi.com/_nuxt/img/20210824_022917.47cb9f8.jpg',
-        },
+        // 既定の og:image は置いていない（記事ページは各記事のサムネイルを出す）。ロゴを作るときに足す（#43）
         { property: 'og:locale', content: 'ja_JP' },
         { name: 'twitter:card', content: 'summary' },
-        { name: 'twitter:site', content: '@gadgetgurashi' },
-        { name: 'twitter:site', content: '@nzn_gadget' },
       ],
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
