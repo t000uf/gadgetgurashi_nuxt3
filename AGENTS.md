@@ -38,6 +38,11 @@ APIキーはクライアントに出さないため、microCMS へのアクセ�
 ページからは `useFetch('/api/article')` のように自前のAPIを叩くこと。
 サーバー側から microCMS を呼ぶときは、必ず `server/utils/microcms.ts` の `fetchMicroCMS` を使う
 （エラー時のステータスの変換・ログ・タイムアウトをまとめている）。
+リクエストのクエリを microCMS に渡すときは、`pickQuery(event, ['limit', ...])` でそのAPIが使うキーだけにする
+（丸ごと渡すと `draftKey` や任意の `filters` を外から指定できる）。
+
+URLから受けた記事ID・タグIDは、APIのパスや `filters` / `ids` に埋める前に `isContentId`（`shared/utils/contentId.ts`）で
+形式を確かめ、合わなければ404にする。ページ番号は `usePageNumber` で読む（`/page/02` などの別表記も404にする）。
 
 ページで `useFetch` したら `throwIfNotFound(error, data)` を呼ぶ。取得失敗や該当なしを
 そのまま描画すると、空のページが200で返り soft 404 になる。
@@ -46,7 +51,8 @@ APIキーはクライアントに出さないため、microCMS へのアクセ�
 
 キャッシュは `nuxt.config.ts` の `routeRules`（Netlify の `isr`）で一括管理する（ADR 0005）。
 APIに `Cache-Control` を個別に付けない。プレビュー系など、キャッシュしてはいけないルートは
-`isr: false` を足す。5xx を CDN に残さない処理は `server/plugins/no-store-on-error.ts` で一括して行う。
+`isr: false` を足す。エラーのキャッシュ（5xx は残さない、4xx は stale-while-revalidate なしの短いキャッシュ）は
+`server/plugins/no-store-on-error.ts` で一括して行う。
 
 ## ディレクトリ
 
@@ -59,8 +65,9 @@ layouts/         default（記事・一覧）、home（トップ：ヒーロー�
 pages/           index / page/[p] / article/[id] / article/about / tag/[tagId]/page/[p] / draft
 server/api/      microCMS プロキシ、sitemap のURL生成
 server/routes/   RSS（rss.xml）
-server/plugins/  5xx を CDN にキャッシュさせない処理
-server/utils/    microCMS 呼び出しの共通処理（fetchMicroCMS）
+server/plugins/  エラーのレスポンスのキャッシュヘッダーを上書きする処理
+server/utils/    microCMS 呼び出しの共通処理（fetchMicroCMS / pickQuery）
+shared/utils/    ページとサーバーの両方で自動インポートされる処理（isContentId）
 types/           microCMS のレスポンス型
 docs/DESIGN.md   デザインシステム（v8リブランディング）
 docs/adr/        アーキテクチャ決定記録（ADR）。フレームワーク移行など経緯を残すべき決定

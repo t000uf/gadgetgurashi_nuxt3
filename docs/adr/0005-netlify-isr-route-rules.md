@@ -32,7 +32,11 @@
   APIキーの失効など上流の失敗なので、そのまま返すと閲覧者やクローラーに誤ったステータスが伝わるため
 - 5xx のレスポンスは、Nitro の `error` フック（`server/plugins/no-store-on-error.ts`）で一括して
   `Netlify-CDN-Cache-Control: no-store` にする。呼び出し側ごとに付けると、描画中の例外などで漏れるため。
-  4xx は同じ URL なら同じ結果になるのでキャッシュしてよい
+  4xx は同じ URL なら同じ結果になるのでキャッシュしてよいが、同じフックで
+  `public, max-age=60, durable`（stale-while-revalidate なし）に上書きする。残したままだと、公開前の記事 URL に
+  一度アクセスがあった場合、公開後も最初の 1 リクエストには古い 404 が返るため（issue #64 で追加）
+- microCMS へのクエリは、各 API が `pickQuery` で許可したキーだけを渡す。リクエストのクエリを丸ごと渡すと、
+  公開 API に `draftKey` を付けて下書きを isr 対象のルートでキャッシュさせられるため（issue #64 で追加）
 - トップページの見出し文・ヒーロー画像（`/api/top`）は取得に失敗しても既定値で表示を続けるが、
   エラーではないのでフックを通らない。そのページは `pages/index.vue` で個別に `no-store` にする
 
