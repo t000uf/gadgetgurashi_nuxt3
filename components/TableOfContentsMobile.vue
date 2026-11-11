@@ -61,6 +61,11 @@ watch(() => state.value.isBeforeBodyEnd, (isBeforeBodyEnd) => {
   if (!isBeforeBodyEnd) close()
 })
 
+// レイアウト直下に置いているので、同じレイアウト内の遷移ではアンマウントされない。開いたままブラウザの「戻る」などで
+// 移ると、閉じる処理が走らずスクロールの停止が移動先に残るので、ページが替わったら必ず閉じる
+const route = useRoute()
+watch(() => route.path, close)
+
 // 開いている間は背景のスクロールを止める（ドロワーとして扱う）。止めないと、一覧を送る指の動きや
 // バーの外での操作で本文がスクロールしてしまう。一覧自体のスクロールは overscroll-behavior で閉じ込める
 const lockPageScroll = (lock: boolean) => {

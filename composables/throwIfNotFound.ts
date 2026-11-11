@@ -7,7 +7,7 @@ export const createNotFoundError = () => createError({ statusCode: 404, fatal: i
 
 // useFetchの失敗・空データをエラーページへ回す。
 // 何もしないと空のページが200で返り、soft 404としてインデックスに残る。
-// 5xxをCDNにキャッシュさせない処理は server/plugins/no-store-on-error.ts で一括して行う
+// エラーのキャッシュの扱い（5xx は残さない、4xx は短く）は server/plugins/no-store-on-error.ts で一括して行う
 export const throwIfNotFound = (
   error: Ref<{ statusCode?: number } | null | undefined>,
   data: Ref<unknown>,

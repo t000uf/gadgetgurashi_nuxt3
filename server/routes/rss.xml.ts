@@ -9,7 +9,7 @@ const escapeXml = (value: string) =>
   value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 export default defineEventHandler(async (event) => {
-  const data = await fetchMicroCMS<{ contents: FeedArticle[] }>(event, 'article', {
+  const data = await fetchMicroCMS<{ contents: FeedArticle[] }>('article', {
     limit: 20,
     fields: 'id,title,preview,createdAt',
   });

@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 // 現在地を示す横スクロールのピル列。SPのバーとPCのサイドバーで共用する
 import type { TocItem } from '@/composables/useToc'
-import { activeTocIds } from '@/composables/useToc'
 
 const props = defineProps<{
   toc: TocItem[]

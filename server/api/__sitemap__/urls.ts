@@ -1,11 +1,11 @@
-export default defineSitemapEventHandler(async (event) => {
+export default defineSitemapEventHandler(async () => {
   const fetchAll = async (endpoint: string) => {
     const limit = 100;
     let offset = 0;
     let allContents: any[] = [];
 
     while (true) {
-      const data = await fetchMicroCMS<any>(event, endpoint, { limit, offset, fields: 'id' });
+      const data = await fetchMicroCMS<any>(endpoint, { limit, offset, fields: 'id' });
       allContents = [...allContents, ...data.contents];
       // 取得の途中で記事が削除されると totalCount に届かないまま空のページが返るので、そこで止める
       if (data.contents.length === 0 || allContents.length >= data.totalCount) break;

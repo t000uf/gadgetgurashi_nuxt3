@@ -67,11 +67,14 @@ useHead({
 }
 
 .notfound__title {
-  margin: 0 0 16px;
-  color: $color-base;
-  font-family: $font-heading;
-  font-weight: 700;
-  font-size: 22px;
+  @include heading-1;
+
+  // 中央寄せのブロックなので、全幅の下線ではなく中央の短いバーにする（DESIGN.md の H1）
+  &::after {
+    left: 50%;
+    width: 48px;
+    transform: translateX(-50%);
+  }
 }
 
 .notfound__text {

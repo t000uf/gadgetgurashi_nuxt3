@@ -3,13 +3,18 @@ import type { MicroCMSListContent } from 'microcms-js-sdk'
 import type { Article } from '@/types'
 
 const route = useRoute()
+const id = route.params.id
+if (!isContentId(id)) {
+  throw createNotFoundError()
+}
+
 const { data: content, error } = await useFetch<MicroCMSListContent & Article>(
-  `/api/article/${route.params.id}`,
+  `/api/article/${id}`,
   { query: { depth: 2 } }
 )
 throwIfNotFound(error, content)
 
-// og:url・JSON-LD・サイトマップと同じく末尾スラッシュなしに揃える（canonicalを分裂させない）
+// canonical・og:url（app.vue）・サイトマップと同じく末尾スラッシュなしに揃える（シェアされるURLを分裂させない）
 const shareUrl = computed(() => `https://gadgetgurashi.com/article/${content.value?.id}`)
 const shareTitle = computed(() => `${content.value?.title ?? ''} - がじぇっとぐらし！`)
 
