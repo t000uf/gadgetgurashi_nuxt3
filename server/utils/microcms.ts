@@ -1,15 +1,23 @@
 import type { H3Event } from 'h3';
 import type { FetchError } from 'ofetch';
 
-// 応答がないまま関数のタイムアウト（ログも残らない）まで待たないよう、先に打ち切る
-const TIMEOUT_MS = 10_000;
+// 応答がないまま関数のタイムアウト（ログも残らない）まで待たないよう、先に打ち切る。
+// トップページは top → article を直列に呼ぶので、2回分が関数の上限（Netlifyの既定は10秒）に収まる値にする。
+// @nuxtjs/sitemap がソースの取得を打ち切る5秒よりも短くして、失敗の原因がこちらのログに残るようにする
+const TIMEOUT_MS = 4_000;
+
+// 受けたリクエストのクエリから、そのAPIで使うキーだけを取り出す。
+// 丸ごと渡すと、draftKey（下書きがisrでキャッシュされる）や任意の filters・limit を外から指定できてしまう
+export const pickQuery = (event: H3Event, keys: readonly string[]) => {
+  const query = getQuery(event);
+  return Object.fromEntries(keys.filter((key) => query[key] !== undefined).map((key) => [key, query[key]]));
+};
 
 // microCMSへの呼び出し共通処理。APIキーはサーバー側だけで扱う。
-// queryを省略したときは、受けたリクエストのクエリをそのまま渡す
+// クエリは呼び出し側で明示する（リクエストから渡すときは pickQuery で許可したキーだけにする）
 export const fetchMicroCMS = async <T = unknown>(
-  event: H3Event,
   path: string,
-  query: Record<string, unknown> = getQuery(event),
+  query: Record<string, unknown> = {},
 ): Promise<T> => {
   try {
     // 外部URLなので、Nitroの内部ルートの型推論は効かない（戻り値の型は呼び出し側で指定する）
@@ -17,6 +25,9 @@ export const fetchMicroCMS = async <T = unknown>(
       headers: { 'X-MICROCMS-API-KEY': process.env.MICROCMS_API_KEY ?? '' },
       query,
       timeout: TIMEOUT_MS,
+      // ofetchはGETの失敗（5xx・429・タイムアウト）を既定で1回再試行するので、待ち時間が倍になる。
+      // 上のタイムアウトの計算が崩れるので再試行しない
+      retry: 0,
     })) as T;
   } catch (error) {
     // ログにはURLを出さない（下書きのdraftKeyがクエリに入っているため）。

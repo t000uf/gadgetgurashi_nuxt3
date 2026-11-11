@@ -1,1 +1,3 @@
-export default defineEventHandler((event) => fetchMicroCMS(event, 'article'));
+export default defineEventHandler((event) =>
+  fetchMicroCMS('article', pickQuery(event, ['limit', 'offset', 'fields', 'filters'])),
+);

@@ -1,1 +1,1 @@
-export default defineEventHandler((event) => fetchMicroCMS(event, 'top'));
+export default defineEventHandler(() => fetchMicroCMS('top'));

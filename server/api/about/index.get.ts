@@ -1,1 +1,1 @@
-export default defineEventHandler((event) => fetchMicroCMS(event, 'about'));
+export default defineEventHandler(() => fetchMicroCMS('about'));

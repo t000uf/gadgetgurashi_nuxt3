@@ -2,7 +2,10 @@
 import type { Article, Tag, MicroCMSList } from '@/types'
 
 const route = useRoute()
-const tagId = route.params.tagId as string
+const tagId = route.params.tagId
+if (!isContentId(tagId)) {
+  throw createNotFoundError()
+}
 const page = usePageNumber()
 const limit = 10
 
@@ -21,7 +24,11 @@ const [{ data: articleData, error: articleError }, { data: tagData, error: tagEr
   })
 ])
 
-const selectedTag = computed(() => tagData.value?.contents[0])
+// ids は複数指定を受けるので、念のため取得できたタグが要求したIDそのものかも確かめる
+const selectedTag = computed(() => {
+  const tag = tagData.value?.contents[0]
+  return tag?.id === tagId ? tag : undefined
+})
 throwIfNotFound(tagError, selectedTag)
 // 記事0件のタグは1ページ目だけ表示し、範囲外のページは404にする
 throwIfNotFound(articleError, computed(() => page === 1 || articleData.value?.contents.length))
