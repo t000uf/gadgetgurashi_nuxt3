@@ -61,7 +61,7 @@ watch(() => state.value.isBeforeBodyEnd, (isBeforeBodyEnd) => {
   if (!isBeforeBodyEnd) close()
 })
 
-// レイアウト直下に置いているので、ページを移ってもアンマウントされない。開いたままブラウザの「戻る」などで
+// レイアウト直下に置いているので、同じレイアウト内の遷移ではアンマウントされない。開いたままブラウザの「戻る」などで
 // 移ると、閉じる処理が走らずスクロールの停止が移動先に残るので、ページが替わったら必ず閉じる
 const route = useRoute()
 watch(() => route.path, close)

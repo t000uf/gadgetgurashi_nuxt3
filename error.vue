@@ -69,7 +69,7 @@ useHead({
 .notfound__title {
   @include heading-1;
 
-  // 中央寄せのカードなので、全幅の下線ではなく中央の短いバーにする
+  // 中央寄せのブロックなので、全幅の下線ではなく中央の短いバーにする（DESIGN.md の H1）
   &::after {
     left: 50%;
     width: 48px;

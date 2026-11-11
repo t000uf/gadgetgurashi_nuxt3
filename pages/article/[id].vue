@@ -14,7 +14,7 @@ const { data: content, error } = await useFetch<MicroCMSListContent & Article>(
 )
 throwIfNotFound(error, content)
 
-// og:url・JSON-LD・サイトマップと同じく末尾スラッシュなしに揃える（canonicalを分裂させない）
+// canonical・og:url（app.vue）・サイトマップと同じく末尾スラッシュなしに揃える（シェアされるURLを分裂させない）
 const shareUrl = computed(() => `https://gadgetgurashi.com/article/${content.value?.id}`)
 const shareTitle = computed(() => `${content.value?.title ?? ''} - がじぇっとぐらし！`)
 

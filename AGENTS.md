@@ -51,7 +51,7 @@ URLから受けた記事ID・タグIDは、APIのパスや `filters` / `ids` に
 
 キャッシュは `nuxt.config.ts` の `routeRules`（Netlify の `isr`）で一括管理する（ADR 0005）。
 APIに `Cache-Control` を個別に付けない。プレビュー系など、キャッシュしてはいけないルートは
-`isr: false` を足す。エラーのキャッシュ（5xx は残さない、4xx は stale-while-revalidate なしの短いキャッシュ）は
+`isr: false` を足す。エラーのキャッシュ（5xx は残さない、isr のルートの 4xx は stale-while-revalidate なしの短いキャッシュ）は
 `server/plugins/no-store-on-error.ts` で一括して行う。
 
 ## ディレクトリ
