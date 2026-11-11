@@ -39,7 +39,6 @@ export default defineNuxtConfig({
         { name: 'description', content: 'オタクがガジェットやその他話題について書き散らします' },
         { property: 'og:site_name', content: 'がじぇっとぐらし！' },
         { property: 'og:type', content: 'blog' },
-        { property: 'og:url', content: 'https://www.gadgetgurashi.com' },
         { property: 'og:title', content: 'がじぇっとぐらし！' },
         {
           property: 'og:description',
