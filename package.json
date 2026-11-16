@@ -15,7 +15,7 @@
         "@nuxtjs/eslint-config": "^12.0.0",
         "@nuxtjs/eslint-config-typescript": "^12.0.0",
         "@types/node": "^24.19.2",
-        "@volar/typescript": "^2.4.30",
+        "@volar/typescript": "^2.4.31",
         "eslint": "^10.14.0",
         "eslint-config-prettier": "^10.1.8",
         "nuxt": "^4.6.4",
